@@ -1,7 +1,0 @@
-const FALLBACK_ACE_MODE = 'plain_text';
-const DEFAULT_ACE_MODE = 'c_cpp';
-const DEFAULT_LANG_SHORTNAME = 'C++17';
-
-export {
-    FALLBACK_ACE_MODE, DEFAULT_ACE_MODE, DEFAULT_LANG_SHORTNAME
-};
