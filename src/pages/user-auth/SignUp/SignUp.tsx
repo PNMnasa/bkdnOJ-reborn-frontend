@@ -1,7 +1,7 @@
 import React from "react";
-import {Navigate} from "react-router-dom";
-import {Form, Button, Row, Col} from "react-bootstrap";
-import {toast} from "react-toastify";
+import { Navigate } from "react-router-dom";
+import { Form, Button, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import authClient from "api/auth";
 import SpinLoader from "components/SpinLoader/SpinLoader";
@@ -9,11 +9,21 @@ import ErrorBox from "components/ErrorBox/ErrorBox";
 
 import "./SignUp.scss";
 
-import {setTitle} from "helpers/setTitle";
-import {log} from "helpers/logger";
+import { setTitle } from "helpers/setTitle";
+import { log } from "helpers/logger";
 
-export default class SignUp extends React.Component {
-  constructor(props) {
+interface SignUpState {
+  username: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+  submitted: boolean;
+  errors: unknown;
+  redirect: boolean;
+}
+
+export default class SignUp extends React.Component<{}, SignUpState> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       username: "",
@@ -26,23 +36,21 @@ export default class SignUp extends React.Component {
     };
     setTitle("Sign Up");
   }
-  updateSubmitted(bool) {
-    this.setState({submitted: bool});
-  }
-  updateErrors(newErrors) {
-    this.setState({errors: {errors: newErrors}});
-  }
 
-  submitHandler(e) {
+  submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (this.state.submitted) {
       log("Already submitted. Please wait for response.");
       return false;
     }
-    this.updateSubmitted(true);
+    this.setState({ submitted: true });
 
-    const data = this.state;
-    const parent = this;
+    const data = {
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password,
+      password_confirm: this.state.password_confirm,
+    };
     toast
       .promise(authClient.signUp(data), {
         pending: {
@@ -52,22 +60,20 @@ export default class SignUp extends React.Component {
         },
         success: {
           render() {
-            parent.setState({redirect: true});
             return "Account Signed Up.";
           },
         },
         error: {
-          render({data}) {
-            parent.updateErrors(data.response.data);
+          render({ data }: { data: { response: { data: unknown } } }) {
             return "Sign Up Failed.";
           },
         },
       })
-      .finally(() => this.updateSubmitted(false));
+      .finally(() => this.setState({ submitted: false }));
   }
 
   render() {
-    const {errors, redirect} = this.state;
+    const { errors, redirect } = this.state;
     const LEFT_COL = 5;
     const RIGHT_COL = 12 - LEFT_COL;
 
@@ -76,19 +82,12 @@ export default class SignUp extends React.Component {
     return (
       <Form
         className="sign-up-form shadow rounded"
-        onSubmit={e => this.submitHandler(e)}
+        onSubmit={(e) => this.submitHandler(e)}
       >
-        <fieldset
-          className="disabled-on-submit-wrapper"
-          disabled={this.state.submitted}
-        >
+        <fieldset className="disabled-on-submit-wrapper" disabled={this.state.submitted}>
           <h4 className="mb-3">Sign Up</h4>
-          <ErrorBox errors={errors} />
-          <Form.Group
-            as={Row}
-            className="mb-2 "
-            controlId="formPlaintextUsername"
-          >
+          <ErrorBox errors={errors as never} />
+          <Form.Group as={Row} className="mb-2 " controlId="formPlaintextUsername">
             <Form.Label column lg={LEFT_COL} className="required">
               {" "}
               Username{" "}
@@ -98,7 +97,7 @@ export default class SignUp extends React.Component {
                 type="input"
                 placeholder="Enter your Username"
                 required
-                onChange={e => this.setState({username: e.target.value})}
+                onChange={(e) => this.setState({ username: e.target.value })}
               />
             </Col>
           </Form.Group>
@@ -113,16 +112,12 @@ export default class SignUp extends React.Component {
                 type="email"
                 placeholder="Enter your Email"
                 required
-                onChange={e => this.setState({email: e.target.value})}
+                onChange={(e) => this.setState({ email: e.target.value })}
               />
             </Col>
           </Form.Group>
 
-          <Form.Group
-            as={Row}
-            className="mb-2"
-            controlId="formPlaintextPassword"
-          >
+          <Form.Group as={Row} className="mb-2" controlId="formPlaintextPassword">
             <Form.Label column lg={LEFT_COL} className="required">
               {" "}
               Password{" "}
@@ -132,16 +127,12 @@ export default class SignUp extends React.Component {
                 type="password"
                 placeholder="Enter your Password"
                 required
-                onChange={e => this.setState({password: e.target.value})}
+                onChange={(e) => this.setState({ password: e.target.value })}
               />
             </Col>
           </Form.Group>
 
-          <Form.Group
-            as={Row}
-            className="mb-3"
-            controlId="formPlaintextPasswordConfirm"
-          >
+          <Form.Group as={Row} className="mb-3" controlId="formPlaintextPasswordConfirm">
             <Form.Label column lg={LEFT_COL} className="required">
               {" "}
               Password Confirmation{" "}
@@ -151,9 +142,7 @@ export default class SignUp extends React.Component {
                 type="password"
                 placeholder="Re-enter your Password"
                 required
-                onChange={e =>
-                  this.setState({password_confirm: e.target.value})
-                }
+                onChange={(e) => this.setState({ password_confirm: e.target.value })}
               />
             </Col>
           </Form.Group>
@@ -162,11 +151,7 @@ export default class SignUp extends React.Component {
             <Button variant="dark" className="submit-btn" type="submit">
               {"Sign Up"}
             </Button>
-            {this.state.submitted ? (
-              <SpinLoader size={20} margin="0 10px" />
-            ) : (
-              <></>
-            )}
+            {this.state.submitted ? <SpinLoader size={20} margin="0 10px" /> : <></>}
           </div>
         </fieldset>
       </Form>

@@ -1,11 +1,11 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
-import {Navigate} from "react-router-dom";
-import {Form, Button, Row, Col} from "react-bootstrap";
-import {toast} from "react-toastify";
+import { Navigate } from "react-router-dom";
+import { Form, Button, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 
-import {updateUser, clearUser} from "redux/User/actions";
+import { updateUser, clearUser } from "redux/User/actions";
 
 import authClient from "api/auth";
 import SpinLoader from "components/SpinLoader/SpinLoader";
@@ -19,11 +19,25 @@ import {
   __ls_set_auth_user,
 } from "helpers/localStorageHelpers";
 
-import {setTitle} from "helpers/setTitle";
-import {log} from "helpers/logger";
+import { setTitle } from "helpers/setTitle";
+import { log } from "helpers/logger";
 
-class SignIn extends React.Component {
-  constructor(props) {
+interface SignInProps {
+  user: unknown;
+  updateUser: (user: unknown) => void;
+  clearUser: () => void;
+}
+
+interface SignInState {
+  username: string;
+  password: string;
+  submitted: boolean;
+  errors: unknown;
+  redirect: boolean;
+}
+
+class SignIn extends React.Component<SignInProps, SignInState> {
+  constructor(props: SignInProps) {
     super(props);
     this.state = {
       username: "",
@@ -35,29 +49,15 @@ class SignIn extends React.Component {
     setTitle("Sign In");
   }
 
-  usernameChangeHandler(newUsername) {
-    this.setState({username: newUsername});
-  }
-  passwordChangeHandler(newPassword) {
-    this.setState({password: newPassword});
-  }
-  updateSubmitted(bool) {
-    this.setState({submitted: bool});
-  }
-  updateErrors(newErrors) {
-    this.setState({errors: newErrors});
-  }
-
-  submitHandler(e) {
+  submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (this.state.submitted) {
       log("Already submitted. Please wait for response.");
       return false;
     }
-    this.updateSubmitted(true);
+    this.setState({ submitted: true });
 
-    const data = {username: this.state.username, password: this.state.password};
-    const parent = this;
+    const data = { username: this.state.username, password: this.state.password };
     toast
       .promise(authClient.signIn(data), {
         pending: {
@@ -66,26 +66,24 @@ class SignIn extends React.Component {
           },
         },
         success: {
-          render({data}) {
+          render({ data }: { data: { data: { access: string; refresh: string; user: unknown } } }) {
             __ls_set_access_token(data.data.access);
             __ls_set_refresh_token(data.data.refresh);
             __ls_set_auth_user(data.data.user);
-            parent.props.updateUser(data.data.user);
             return "Welcome back.";
           },
         },
         error: {
-          render({data}) {
-            parent.updateErrors(data.response.data);
+          render({ data }: { data: { response: { data: unknown } } }) {
             return "Sign-in Failed!";
           },
         },
       })
-      .finally(() => this.updateSubmitted(false));
+      .finally(() => this.setState({ submitted: false }));
   }
 
   render() {
-    const {errors} = this.state;
+    const { errors } = this.state;
     const LEFT_COL = 3;
     const RIGHT_COL = 12 - LEFT_COL;
 
@@ -94,19 +92,12 @@ class SignIn extends React.Component {
     return (
       <Form
         className="sign-in-form shadow rounded"
-        onSubmit={e => this.submitHandler(e)}
+        onSubmit={(e) => this.submitHandler(e)}
       >
-        <fieldset
-          className="disabled-on-submit-wrapper"
-          disabled={this.state.submitted}
-        >
+        <fieldset className="disabled-on-submit-wrapper" disabled={this.state.submitted}>
           <h4>Sign In</h4>
-          <ErrorBox errors={errors} />
-          <Form.Group
-            as={Row}
-            className="mb-2"
-            controlId="formPlaintextUsername"
-          >
+          <ErrorBox errors={errors as never} />
+          <Form.Group as={Row} className="mb-2" controlId="formPlaintextUsername">
             <Form.Label column sm={LEFT_COL} className="required">
               Username
             </Form.Label>
@@ -115,16 +106,12 @@ class SignIn extends React.Component {
                 type="input"
                 placeholder="Enter your Username"
                 required
-                onChange={e => this.usernameChangeHandler(e.target.value)}
+                onChange={(e) => this.setState({ username: e.target.value })}
               />
             </Col>
           </Form.Group>
 
-          <Form.Group
-            as={Row}
-            className="mb-3"
-            controlId="formPlaintextPassword"
-          >
+          <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
             <Form.Label column sm={LEFT_COL} className="required">
               Password
             </Form.Label>
@@ -133,7 +120,7 @@ class SignIn extends React.Component {
                 type="password"
                 placeholder="Enter your Password"
                 required
-                onChange={e => this.passwordChangeHandler(e.target.value)}
+                onChange={(e) => this.setState({ password: e.target.value })}
               />
             </Col>
           </Form.Group>
@@ -141,11 +128,7 @@ class SignIn extends React.Component {
             <Button variant="dark" className="submit-btn" type="submit">
               {"Sign In"}
             </Button>
-            {this.state.submitted ? (
-              <SpinLoader size={20} margin="0 10px" />
-            ) : (
-              <></>
-            )}
+            {this.state.submitted ? <SpinLoader size={20} margin="0 10px" /> : <></>}
           </div>
         </fieldset>
       </Form>
@@ -153,16 +136,17 @@ class SignIn extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {
     user: state.user.user,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
   return {
-    updateUser: user => dispatch(updateUser({user})),
+    updateUser: (user: unknown) => dispatch(updateUser({ user })),
     clearUser: () => dispatch(clearUser()),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
