@@ -17,11 +17,52 @@ import Members from "./_/Members";
 
 import "./Details.scss";
 
-class OrgDetail extends React.Component {
-  constructor(props) {
+interface OrgData {
+  slug: string;
+  name: string;
+  short_name: string;
+  logo_url?: string;
+  about?: string;
+  is_unlisted?: boolean;
+  is_open?: boolean;
+  is_protected?: boolean;
+  access_code?: string;
+  access_code_prompt?: string;
+  member_count?: number;
+  real_member_count?: number;
+  suborg_count?: number;
+  becomeRoot?: boolean;
+  become_root?: boolean;
+  new_parent_org?: string | null;
+  parent_org?: {
+    slug: string;
+    name: string;
+    short_name: string;
+    logo_url?: string;
+  } | null;
+  admins?: string[];
+  [key: string]: unknown;
+}
+
+interface OrgDetailProps {
+  params: Record<string, string | undefined>;
+  navigate: (to: string, options?: { replace?: boolean }) => void;
+}
+
+interface OrgDetailState {
+  slug: string;
+  data: OrgData | null;
+  loaded: boolean;
+  errors: unknown;
+  parentOrg: unknown;
+  redirectUrl?: string;
+}
+
+class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
+  constructor(props: OrgDetailProps) {
     super(props);
     this.state = {
-      slug: this.props.params.slug,
+      slug: this.props.params.slug!,
       data: null,
       loaded: false,
       errors: null,
@@ -40,10 +81,10 @@ class OrgDetail extends React.Component {
           data: res.data,
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || ["Cannot get org info."],
+          errors: err.response?.data || ["Cannot get org info."],
         });
       });
   }
@@ -52,18 +93,18 @@ class OrgDetail extends React.Component {
     this.callApi();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: OrgDetailProps) {
     if (prevProps.params !== this.props.params) {
       this.setState(
         {
-          slug: this.props.params.slug,
+          slug: this.props.params.slug!,
         },
         () => this.callApi()
       );
     }
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     this.setState({errors: null});
 
@@ -76,10 +117,10 @@ class OrgDetail extends React.Component {
         if (res.data.slug !== this.state.slug)
           this.props.navigate(`/admin/org/${res.data.slug}`, {replace: true});
       })
-      .catch(err => {
-        toast.error(`Cannot update (${err.response.status})`);
+      .catch((err: { response?: { status: number; data: unknown } }) => {
+        toast.error(`Cannot update (${err.response?.status})`);
         this.setState({
-          errors: {errors: err.response.data} || [
+          errors: {errors: err.response?.data} || [
             "Cannot update organization information.",
           ],
         });
@@ -98,20 +139,20 @@ class OrgDetail extends React.Component {
         toast.success("OK Deleted.");
         this.setState({redirectUrl: "/admin/orgs"});
       })
-      .catch(err => {
-        toast.error(`Cannot delete. (${err.response.status})`);
+      .catch((err: { response?: { status: number; data: unknown } }) => {
+        toast.error(`Cannot delete. (${err.response?.status})`);
         this.setState({
-          errors: {errors: err.response.data} || [
+          errors: {errors: err.response?.data} || [
             "Cannot delete this organization.",
           ],
         });
       });
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
-    let newData = this.state.data;
+    let newData = this.state.data!;
     if (!isCheckbox) newData[event.target.id] = event.target.value;
     else {
       newData[event.target.id] = !newData[event.target.id];
@@ -351,7 +392,7 @@ class OrgDetail extends React.Component {
                             <UserMultiSelect
                               id="admins"
                               value={data.admins || []}
-                              onChange={arr =>
+                              onChange={(arr: string[]) =>
                                 this.setState({data: {...data, admins: arr}})
                               }
                             />
@@ -437,9 +478,9 @@ class OrgDetail extends React.Component {
                               placeholder="Member Count"
                               id="member_count"
                               value={
-                                isNaN(data.member_count)
+                                isNaN(data.member_count as number)
                                   ? ""
-                                  : data.member_count
+                                  : (data.member_count as number)
                               }
                               disabled
                               readOnly
@@ -457,9 +498,9 @@ class OrgDetail extends React.Component {
                               placeholder="Real Member Count"
                               id="real_member_count"
                               value={
-                                isNaN(data.real_member_count)
+                                isNaN(data.real_member_count as number)
                                   ? ""
-                                  : data.real_member_count
+                                  : (data.real_member_count as number)
                               }
                               disabled
                               readOnly
@@ -478,9 +519,9 @@ class OrgDetail extends React.Component {
                               placeholder="Sub Org Count"
                               id="suborg_count"
                               value={
-                                isNaN(data.suborg_count)
+                                isNaN(data.suborg_count as number)
                                   ? ""
-                                  : data.suborg_count
+                                  : (data.suborg_count as number)
                               }
                               disabled
                               readOnly
@@ -498,11 +539,11 @@ class OrgDetail extends React.Component {
                                 type="checkbox"
                                 id="become_oot"
                                 className="w-100"
-                                value={this.state.data.becomeRoot}
+                                value={this.state.data?.becomeRoot as unknown as string}
                                 onChange={e =>
                                   this.setState({
                                     data: {
-                                      ...data,
+                                      ...data!,
                                       become_root: e.target.checked,
                                     },
                                   })
@@ -520,7 +561,7 @@ class OrgDetail extends React.Component {
                                 className="w-100 m-1 ml-2 mr-2"
                                 onClick={() =>
                                   this.setState({
-                                    data: {...data, new_parent_org: null},
+                                    data: {...data!, new_parent_org: null},
                                   })
                                 }
                               >
@@ -528,10 +569,10 @@ class OrgDetail extends React.Component {
                               </Button>
                               <OrgSingleSelect
                                 id="parent_org"
-                                value={this.state.data.new_parent_org}
-                                onChange={val =>
+                                value={this.state.data?.new_parent_org as string}
+                                onChange={(val: string) =>
                                   this.setState({
-                                    data: {...data, new_parent_org: val},
+                                    data: {...data!, new_parent_org: val},
                                   })
                                 }
                               />

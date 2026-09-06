@@ -3,14 +3,12 @@ import ReactPaginate from "react-paginate";
 import {Navigate, Link} from "react-router-dom";
 import {Button, Table, Row, Col, Form} from "react-bootstrap";
 
-/* icons */
 import {
   AiOutlineForm,
   AiOutlineArrowRight,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
 
-/* my imports */
 import {SpinLoader, ErrorBox} from "components";
 import userAPI from "api/user";
 import {setTitle} from "helpers/setTitle";
@@ -22,7 +20,20 @@ import { toast } from "react-toastify";
 import { FaFilter, FaTimes } from "react-icons/fa";
 import { FcOk, FcHighPriority } from "react-icons/fc";
 
-class UserItem extends React.Component {
+interface UserItemProps {
+  id: number | string;
+  username: string;
+  email: string;
+  is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
+  date_joined: string;
+  selectChk: boolean;
+  onSelectChkChange: () => void;
+  [key: string]: unknown;
+}
+
+class UserItem extends React.Component<UserItemProps> {
   render() {
     const {
       id,
@@ -52,10 +63,6 @@ class UserItem extends React.Component {
         <td className="text-truncate" style={{maxWidth: "100px"}}>
           {new Date(date_joined).toLocaleString()}
         </td>
-        {/* <td className="text-truncate" style={{maxWidth: "100px"}}>
-          {last_login ? new Date(last_login).toLocaleString() : "N/A"}
-        </td> */}
-
         <td>
           <input
             type="checkbox"
@@ -68,8 +75,28 @@ class UserItem extends React.Component {
   }
 }
 
-class AdminUserList extends React.Component {
-  constructor(props) {
+interface UserData {
+  id: number | string;
+  username: string;
+  [key: string]: unknown;
+}
+
+interface AdminUserListState {
+  objects: UserData[];
+  selectChk: boolean[];
+  currPage: number;
+  pageCount: number;
+  loaded: boolean;
+  errors: unknown;
+  submitting: boolean;
+  filters: Record<string, unknown>;
+  count: number;
+  selectChkAll?: boolean;
+  redirectUrl?: string;
+}
+
+class AdminUserList extends React.Component<Record<string, never>, AdminUserListState> {
+  constructor(props: Record<string, never>) {
     super(props);
     this.state = {
       objects: [],
@@ -83,11 +110,12 @@ class AdminUserList extends React.Component {
       submitting: false,
 
       filters: {},
+      count: 0,
     };
     setTitle("Admin | Users");
   }
 
-  selectChkChangeHandler(idx) {
+  selectChkChangeHandler(idx: number) {
     const {selectChk} = this.state;
     if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
@@ -100,7 +128,7 @@ class AdminUserList extends React.Component {
     }
   }
 
-  callApi(params) {
+  callApi(params: { page: number }) {
     this.setState({loaded: false, errors: null, selectChkAll: false});
     let query = {params: {page: params.page + 1, ...this.state.filters}}
 
@@ -132,14 +160,14 @@ class AdminUserList extends React.Component {
     this.callApi({page: this.state.currPage});
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: { selected: number }) => {
     this.callApi({page: event.selected});
   };
 
-  handleActOnUsers(action) {
+  handleActOnUsers(action: string) {
     this.setState({errors: null});
 
-    let usernames = [];
+    let usernames: string[] = [];
     this.state.selectChk.forEach((v, i) => {
       if (v) usernames.push(this.state.objects[i].username);
     });
@@ -149,11 +177,10 @@ class AdminUserList extends React.Component {
       return;
     }
 
-    // TODO: Write a bulk delete API for submissions
     const conf = window.confirm(
       `${action} các user ` + JSON.stringify(usernames) + " này?"
     );
-    if (! conf) return false;
+    if (! conf) return;
 
     const payload = {
       action: action,
@@ -167,15 +194,15 @@ class AdminUserList extends React.Component {
         parent.refetch(); 
         return "Success."; 
       }, },
-      error: { render({data}) { 
-          parent.setState({ errors: data.response.data, }); 
+      error: { render({data}: {data: { response?: { data: unknown } }}) { 
+          parent.setState({ errors: data.response?.data, }); 
           return "Update Failed."; 
         }, 
       },
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_prevProps: Record<string, never>, prevState: AdminUserListState) {
     if (prevState.filters !== this.state.filters) this.refetch();
   }
 
@@ -187,7 +214,6 @@ class AdminUserList extends React.Component {
 
     return (
       <div className="admin admin-users">
-        {/* Options for Admins: Create New,.... */}
         <div className="admin-options m-0 wrapper-vanilla">
           <div className="border d-inline-flex p-1">
             <Button
@@ -207,18 +233,16 @@ class AdminUserList extends React.Component {
           </div>
         </div>
 
-        {/* Place for displaying information about admin actions  */}
         <div className="admin-note text-center mb-1">
           {submitting && (
             <span className="loading_3dot">Đang xử lý yêu cầu</span>
           )}
         </div>
 
-        {/* User List */}
         <div className="admin-table user-table wrapper-vanilla">
           <UserFilter 
             filters={this.state.filters}
-            setFilters={(filters => this.setState({filters}))}
+            setFilters={(filters: Record<string, unknown>) => this.setState({filters})}
             disabled={!this.state.loaded}
           />
 
@@ -276,10 +300,9 @@ class AdminUserList extends React.Component {
                   )}
                 </th>
                 <th>Joined</th>
-                {/* <th >Last seen</th> */}
                 <th style={{width: "8%"}}>
                   <input type="checkbox" 
-                    value={this.state.selectChkAll}
+                    value={this.state.selectChkAll as unknown as string}
                     onChange={e => this.setState({  
                       selectChkAll: e.target.checked,
                       selectChk: Array(this.state.objects.length).fill(e.target.checked) 
@@ -291,7 +314,7 @@ class AdminUserList extends React.Component {
             <tbody>
               {this.state.loaded === false && (
                 <tr>
-                  <td colSpan="99">
+                  <td colSpan={99}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>
@@ -300,8 +323,13 @@ class AdminUserList extends React.Component {
                 this.state.objects.length > 0 ? this.state.objects.map((obj, idx) => (
                   <UserItem
                     key={`user-${obj.username}`}
-                    rowidx={idx}
-                    {...obj}
+                    id={obj.id}
+                    username={obj.username}
+                    email={obj.email as string}
+                    is_active={obj.is_active as boolean}
+                    is_staff={obj.is_staff as boolean}
+                    is_superuser={obj.is_superuser as boolean}
+                    date_joined={obj.date_joined as string}
                     selectChk={this.state.selectChk[idx]}
                     onSelectChkChange={() => this.selectChkChangeHandler(idx)}
                   />
@@ -339,15 +367,27 @@ class AdminUserList extends React.Component {
   }
 }
 
-class UserFilter extends React.Component {
-  constructor(props) {
+interface UserFilterProps {
+  filters: Record<string, unknown>;
+  setFilters: (filters: Record<string, unknown>) => void;
+  disabled: boolean;
+}
+
+interface UserFilterState {
+  filters: Record<string, unknown>;
+  filterByStatusChk?: boolean;
+  filterByJoinDateChk?: boolean;
+}
+
+class UserFilter extends React.Component<UserFilterProps, UserFilterState> {
+  constructor(props: UserFilterProps) {
     super(props)
     this.state = {
       filters: {...this.props.filters},
     }
   }
 
-  changeFilters(changes) {
+  changeFilters(changes: Record<string, unknown>) {
     const {filters} = this.state;
     this.setState({
       filters: {
@@ -373,7 +413,7 @@ class UserFilter extends React.Component {
       delete filt['date_joined_after']
     } else {
       ['date_joined_before', 'date_joined_after'].forEach(key => {
-        if (filt[key]) filt[key] = new Date(filt[key]).toISOString();
+        if (filt[key]) filt[key] = new Date(filt[key] as string).toISOString();
       });
     }
 
@@ -389,10 +429,10 @@ class UserFilter extends React.Component {
     this.props.setFilters({})
   }
 
-  getTime(key) {
+  getTime(key: string) {
     const data = this.state.filters;
     if (data && data[key]) {
-      let time = new Date(data[key]);
+      let time = new Date(data[key] as string);
       time.setMinutes(time.getMinutes() - time.getTimezoneOffset());
       return time.toISOString().slice(0, 19);
     }
@@ -414,7 +454,7 @@ class UserFilter extends React.Component {
               size="sm"
               type="text"
               placeholder="Search username (prefix), first name, last name (full text)"
-              value={filters.search || ""}
+              value={(filters.search as string) || ""}
               onChange={e => this.changeFilters({ search: e.target.value, })}
             />
           </Col>
@@ -423,26 +463,26 @@ class UserFilter extends React.Component {
           <Col className="">
             <label className="mr-2">
               <input type="checkbox" id="user-filter-chk-active"
-                checked={this.state.filterByStatusChk}
+                checked={this.state.filterByStatusChk || false}
                 onChange={e=>this.setState({filterByStatusChk: e.target.checked})}/>
               <span className="ml-1"><strong>Filter by Status?</strong></span>
             </label>
             <label className="ml-2">
               <input type="checkbox" id="user-filter-chk-active"
                 disabled={!this.state.filterByStatusChk}
-                checked={filters.is_active} onChange={e=>this.changeFilters({is_active: e.target.checked})}/>
+                checked={filters.is_active as boolean} onChange={e=>this.changeFilters({is_active: e.target.checked})}/>
               <span className="ml-1">Active</span>
             </label>
             <label className="ml-2">
               <input type="checkbox" id="user-filter-chk-staff"
                 disabled={!this.state.filterByStatusChk}
-                checked={filters.is_staff} onChange={e=>this.changeFilters({is_staff: e.target.checked})}/>
+                checked={filters.is_staff as boolean} onChange={e=>this.changeFilters({is_staff: e.target.checked})}/>
               <span className="ml-1">Staff</span>
             </label>
             <label className="ml-2">
               <input type="checkbox" id="user-filter-chk-staff"
                 disabled={!this.state.filterByStatusChk}
-                checked={filters.is_superuser} onChange={e=>this.changeFilters({is_superuser: e.target.checked})}/>
+                checked={filters.is_superuser as boolean} onChange={e=>this.changeFilters({is_superuser: e.target.checked})}/>
               <span className="ml-1">Superuser</span>
             </label>
           </Col>
@@ -451,7 +491,7 @@ class UserFilter extends React.Component {
           <Col className="">
             <label className="">
               <input type="checkbox" id="user-filter-chk-active"
-                checked={this.state.filterByJoinDateChk}
+                checked={this.state.filterByJoinDateChk || false}
                 onChange={e=>this.setState({filterByJoinDateChk: e.target.checked})}/>
               <span className="ml-1"><strong>Filter by Join Date?</strong></span>
             </label>
@@ -498,7 +538,7 @@ class UserFilter extends React.Component {
             <label className="">
               <span className="ml-1 mr-2"><strong>Order by</strong></span>
               <select id="user-filter-chk-active"
-                value={this.state.filters.ordering || ""}
+                value={(this.state.filters.ordering as string) || ""}
                 onChange={e=>this.changeFilters({ordering: e.target.value})}>
                   <option value="">--</option>
                   <option value="id">ID asc</option>
@@ -515,7 +555,7 @@ class UserFilter extends React.Component {
         <div className="w-100 mt-2 d-flex flex-row-reverse">
           <Button size="sm" variant="dark" className="ml-1 mr-1 btn-svg"
             disabled={disabled}
-            onClick={() => this.setFilters(filters)}
+            onClick={() => this.setFilters()}
           >
             <FaFilter/> Filter
           </Button>

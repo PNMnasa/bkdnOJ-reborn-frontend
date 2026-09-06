@@ -9,8 +9,20 @@ import {setTitle} from "helpers/setTitle";
 
 import "./Details.scss";
 
-class AdminJudgeDetails extends React.Component {
-  constructor(props) {
+interface AdminJudgeDetailsProps {
+  params: Record<string, string | undefined>;
+  user?: unknown;
+}
+
+interface AdminJudgeDetailsState {
+  loaded: boolean;
+  errors: unknown;
+  data: undefined;
+  redirectUrl: string | null;
+}
+
+class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJudgeDetailsState> {
+  constructor(props: AdminJudgeDetailsProps) {
     super(props);
     this.state = {
       loaded: false,
@@ -20,7 +32,7 @@ class AdminJudgeDetails extends React.Component {
     };
   }
 
-  setRedirect(url) {
+  setRedirect(url: string) {
     this.setState({redirectUrl: url});
   }
 
@@ -44,14 +56,8 @@ class AdminJudgeDetails extends React.Component {
         <div className="user-details">
           <Tabs defaultActiveKey="upload" id="new-user-tabs" className="pl-2">
             <Tab eventKey="upload" title="Upload CSV">
-              <UserFromFile redirectTo={url => this.setRedirect(url)} />
+              <UserFromFile redirectTo={(url: string) => this.setRedirect(url)} />
             </Tab>
-            {/* <Tab eventKey="form" title="Form">
-              <span> Not implemented </span>
-            </Tab>
-            <Tab eventKey="macros" title="Macros">
-              <span> Not implemented </span>
-            </Tab> */}
           </Tabs>
         </div>
       </div>
@@ -61,7 +67,7 @@ class AdminJudgeDetails extends React.Component {
 
 let wrappedPD = AdminJudgeDetails;
 wrappedPD = withParams(wrappedPD);
-const mapStateToProps = state => {
+const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};
 };
 wrappedPD = connect(mapStateToProps, null)(wrappedPD);

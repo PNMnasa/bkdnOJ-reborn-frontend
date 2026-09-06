@@ -17,8 +17,19 @@ import TestcaseDetails from "./_/TestcaseDetails";
 
 import "./AdminProblemDetails.scss";
 
-class RejudgeButton extends React.Component {
-  constructor(props) {
+interface RejudgeButtonProps {
+  shortname: string;
+  setErrors?: (e: unknown) => void;
+}
+
+interface RejudgeButtonState {
+  judgeInfo: string | null;
+  fetchingInfo: boolean;
+  confirmRejudge: boolean;
+}
+
+class RejudgeButton extends React.Component<RejudgeButtonProps, RejudgeButtonState> {
+  constructor(props: RejudgeButtonProps) {
     super(props);
     this.state = {
       judgeInfo: null,
@@ -38,16 +49,16 @@ class RejudgeButton extends React.Component {
             this.setState({confirmRejudge: conf});
           });
         })
-        .catch(err => {
-          let msg = `Cannot get rejudge info. ${err.response.status}`;
-          if (err.response.data.detail) msg = err.response.data.detail;
+        .catch((err: { response?: { status: number; data: { detail?: string } } }) => {
+          let msg = `Cannot get rejudge info. ${err.response?.status}`;
+          if (err.response?.data?.detail) msg = err.response.data.detail;
           toast.error(msg);
         })
         .finally(() => this.setState({fetchingInfo: false}));
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_prevProps: RejudgeButtonProps, prevState: RejudgeButtonState) {
     if (
       prevState.confirmRejudge === false &&
       this.state.confirmRejudge === true
@@ -61,7 +72,7 @@ class RejudgeButton extends React.Component {
     }
   }
 
-  clickHandler(e) {
+  clickHandler(e: React.MouseEvent) {
     e.preventDefault();
     if (this.state.confirmRejudge) {
       alert("Please refresh if you want to re-rejudge this problem.");
@@ -89,11 +100,37 @@ class RejudgeButton extends React.Component {
   }
 }
 
-class AdminProblemDetails extends React.Component {
-  constructor(props) {
+interface ProblemData {
+  shortname: string;
+  title: string;
+  [key: string]: unknown;
+}
+
+interface AdminProblemDetailsProps {
+  params: Record<string, string | undefined>;
+  user?: unknown;
+}
+
+interface AdminProblemDetailsState {
+  loaded: boolean;
+  errors: unknown;
+  options: unknown;
+  problemTitle: string | undefined;
+  general: ProblemData | undefined;
+  testData: unknown;
+  formErrors: unknown;
+  redirectUrl?: string;
+  shortname?: string;
+  childKey?: number;
+}
+
+class AdminProblemDetails extends React.Component<AdminProblemDetailsProps, AdminProblemDetailsState> {
+  shortname: string;
+
+  constructor(props: AdminProblemDetailsProps) {
     super(props);
     const {shortname} = this.props.params;
-    this.shortname = shortname;
+    this.shortname = shortname!;
     this.state = {
       loaded: false,
       errors: null,
@@ -105,7 +142,7 @@ class AdminProblemDetails extends React.Component {
       formErrors: null,
     };
   }
-  refetch(newshortname = null) {
+  refetch(newshortname: string | null = null) {
     let childKey = this.state.childKey;
     if (newshortname) {
       this.shortname = newshortname;
@@ -113,28 +150,23 @@ class AdminProblemDetails extends React.Component {
     }
 
     Promise.all([
-      //problemAPI.adminOptionsProblemDetails({shortname: this.shortname}),
       problemAPI.getProblemDetails({shortname: this.shortname}),
     ])
       .then(res => {
-        // const [optionsRes, generalRes] = res;
         const [generalRes] = res;
-        // console.log(optionsRes.data)
-        // console.log(generalRes.data)
         this.setState({
           shortname: generalRes.data.shortname,
           problemTitle: generalRes.data.title,
-          // options: optionsRes.data,
           general: generalRes.data,
           loaded: true,
           childKey,
         });
         setTitle(`Admin | Problem. ${generalRes.data.shortname}`);
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data,
+          errors: err.response?.data,
         });
       });
   }
@@ -152,7 +184,7 @@ class AdminProblemDetails extends React.Component {
           toast.success("OK Deleted.");
           this.setState({redirectUrl: "/admin/problem/"});
         })
-        .catch(err => {
+        .catch((err: unknown) => {
           toast.error(`Cannot delete. (${err})`);
         });
     }
@@ -179,8 +211,8 @@ class AdminProblemDetails extends React.Component {
               <span className="title-text">{`Problem | ${this.state.problemTitle}`}</span>
               <span>
                 <RejudgeButton
-                  shortname={general.shortname}
-                  setErrors={e => this.setState({errors: e})}
+                  shortname={general!.shortname}
+                  setErrors={(e: unknown) => this.setState({errors: e})}
                 />
               </span>
               <span>
@@ -225,19 +257,19 @@ class AdminProblemDetails extends React.Component {
                 <Tab eventKey="general" title="General">
                   <GeneralDetails
                     shortname={this.shortname}
-                    data={general}
-                    setProblemTitle={title =>
+                    data={general!}
+                    setProblemTitle={(title: string) =>
                       this.setState({problemTitle: title})
                     }
-                    setErrors={e => this.setState({formErrors: e})}
-                    refetch={newshort => this.refetch(newshort)}
+                    setErrors={(e: unknown) => this.setState({formErrors: e})}
+                    refetch={(newshort: string) => this.refetch(newshort)}
                   />
                 </Tab>
                 <Tab eventKey="data" title="Test Data">
                   <TestDataDetails
                     key={`prb-dt-data${this.state.childKey}`}
                     shortname={this.shortname}
-                    setErrors={e => this.setState({formErrors: e})}
+                    setErrors={(e: unknown) => this.setState({formErrors: e})}
                     forceRerender={() =>
                       this.setState({childKey: Math.random()})
                     }
@@ -247,7 +279,7 @@ class AdminProblemDetails extends React.Component {
                   <TestcaseDetails
                     key={`prb-dt-case${this.state.childKey}`}
                     shortname={this.shortname}
-                    setErrors={e => this.setState({formErrors: e})}
+                    setErrors={(e: unknown) => this.setState({formErrors: e})}
                     forceRerender={() =>
                       this.setState({childKey: Math.random()})
                     }
@@ -264,7 +296,7 @@ class AdminProblemDetails extends React.Component {
 
 let wrappedPD = AdminProblemDetails;
 wrappedPD = withParams(wrappedPD);
-const mapStateToProps = state => {
+const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};
 };
 wrappedPD = connect(mapStateToProps, null)(wrappedPD);

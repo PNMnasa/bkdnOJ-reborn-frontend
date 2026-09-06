@@ -1,19 +1,45 @@
 import React from "react";
 import {Form, Row, Col} from "react-bootstrap";
 
-/* Submission Tabs > General Tab */
-export default class GeneralDetails extends React.Component {
-  constructor(props) {
+interface SubmissionData {
+  id: number | string;
+  problem: {
+    shortname: string;
+    [key: string]: unknown;
+  };
+  contest_object: string | null;
+  user: string;
+  judged_date?: string;
+  rejudged_date?: string;
+  judged_on?: { name: string } | null;
+  locked_after?: string;
+  language: string;
+  source: string;
+  [key: string]: unknown;
+}
+
+interface GeneralDetailsProps {
+  id: string;
+  data: SubmissionData | undefined;
+}
+
+interface GeneralDetailsState {
+  id: string;
+  data?: Record<string, unknown>;
+}
+
+export default class GeneralDetails extends React.Component<GeneralDetailsProps, GeneralDetailsState> {
+  constructor(props: GeneralDetailsProps) {
     super(props);
     this.state = {
       id: this.props.id,
     };
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
-    let newData = this.state.data;
+    let newData = this.state.data!;
     if (!isCheckbox) newData[event.target.id] = event.target.value;
     else {
       newData[event.target.id] = !newData[event.target.id];
@@ -21,7 +47,7 @@ export default class GeneralDetails extends React.Component {
     this.setState({data: newData});
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
   }
 
@@ -144,7 +170,7 @@ export default class GeneralDetails extends React.Component {
               size="sm"
               type="text"
               id="judged_on"
-              value={data.judged_on ? data.judged_on.name : "N/A"}
+              value={data.judged_on ? (data.judged_on as { name: string }).name : "N/A"}
               readOnly
             />
           </Col>
@@ -209,9 +235,6 @@ export default class GeneralDetails extends React.Component {
             <sub>**Chưa thể chỉnh sửa.</sub>
           </Col>
           <Col>
-            {/* <Button variant="dark" size="sm" type="submit" disabled>
-            No Op
-          </Button> */}
           </Col>
         </Row>
       </Form>

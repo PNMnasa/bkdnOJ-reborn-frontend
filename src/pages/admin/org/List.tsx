@@ -14,13 +14,32 @@ import {FaTimes, FaPlus} from "react-icons/fa";
 import "./List.scss";
 import "styles/ClassicPagination.scss";
 
-export const INITIAL_FILTER = {
+export const INITIAL_FILTER: Record<string, unknown> = {
   search: "",
   ordering: "-creation_date",
 };
 
-class OrgList extends React.Component {
-  constructor(props) {
+interface OrgData {
+  slug: string;
+  name: string;
+  short_name: string;
+  logo_url?: string;
+  member_count?: number;
+  real_member_count?: number;
+  suborg_count?: number;
+  is_unlisted?: boolean;
+  sub_orgs?: OrgData[];
+  [key: string]: unknown;
+}
+
+interface OrgListProps {
+  orgs: OrgData[];
+  prefix: string;
+  setModalData: (slug: string) => void;
+}
+
+class OrgList extends React.Component<OrgListProps> {
+  constructor(props: OrgListProps) {
     super(props);
   }
   render() {
@@ -77,7 +96,7 @@ class OrgList extends React.Component {
               </div>
             </div>
             <OrgList
-              orgs={org.sub_orgs}
+              orgs={org.sub_orgs || []}
               prefix={prefix + `${idx + 1}.`}
               setModalData={this.props.setModalData}
             />
@@ -88,8 +107,22 @@ class OrgList extends React.Component {
   }
 }
 
-class OrgListWrapper extends React.Component {
-  constructor(props) {
+interface OrgListWrapperState {
+  searchData: Record<string, unknown>;
+  submitting: boolean;
+  loaded: boolean;
+  errors: string[] | null;
+  modalData: {
+    show: boolean;
+    parentOrg: string | null;
+  };
+  redirectUrl: string | null;
+  memberOf?: OrgData[];
+  adminOf?: OrgData[];
+}
+
+class OrgListWrapper extends React.Component<Record<string, never>, OrgListWrapperState> {
+  constructor(props: Record<string, never>) {
     super(props);
     this.state = {
       searchData: {...INITIAL_FILTER},
@@ -116,7 +149,7 @@ class OrgListWrapper extends React.Component {
       },
     });
   }
-  openNewModal(slug) {
+  openNewModal(slug: string | null) {
     this.setState({
       modalData: {
         show: true,
@@ -137,8 +170,7 @@ class OrgListWrapper extends React.Component {
           loaded: true,
         });
       })
-      .catch(_err => {
-        // console.log(err);
+      .catch((_err: unknown) => {
         this.setState({
           loaded: true,
           errors: ["Cannot fetch orgs. Please retry again."],
@@ -158,7 +190,6 @@ class OrgListWrapper extends React.Component {
 
     return (
       <div className="admin admin-org">
-        {/* Options for Admins: Create New,.... */}
         <NewModal
           show={this.state.modalData.show}
           parent={this.state.modalData.parentOrg}
@@ -175,11 +206,6 @@ class OrgListWrapper extends React.Component {
               onClick={() => this.openNewModal(null)}
             >
               <AiOutlinePlusCircle /> Add Root Org (Form)
-              {/* <span className="d-none d-md-inline-flex">Add Root Org (Form)</span>
-              <span className="d-inline-flex d-md-none">
-                <AiOutlineArrowRight />
-                <AiOutlineForm />
-              </span> */}
             </Button>
           </div>
 
@@ -214,12 +240,12 @@ class OrgListWrapper extends React.Component {
             <>
               {
                 <OrgList
-                  orgs={adminOf}
+                  orgs={adminOf || []}
                   prefix={""}
                   setModalData={slug => this.openNewModal(slug)}
                 />
               }
-              {adminOf.length === 0 && (
+              {(adminOf || []).length === 0 && (
                 <div style={{height: "100px"}} className="flex-center">
                   <em>Bạn hiện đang không là admin của tổ chức nào cả.</em>
                 </div>
@@ -234,8 +260,23 @@ class OrgListWrapper extends React.Component {
 
 export default OrgListWrapper;
 
-class NewModal extends React.Component {
-  constructor(props) {
+interface NewModalProps {
+  show: boolean;
+  parent: string | null;
+  setHide: () => void;
+}
+
+interface NewModalState {
+  parent: string | null;
+  slug: string;
+  short_name: string;
+  name: string;
+  errors: { errors: unknown } | null;
+  redirectUrl: string | null;
+}
+
+class NewModal extends React.Component<NewModalProps, NewModalState> {
+  constructor(props: NewModalProps) {
     super(props);
     this.state = {
       parent: this.props.parent,
@@ -245,10 +286,11 @@ class NewModal extends React.Component {
       name: "",
 
       errors: null,
+      redirectUrl: null,
     };
   }
 
-  onSubmitHandler(e) {
+  onSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     this.setState({errors: null});
 
@@ -269,9 +311,9 @@ class NewModal extends React.Component {
           redirectUrl: `/admin/org/${this.state.slug.toUpperCase()}`,
         });
       })
-      .catch(err => {
-        toast.error(`Cannot create org. (${err.response.status})`);
-        this.setState({errors: {errors: err.response.data}});
+      .catch((err: { response?: { status: number; data: unknown } }) => {
+        toast.error(`Cannot create org. (${err.response?.status})`);
+        this.setState({errors: {errors: err.response?.data}});
       });
   }
   componentWillUnmount() {}

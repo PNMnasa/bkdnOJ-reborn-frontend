@@ -10,8 +10,31 @@ import {VscRefresh} from "react-icons/vsc";
 import problemAPI from "api/problem";
 import commonAPI from "api/common";
 
-export default class TestDataDetails extends React.Component {
-  constructor(props) {
+interface TestDataDetailsProps {
+  shortname: string;
+  setErrors?: (e: unknown) => void;
+  forceRerender: () => void;
+}
+
+interface TestDataState {
+  data: {
+    zipfile: string | null;
+    custom_checker: string | null;
+    custom_checker_remove: boolean;
+    zipfile_remove: boolean;
+    generator_remove: boolean;
+    checker?: string;
+    checker_args?: string;
+    [key: string]: unknown;
+  };
+  selectedZip: File | null;
+  selectedCustomChecker: File | null;
+  submitting: boolean;
+  errors?: unknown;
+}
+
+export default class TestDataDetails extends React.Component<TestDataDetailsProps, TestDataState> {
+  constructor(props: TestDataDetailsProps) {
     super(props);
     this.state = {
       data: {
@@ -47,9 +70,8 @@ export default class TestDataDetails extends React.Component {
               submitting: false,
             });
           })
-          .catch(_err => {
+          .catch((_err: unknown) => {
             this.setState({submitting: false});
-            // console.log(err);
           });
       }
     );
@@ -59,14 +81,14 @@ export default class TestDataDetails extends React.Component {
     this.refetch();
   }
 
-  setSelectedZip(file) {
+  setSelectedZip(file: File) {
     this.setState({selectedZip: file});
   }
-  setSelectedCustomChecker(file) {
+  setSelectedCustomChecker(file: File) {
     this.setState({selectedCustomChecker: file});
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -77,7 +99,7 @@ export default class TestDataDetails extends React.Component {
     this.setState({data: newData});
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     if (this.state.submitting) return;
     if (this.props.setErrors) {
@@ -97,8 +119,8 @@ export default class TestDataDetails extends React.Component {
       formData.append("custom_checker", this.state.selectedCustomChecker);
 
     for (let key in sendData) {
-      if (![null, undefined].includes(sendData[key]))
-        formData.append(key, sendData[key]);
+      if (![null, undefined].includes(sendData[key] as never))
+        formData.append(key, String(sendData[key]));
     }
 
     this.setState({submitting: true}, () => {
@@ -111,10 +133,10 @@ export default class TestDataDetails extends React.Component {
           toast.success("OK Updated.");
           this.props.forceRerender();
         })
-        .catch(err => {
+        .catch((err: { response?: { data: unknown } }) => {
           this.setState({
             errors: {
-              errors: err.response.data || ["Cannot update problem data."],
+              errors: err.response?.data || ["Cannot update problem data."],
             },
             submitting: false,
           });
@@ -122,50 +144,44 @@ export default class TestDataDetails extends React.Component {
     });
   }
 
-  downloadZip(url) {
+  downloadZip(url: string) {
     const toastId = toast.loading("Downloading..")
     commonAPI.downloadFile(url).then(response => {
       toast.update(toastId, {render: "Saved", type: "success", isLoading: false, autoClose: 3000})
-      // create file link in browser's memory
       const href = URL.createObjectURL(response.data);
 
-      // create "a" HTLM element with href to file & click
       const link = document.createElement('a');
       link.href = href;
-      link.setAttribute('download', `archive-${this.props.shortname}.zip`); //or any other extension
+      link.setAttribute('download', `archive-${this.props.shortname}.zip`);
       document.body.appendChild(link);
       link.click();
 
-      // clean up "a" element & remove ObjectURL
       document.body.removeChild(link);
       URL.revokeObjectURL(href);
-    }).catch(err => {
+    }).catch((err: unknown) => {
       toast.update(toastId, {render: "Download PDF failed. Check console for more info.", type: "error", isLoading: false, autoClose: 3000})
       console.log("Cannot download pdf.", err)
     })
   }
 
-  downloadCustomChecker(url) {
+  downloadCustomChecker(url: string) {
     let filename = url.substring(url.lastIndexOf("/")+1)
     if (filename.length === 0) filename = "customchecker";
 
     const toastId = toast.loading("Downloading..")
     commonAPI.downloadFile(url).then(response => {
       toast.update(toastId, {render: "Saved", type: "success", isLoading: false, autoClose: 3000})
-      // create file link in browser's memory
       const href = URL.createObjectURL(response.data);
 
-      // create "a" HTLM element with href to file & click
       const link = document.createElement('a');
       link.href = href;
-      link.setAttribute('download', `${filename}`); //or any other extension
+      link.setAttribute('download', `${filename}`);
       document.body.appendChild(link);
       link.click();
 
-      // clean up "a" element & remove ObjectURL
       document.body.removeChild(link);
       URL.revokeObjectURL(href);
-    }).catch(err => {
+    }).catch((err: unknown) => {
       toast.update(toastId, {render: "Download PDF failed. Check console for more info.", type: "error", isLoading: false, autoClose: 3000})
       console.log("Cannot download pdf.", err)
     })
@@ -200,8 +216,8 @@ export default class TestDataDetails extends React.Component {
           <Col md={10}>
             <div className="p-0">
               {data.zipfile ? (
-                <a /*href={data.pdf}*/ className="text-truncate style-as-default-link"
-                    onClick={()=>this.downloadZip(data.zipfile)}
+                <a className="text-truncate style-as-default-link"
+                    onClick={()=>this.downloadZip(data.zipfile!)}
                 >
                   {data.zipfile}
                 </a>
@@ -209,8 +225,8 @@ export default class TestDataDetails extends React.Component {
                 "Not Available"
               )}
               <FileUploader
-                onFileSelectSuccess={file => this.setSelectedZip(file)}
-                onFileSelectError={({error}) => alert(error)}
+                onFileSelectSuccess={(file: File) => this.setSelectedZip(file)}
+                onFileSelectError={({error}: {error: string}) => alert(error)}
               />
             </div>
           </Col>
@@ -273,10 +289,10 @@ export default class TestDataDetails extends React.Component {
                 "None"
               )}
               <FileUploader
-                onFileSelectSuccess={file =>
+                onFileSelectSuccess={(file: File) =>
                   this.setSelectedCustomChecker(file)
                 }
-                onFileSelectError={({error}) => alert(error)}
+                onFileSelectError={({error}: {error: string}) => alert(error)}
               />
             </div>
           </Col>

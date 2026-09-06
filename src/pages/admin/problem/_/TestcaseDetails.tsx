@@ -6,7 +6,24 @@ import {VscRefresh} from "react-icons/vsc";
 
 import problemAPI from "api/problem";
 
-class TestcaseItem extends React.Component {
+interface TestcaseItemData {
+  id: number;
+  order?: number;
+  input_file: string;
+  output_file: string;
+  points: number;
+  is_pretest: boolean;
+  [key: string]: unknown;
+}
+
+interface TestcaseItemProps extends TestcaseItemData {
+  rowidx?: number;
+  onPretestToggle: () => void;
+  isSelected: boolean;
+  onSelectChkChange: () => void;
+}
+
+class TestcaseItem extends React.Component<TestcaseItemProps> {
   render() {
     const {
       order,
@@ -28,14 +45,14 @@ class TestcaseItem extends React.Component {
         <td>
           <input
             type="checkbox"
-            value={is_pretest}
+            value={is_pretest as unknown as string}
             onChange={() => onPretestToggle()}
           />
         </td>
         <td>
           <input
             type="checkbox"
-            value={isSelected}
+            value={isSelected as unknown as string}
             onChange={() => onSelectChkChange()}
           />
         </td>
@@ -44,8 +61,22 @@ class TestcaseItem extends React.Component {
   }
 }
 
-export default class TestcaseDetails extends React.Component {
-  constructor(props) {
+interface TestcaseDetailsProps {
+  shortname: string;
+  setErrors?: (e: unknown) => void;
+  forceRerender: () => void;
+}
+
+interface TestcaseDetailsState {
+  data: TestcaseItemData[];
+  loaded: boolean;
+  errors: unknown;
+  selectChk: boolean[];
+  submitting: boolean;
+}
+
+export default class TestcaseDetails extends React.Component<TestcaseDetailsProps, TestcaseDetailsState> {
+  constructor(props: TestcaseDetailsProps) {
     super(props);
     this.state = {
       data: [],
@@ -57,7 +88,7 @@ export default class TestcaseDetails extends React.Component {
     };
   }
 
-  selectChkChangeHandler(idx) {
+  selectChkChangeHandler(idx: number) {
     const {selectChk} = this.state;
     if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
@@ -70,7 +101,7 @@ export default class TestcaseDetails extends React.Component {
     }
   }
 
-  pretestToggleHandler(id) {
+  pretestToggleHandler(id: number) {
     const testcases = this.state.data;
     let sel = testcases.find(tc => tc.id === id);
     if (!sel) return;
@@ -100,18 +131,16 @@ export default class TestcaseDetails extends React.Component {
               data: res.data,
               selectChk: Array(res.data.length).fill(false),
               loaded: true,
-              // errors: null,
               submitting: false,
             });
           })
-          .catch(err => {
+          .catch((err: { response?: { data: unknown } }) => {
             this.setState({
               loaded: true,
               submitting: false,
-              // errors: ['Cannot fetch testcases for this problem. Has it been deleted?']
             });
             if (this.props.setErrors) {
-              this.props.setErrors({errors: err.response.data});
+              this.props.setErrors({errors: err.response?.data});
             }
           });
       }
@@ -122,7 +151,7 @@ export default class TestcaseDetails extends React.Component {
     this.refetch();
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     this.props.forceRerender();
     alert("Editing this resource is not implemented.");
@@ -154,7 +183,6 @@ export default class TestcaseDetails extends React.Component {
         </Row>
 
         <Accordion defaultActiveKey="0">
-          {/* General Settings */}
           <Accordion.Item eventKey="0" className="testcases">
             <Accordion.Header>Testcases</Accordion.Header>
             <Accordion.Body>
@@ -188,7 +216,7 @@ export default class TestcaseDetails extends React.Component {
                 <tbody>
                   {loaded === false ? (
                     <tr>
-                      <td colSpan="6">
+                      <td colSpan={6}>
                         <SpinLoader margin="10px" />
                       </td>
                     </tr>

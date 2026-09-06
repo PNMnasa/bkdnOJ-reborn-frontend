@@ -2,7 +2,9 @@ import React from "react";
 import {Form, Accordion, Table, Row, Col} from "react-bootstrap";
 import {ErrorBox, SpinLoader} from "components";
 
-class ButtonPanel extends React.Component {
+interface ButtonPanelProps {}
+
+class ButtonPanel extends React.Component<ButtonPanelProps> {
   render() {
     return (
       <Row className="button-panel">
@@ -10,16 +12,25 @@ class ButtonPanel extends React.Component {
           <sub>**Chưa thể chỉnh sửa.</sub>
         </Col>
         <Col>
-          {/* <Button variant="dark" size="sm" type="submit" disabled>
-            No Op
-          </Button> */}
         </Col>
       </Row>
     );
   }
 }
 
-class TestcaseItem extends React.Component {
+interface TestcaseItemProps {
+  id: number | string;
+  status: string;
+  time: string;
+  memory: string;
+  points: number | string;
+  total: number | string;
+  case: number | string;
+  rowidx?: number;
+  [key: string]: unknown;
+}
+
+class TestcaseItem extends React.Component<TestcaseItemProps> {
   render() {
     const {id, status, time, memory, points, total} = this.props;
     const case_no = this.props.case;
@@ -38,8 +49,30 @@ class TestcaseItem extends React.Component {
   }
 }
 
-export default class TestcaseDetails extends React.Component {
-  constructor(props) {
+interface SubmissionData {
+  result?: string;
+  status?: string;
+  error?: string;
+  points?: number | string;
+  test_cases?: TestcaseItemProps[];
+  [key: string]: unknown;
+}
+
+interface TestcaseDetailsProps {
+  shortname?: string;
+  id: string;
+  data: SubmissionData | undefined;
+}
+
+interface TestcaseDetailsState {
+  shortname?: string;
+  data: null;
+  loaded: boolean;
+  errors: unknown;
+}
+
+export default class TestcaseDetails extends React.Component<TestcaseDetailsProps, TestcaseDetailsState> {
+  constructor(props: TestcaseDetailsProps) {
     super(props);
     this.state = {
       shortname: this.props.shortname,

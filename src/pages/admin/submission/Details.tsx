@@ -15,11 +15,30 @@ import GeneralDetails from "./_/GeneralDetails";
 import TestcaseDetails from "./_/TestcaseDetails";
 import "./Details.scss";
 
-class AdminSubmissionDetails extends React.Component {
-  constructor(props) {
+interface SubmissionData {
+  id: number | string;
+  [key: string]: unknown;
+}
+
+interface AdminSubmissionDetailsProps {
+  params: Record<string, string | undefined>;
+  user?: unknown;
+}
+
+interface AdminSubmissionDetailsState {
+  loaded: boolean;
+  errors: unknown;
+  data: SubmissionData | undefined;
+  redirectUrl?: string;
+}
+
+class AdminSubmissionDetails extends React.Component<AdminSubmissionDetailsProps, AdminSubmissionDetailsState> {
+  id: string;
+
+  constructor(props: AdminSubmissionDetailsProps) {
     super(props);
     const {id} = this.props.params;
-    this.id = id;
+    this.id = id!;
     this.state = {
       loaded: false,
       errors: null,
@@ -37,10 +56,10 @@ class AdminSubmissionDetails extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: {errors: err.response.data || "Cannot load submission."},
+          errors: {errors: err.response?.data || "Cannot load submission."},
         });
       });
   }
@@ -57,7 +76,7 @@ class AdminSubmissionDetails extends React.Component {
           this.setState({redirectUrl: "/admin/submission/"});
         })
         .catch(() => {
-          toast.error(`Cannot delete. (${err})`);
+          toast.error(`Cannot delete.`);
         });
     }
   }
@@ -138,7 +157,7 @@ class AdminSubmissionDetails extends React.Component {
 
 let wrappedPD = AdminSubmissionDetails;
 wrappedPD = withParams(wrappedPD);
-const mapStateToProps = state => {
+const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};
 };
 wrappedPD = connect(mapStateToProps, null)(wrappedPD);

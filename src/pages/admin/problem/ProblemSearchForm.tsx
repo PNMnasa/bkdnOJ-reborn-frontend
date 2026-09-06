@@ -1,16 +1,31 @@
 import React from "react";
-import PropTypes from "prop-types";
+
 import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
 
 import {FaTimes, FaFilter} from "react-icons/fa";
 
-import {INITIAL_FILTER} from "./List.jsx";
+import {PROBLEM_INITIAL_FILTER} from "./AdminProblemList";
 
-export default class Filter extends React.Component {
-  constructor(props) {
+interface ProblemSearchFormProps {
+  searchData: Record<string, unknown>;
+  setSearchData: (data: Record<string, unknown>) => void;
+}
+
+interface ProblemSearchFormState {
+  search: string;
+  ordering: string;
+  is_public: string;
+  is_organization_private: string;
+  partial: string;
+  short_circuit: string;
+  [key: string]: unknown;
+}
+
+export default class ProblemSearchForm extends React.Component<ProblemSearchFormProps, ProblemSearchFormState> {
+  constructor(props: ProblemSearchFormProps) {
     super(props);
     this.state = {
-      ...INITIAL_FILTER,
+      ...PROBLEM_INITIAL_FILTER,
     };
   }
 
@@ -18,7 +33,7 @@ export default class Filter extends React.Component {
     const data = this.state;
     return (
       <Form onSubmit={e => e.preventDefault()}>
-        <Accordion defaultActiveKey="0">
+        <Accordion defaultActiveKey="-1">
           <Accordion.Item eventKey="0" className="filter">
             <Accordion.Header>Search/Filter</Accordion.Header>
             <Accordion.Body>
@@ -31,7 +46,7 @@ export default class Filter extends React.Component {
                   <Form.Control
                     size="sm"
                     type="text"
-                    placeholder="Search (key/name)"
+                    placeholder="Search (code/title)"
                     value={data.search}
                     onChange={e => this.setState({search: e.target.value})}
                   />
@@ -49,47 +64,43 @@ export default class Filter extends React.Component {
                     onChange={e => this.setState({ordering: e.target.value})}
                     value={data.ordering}
                   >
-                    <option value="-start_time">
-                      Thời gian bắt đầu giảm dần
+                    <option value="-created">Tạo gần đây nhất</option>
+                    <option value="created">Tạo cách đây lâu nhất</option>
+                    <option value="-modified">Chỉnh sửa gần đây nhất</option>
+                    <option value="modified">
+                      Chỉnh sửa cách đây lâu nhất
                     </option>
-                    <option value="start_time">
-                      Thời gian bắt đầu tăng dần
-                    </option>
-                    <option value="-end_time">
-                      Thời gian kết thúc giảm dần
-                    </option>
-                    <option value="end_time">
-                      Thời gian kết thúc tăng dần
-                    </option>
+                    <option value="-points">Điểm giảm dần</option>
+                    <option value="points">Điểm tăng dần</option>
                   </Form.Select>
                 </Col>
               </Row>
 
               <Row>
                 <Col>
-                  <Form.Label column="sm"> Visible? </Form.Label>
+                  <Form.Label column="sm"> Public? </Form.Label>
                   <Form.Select
                     size="sm"
-                    id="is_visible"
+                    id="is_public"
                     className="mb-1"
-                    value={data.is_visible}
-                    onChange={e => this.setState({is_visible: e.target.value})}
+                    value={data.is_public}
+                    onChange={e => this.setState({is_public: e.target.value})}
                   >
                     <option value="">--</option>
-                    <option value="True">Public/Limited</option>
+                    <option value="True">Public</option>
                     <option value="False">Private</option>
                   </Form.Select>
                 </Col>
 
                 <Col>
-                  <Form.Label column="sm"> Frozen? </Form.Label>
+                  <Form.Label column="sm"> Org Private? </Form.Label>
                   <Form.Select
                     size="sm"
-                    id="enable_frozen"
+                    id="is_organization_private"
                     className="mb-1"
-                    value={data.enable_frozen}
+                    value={data.is_organization_private}
                     onChange={e =>
-                      this.setState({enable_frozen: e.target.value})
+                      this.setState({is_organization_private: e.target.value})
                     }
                   >
                     <option value="">--</option>
@@ -99,32 +110,19 @@ export default class Filter extends React.Component {
                 </Col>
 
                 <Col>
-                  <Form.Label column="sm"> Rated? </Form.Label>
+                  <Form.Label column="sm"> ICPC? </Form.Label>
                   <Form.Select
                     size="sm"
-                    id="is_rated"
+                    id="short_circuit"
                     className="mb-1"
-                    value={data.is_rated}
-                    onChange={e => this.setState({is_rated: e.target.value})}
+                    value={data.short_circuit}
+                    onChange={e =>
+                      this.setState({short_circuit: e.target.value})
+                    }
                   >
                     <option value="">--</option>
                     <option value="True">Yes</option>
                     <option value="False">No</option>
-                  </Form.Select>
-                </Col>
-
-                <Col>
-                  <Form.Label column="sm"> Format </Form.Label>
-                  <Form.Select
-                    size="sm"
-                    id="format_name"
-                    className="mb-1"
-                    value={data.format_name}
-                    onChange={e => this.setState({format_name: e.target.value})}
-                  >
-                    <option value="">--</option>
-                    <option value="icpc">ICPC</option>
-                    <option value="ioi">IOI</option>
                   </Form.Select>
                 </Col>
               </Row>
@@ -133,13 +131,13 @@ export default class Filter extends React.Component {
         </Accordion>
         <Row>
           <Col>
-            <span>
-              {/* Bộ lọc:{
+            {/* <span>
+              Bộ lọc:{
                 this.props.searchData && <>
                   <code>{JSON.stringify(this.props.searchData)}</code>
                 </>
-              } */}
-            </span>
+              }
+            </span> */}
           </Col>
           <div className="d-flex flex-row-reverse">
             <Button
@@ -167,8 +165,3 @@ export default class Filter extends React.Component {
     );
   }
 }
-
-Filter.propTypes = {
-  searchData: PropTypes.object,
-  setSearchData: PropTypes.func,
-};

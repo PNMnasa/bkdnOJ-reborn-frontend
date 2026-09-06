@@ -23,8 +23,26 @@ import {getYearMonthDate, getHourMinuteSecond} from "helpers/dateFormatter";
 import "./AdminProblemList.scss";
 import "styles/ClassicPagination.scss";
 
-class ProblemListItem extends React.Component {
-  static formatDateTime(date) {
+interface ProblemListItemData {
+  shortname: string;
+  title: string;
+  points: number;
+  short_circuit: boolean;
+  partial: boolean;
+  is_public: boolean;
+  is_organization_private: boolean;
+  modified?: string;
+  [key: string]: unknown;
+}
+
+interface ProblemListItemProps extends ProblemListItemData {
+  rowidx: number;
+  selectChk: boolean[];
+  onSelectChkChange: (idx: number) => void;
+}
+
+class ProblemListItem extends React.Component<ProblemListItemProps> {
+  static formatDateTime(date: string) {
     const d = new Date(date);
     return (
       <div className="flex-center-col">
@@ -69,7 +87,7 @@ class ProblemListItem extends React.Component {
         <td>
           <input
             type="checkbox"
-            value={selectChk[rowidx]}
+            value={selectChk[rowidx] as unknown as string}
             onChange={() => onSelectChkChange(rowidx)}
           />
         </td>
@@ -78,7 +96,7 @@ class ProblemListItem extends React.Component {
   }
 }
 
-export const PROBLEM_INITIAL_FILTER = {
+export const PROBLEM_INITIAL_FILTER: Record<string, unknown> = {
   search: "",
   is_public: "",
   is_organization_private: "",
@@ -87,8 +105,23 @@ export const PROBLEM_INITIAL_FILTER = {
   ordering: "-created",
 };
 
-class AdminProblemList extends React.Component {
-  constructor(props) {
+interface AdminProblemListState {
+  searchData: Record<string, unknown>;
+  problems: ProblemListItemData[];
+  count: number;
+  selectChk: boolean[];
+  currPage: number;
+  pageCount: number;
+  loaded: boolean;
+  errors: unknown;
+  selectedZip: File | null;
+  submitting: boolean;
+  newModalShow: boolean;
+  helpModalShow: boolean;
+}
+
+class AdminProblemList extends React.Component<Record<string, never>, AdminProblemListState> {
+  constructor(props: Record<string, never>) {
     super(props);
     this.state = {
       searchData: PROBLEM_INITIAL_FILTER,
@@ -111,11 +144,11 @@ class AdminProblemList extends React.Component {
     setTitle("Admin | Problems");
   }
 
-  setSelectedZip(zip) {
+  setSelectedZip(zip: File) {
     this.setState({selectedZip: zip});
   }
 
-  selectChkChangeHandler(idx) {
+  selectChkChangeHandler(idx: number) {
     const {selectChk} = this.state;
     if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
@@ -128,7 +161,7 @@ class AdminProblemList extends React.Component {
     }
   }
 
-  callApi(params) {
+  callApi(params: { page: number }) {
     this.setState({loaded: false, errors: null});
     const searchData = this.state.searchData;
 
@@ -144,11 +177,11 @@ class AdminProblemList extends React.Component {
           selectChk: Array(res.data.results.length).fill(false),
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
           errors:
-            err.response.data || "Cannot fetch problems. Please retry again.",
+            err.response?.data || "Cannot fetch problems. Please retry again.",
         });
       });
   }
@@ -156,20 +189,20 @@ class AdminProblemList extends React.Component {
   componentDidMount() {
     this.callApi({page: this.state.currPage});
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_prevProps: Record<string, never>, prevState: AdminProblemListState) {
     if (prevState.searchData !== this.state.searchData) {
       this.callApi({page: this.state.currPage});
     }
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: { selected: number }) => {
     this.callApi({page: event.selected});
   };
 
-  handleDeleteSelect(e) {
+  handleDeleteSelect(e: React.MouseEvent) {
     e.preventDefault();
 
-    let names = [];
+    let names: string[] = [];
     this.state.selectChk.forEach((v, i) => {
       if (v) names.push(this.state.problems[i].shortname);
     });
@@ -179,12 +212,11 @@ class AdminProblemList extends React.Component {
       return;
     }
 
-    // TODO: Write a bulk delete API for problems
     const conf = window.confirm(
       "Xóa các bài tập " + JSON.stringify(names) + "?"
     );
     if (conf) {
-      let reqs = [];
+      let reqs: Promise<unknown>[] = [];
       names.forEach(shortname => {
         reqs.push(problemApi.adminDeleteProblem({shortname}));
       });
@@ -194,7 +226,7 @@ class AdminProblemList extends React.Component {
           toast.success("OK Deleted.");
           this.callApi({page: this.state.currPage});
         })
-        .catch(err => {
+        .catch((err: { response?: { status: number } }) => {
           let msg = "Không thể xóa các problem này.";
           if (err.response) {
             if (err.response.status === 405)
@@ -210,10 +242,10 @@ class AdminProblemList extends React.Component {
     }
   }
 
-  newModalToggle(bool) {
+  newModalToggle(bool: boolean) {
     this.setState({newModalShow: bool});
   }
-  helpModalToggle(bool) {
+  helpModalToggle(bool: boolean) {
     this.setState({helpModalShow: bool});
   }
 
@@ -222,7 +254,6 @@ class AdminProblemList extends React.Component {
 
     return (
       <div className="admin admin-problems ">
-        {/* Options for Admins: Create New,.... */}
         <div className="admin-options wrapper-vanilla m-0 mb-1">
           <div className="border d-inline-flex p-1">
             <Button
@@ -242,8 +273,8 @@ class AdminProblemList extends React.Component {
 
           <div className="border d-inline-flex p-1">
             <FileUploader
-              onFileSelectSuccess={file => this.setSelectedZip(file)}
-              onFileSelectError={({error}) => alert(error)}
+              onFileSelectSuccess={(file: File) => this.setSelectedZip(file)}
+              onFileSelectError={({error}: {error: string}) => alert(error)}
             />
             <Button
               disabled={submitting}
@@ -259,8 +290,8 @@ class AdminProblemList extends React.Component {
                         toast.success("Đã tạo Problem mới thành công.");
                         this.callApi({page: this.state.currPage});
                       })
-                      .catch(err => {
-                        const data = err.response.data;
+                      .catch((err: { response?: { data: unknown } }) => {
+                        const data = err.response?.data;
                         this.setState({errors: data});
                       })
                       .finally(() => this.setState({submitting: false}));
@@ -293,11 +324,10 @@ class AdminProblemList extends React.Component {
           </div>
         </div>
 
-        {/* Problem List */}
         <div className="admin-table problem-table wrapper-vanilla">
           <ProblemSearchForm
             searchData={this.state.searchData}
-            setSearchData={dat => this.setState({searchData: dat})}
+            setSearchData={(dat: Record<string, unknown>) => this.setState({searchData: dat})}
           />
 
           <h4>Problem List</h4>
@@ -344,7 +374,7 @@ class AdminProblemList extends React.Component {
             <tbody>
               {this.state.loaded === false ? (
                 <tr>
-                  <td colSpan="99">
+                  <td colSpan={99}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>
@@ -355,12 +385,12 @@ class AdminProblemList extends React.Component {
                     rowidx={idx}
                     {...prob}
                     selectChk={this.state.selectChk}
-                    onSelectChkChange={i => this.selectChkChangeHandler(i)}
+                    onSelectChkChange={(i: number) => this.selectChkChangeHandler(i)}
                   />
                 ))
               ) : (
                 <tr>
-                  <td colSpan="99">
+                  <td colSpan={99}>
                     <em>No Submission be found.</em>
                   </td>
                 </tr>
@@ -389,26 +419,37 @@ class AdminProblemList extends React.Component {
 
         <NaviNewProb
           show={this.state.newModalShow}
-          toggle={b => this.newModalToggle(b)}
+          toggle={(b: boolean) => this.newModalToggle(b)}
         />
         <HelpModal
           show={this.state.helpModalShow}
-          toggle={b => this.helpModalToggle(b)}
+          toggle={(b: boolean) => this.helpModalToggle(b)}
         />
       </div>
     );
   }
 }
 
-class NewProblemModal extends React.Component {
-  constructor(props) {
+interface NewProblemModalProps {
+  show: boolean;
+  toggle: (b: boolean) => void;
+  navigate: (to: string) => void;
+}
+
+interface NewProblemModalState {
+  shortname: string;
+  errors: unknown;
+}
+
+class NewProblemModal extends React.Component<NewProblemModalProps, NewProblemModalState> {
+  constructor(props: NewProblemModalProps) {
     super(props);
     this.state = {
       shortname: "",
       errors: null,
     };
   }
-  onSubmit(e) {
+  onSubmit(e: React.FormEvent) {
     e.preventDefault();
     this.setState({errors: null});
 
@@ -418,9 +459,8 @@ class NewProblemModal extends React.Component {
         toast.success("OK Created.");
         this.props.navigate(`/admin/problem/${res.data.shortname}`);
       })
-      .catch(err => {
-        // console.log(err);
-        this.setState({errors: err.response.data});
+      .catch((err: { response?: { data: unknown } }) => {
+        this.setState({errors: err.response?.data});
       });
   }
   close() {
@@ -460,7 +500,12 @@ class NewProblemModal extends React.Component {
 }
 const NaviNewProb = withNavigation(NewProblemModal);
 
-class HelpModal extends React.Component {
+interface HelpModalProps {
+  show: boolean;
+  toggle: (b: boolean) => void;
+}
+
+class HelpModal extends React.Component<HelpModalProps> {
   close() {
     this.props.toggle(false);
   }

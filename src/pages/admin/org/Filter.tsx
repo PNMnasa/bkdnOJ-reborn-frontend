@@ -1,17 +1,26 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
 
 import {FaTimes, FaFilter} from "react-icons/fa";
 
-import {PROBLEM_INITIAL_FILTER} from "./AdminProblemList";
+import {INITIAL_FILTER} from "./List";
 
-export default class ProblemSearchForm extends React.Component {
-  constructor(props) {
+interface FilterProps {
+  searchData: Record<string, unknown>;
+  setSearchData: (data: Record<string, unknown>) => void;
+}
+
+interface FilterState {
+  search: string;
+  ordering: string;
+  [key: string]: unknown;
+}
+
+export default class Filter extends React.Component<FilterProps, FilterState> {
+  constructor(props: FilterProps) {
     super(props);
     this.state = {
-      ...PROBLEM_INITIAL_FILTER,
+      ...INITIAL_FILTER,
     };
   }
 
@@ -19,7 +28,7 @@ export default class ProblemSearchForm extends React.Component {
     const data = this.state;
     return (
       <Form onSubmit={e => e.preventDefault()}>
-        <Accordion defaultActiveKey="-1">
+        <Accordion defaultActiveKey="0">
           <Accordion.Item eventKey="0" className="filter">
             <Accordion.Header>Search/Filter</Accordion.Header>
             <Accordion.Body>
@@ -32,7 +41,7 @@ export default class ProblemSearchForm extends React.Component {
                   <Form.Control
                     size="sm"
                     type="text"
-                    placeholder="Search (code/title)"
+                    placeholder="Search (key/name)"
                     value={data.search}
                     onChange={e => this.setState({search: e.target.value})}
                   />
@@ -50,43 +59,47 @@ export default class ProblemSearchForm extends React.Component {
                     onChange={e => this.setState({ordering: e.target.value})}
                     value={data.ordering}
                   >
-                    <option value="-created">Tạo gần đây nhất</option>
-                    <option value="created">Tạo cách đây lâu nhất</option>
-                    <option value="-modified">Chỉnh sửa gần đây nhất</option>
-                    <option value="modified">
-                      Chỉnh sửa cách đây lâu nhất
+                    <option value="-start_time">
+                      Thời gian bắt đầu giảm dần
                     </option>
-                    <option value="-points">Điểm giảm dần</option>
-                    <option value="points">Điểm tăng dần</option>
+                    <option value="start_time">
+                      Thời gian bắt đầu tăng dần
+                    </option>
+                    <option value="-end_time">
+                      Thời gian kết thúc giảm dần
+                    </option>
+                    <option value="end_time">
+                      Thời gian kết thúc tăng dần
+                    </option>
                   </Form.Select>
                 </Col>
               </Row>
 
               <Row>
                 <Col>
-                  <Form.Label column="sm"> Public? </Form.Label>
+                  <Form.Label column="sm"> Visible? </Form.Label>
                   <Form.Select
                     size="sm"
-                    id="is_public"
+                    id="is_visible"
                     className="mb-1"
-                    value={data.is_public}
-                    onChange={e => this.setState({is_public: e.target.value})}
+                    value={data.is_visible as string}
+                    onChange={e => this.setState({is_visible: e.target.value})}
                   >
                     <option value="">--</option>
-                    <option value="True">Public</option>
+                    <option value="True">Public/Limited</option>
                     <option value="False">Private</option>
                   </Form.Select>
                 </Col>
 
                 <Col>
-                  <Form.Label column="sm"> Org Private? </Form.Label>
+                  <Form.Label column="sm"> Frozen? </Form.Label>
                   <Form.Select
                     size="sm"
-                    id="is_organization_private"
+                    id="enable_frozen"
                     className="mb-1"
-                    value={data.is_organization_private}
+                    value={data.enable_frozen as string}
                     onChange={e =>
-                      this.setState({is_organization_private: e.target.value})
+                      this.setState({enable_frozen: e.target.value})
                     }
                   >
                     <option value="">--</option>
@@ -96,19 +109,32 @@ export default class ProblemSearchForm extends React.Component {
                 </Col>
 
                 <Col>
-                  <Form.Label column="sm"> ICPC? </Form.Label>
+                  <Form.Label column="sm"> Rated? </Form.Label>
                   <Form.Select
                     size="sm"
-                    id="short_circuit"
+                    id="is_rated"
                     className="mb-1"
-                    value={data.short_circuit}
-                    onChange={e =>
-                      this.setState({short_circuit: e.target.value})
-                    }
+                    value={data.is_rated as string}
+                    onChange={e => this.setState({is_rated: e.target.value})}
                   >
                     <option value="">--</option>
                     <option value="True">Yes</option>
                     <option value="False">No</option>
+                  </Form.Select>
+                </Col>
+
+                <Col>
+                  <Form.Label column="sm"> Format </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    id="format_name"
+                    className="mb-1"
+                    value={data.format_name as string}
+                    onChange={e => this.setState({format_name: e.target.value})}
+                  >
+                    <option value="">--</option>
+                    <option value="icpc">ICPC</option>
+                    <option value="ioi">IOI</option>
                   </Form.Select>
                 </Col>
               </Row>
@@ -117,13 +143,13 @@ export default class ProblemSearchForm extends React.Component {
         </Accordion>
         <Row>
           <Col>
-            {/* <span>
-              Bộ lọc:{
+            <span>
+              {/* Bộ lọc:{
                 this.props.searchData && <>
                   <code>{JSON.stringify(this.props.searchData)}</code>
                 </>
-              }
-            </span> */}
+              } */}
+            </span>
           </Col>
           <div className="d-flex flex-row-reverse">
             <Button
@@ -151,8 +177,3 @@ export default class ProblemSearchForm extends React.Component {
     );
   }
 }
-
-ProblemSearchForm.propTypes = {
-  searchData: PropTypes.object,
-  setSearchData: PropTypes.func,
-};

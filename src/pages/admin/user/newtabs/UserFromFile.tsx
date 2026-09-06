@@ -8,8 +8,18 @@ import {FileUploader, SpinLoader, ErrorBox} from "components";
 
 import {fileFromBlob} from "helpers/file-utils"
 
-export default class UserFromFile extends React.Component {
-  constructor(props) {
+interface UserFromFileProps {
+  redirectTo: (url: string) => void;
+}
+
+interface UserFromFileState {
+  submitting: boolean;
+  file: File | null;
+  errors?: unknown;
+}
+
+export default class UserFromFile extends React.Component<UserFromFileProps, UserFromFileState> {
+  constructor(props: UserFromFileProps) {
     super(props);
 
     this.state = {
@@ -18,11 +28,11 @@ export default class UserFromFile extends React.Component {
     };
   }
 
-  setFile(file) {
+  setFile(file: File) {
     this.setState({file});
   }
 
-  sendFile(e) {
+  sendFile(e: React.FormEvent) {
     this.setState({errors: null});
 
     e.preventDefault();
@@ -41,9 +51,9 @@ export default class UserFromFile extends React.Component {
           fileFromBlob(blob, "users.csv");
           this.props.redirectTo("/admin/users/");
         })
-        .catch(err => {
+        .catch((err: { response?: { data: unknown } }) => {
           toast.error(`Cannot create. (${err})`);
-          this.setState({errors: err.response.data});
+          this.setState({errors: err.response?.data});
         })
         .finally(() => {
           this.setState({submitting: false});
@@ -145,8 +155,8 @@ team005,team005@mail.com,uni.fictional,uni`}</pre>
           <Row style={{overflow: "auto"}}>
             <Col className="m-1">
               <FileUploader
-                onFileSelectSuccess={file => this.setFile(file)}
-                onFileSelectError={({error}) => alert(error)}
+                onFileSelectSuccess={(file: File) => this.setFile(file)}
+                onFileSelectError={({error}: {error: string}) => alert(error)}
               />
             </Col>
             <Col sm={2} className="m-1 flex-center">

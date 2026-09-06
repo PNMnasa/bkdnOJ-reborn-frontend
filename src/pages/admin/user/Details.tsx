@@ -17,11 +17,52 @@ import {randomString} from "helpers/random";
 import "./Details.scss";
 import { qmClarify } from "helpers/components";
 
-class AdminJudgeDetails extends React.Component {
-  constructor(props) {
+interface UserData {
+  id?: number | string;
+  username?: string;
+  email?: string;
+  is_active?: boolean;
+  is_staff?: boolean;
+  is_superuser?: boolean;
+  date_joined?: string;
+  first_name?: string;
+  last_name?: string;
+  [key: string]: unknown;
+}
+
+interface ProfileData {
+  first_name?: string;
+  last_name?: string;
+  display_name?: string;
+  about?: string;
+  performance_points?: number;
+  problem_count?: number;
+  points?: number;
+  rating?: number;
+  [key: string]: unknown;
+}
+
+interface AdminJudgeDetailsProps {
+  params: Record<string, string | undefined>;
+  user?: unknown;
+}
+
+interface AdminJudgeDetailsState {
+  loaded: boolean;
+  errors: unknown;
+  data: UserData | undefined;
+  password: string;
+  redirectUrl?: string;
+  errbox_errors?: unknown;
+}
+
+class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJudgeDetailsState> {
+  username: string;
+
+  constructor(props: AdminJudgeDetailsProps) {
     super(props);
     const {username} = this.props.params;
-    this.username = username
+    this.username = username!;
     this.state = {
       loaded: false,
       errors: null,
@@ -41,7 +82,7 @@ class AdminJudgeDetails extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: unknown) => {
         this.setState({
           loaded: true,
           errors: err,
@@ -53,10 +94,10 @@ class AdminJudgeDetails extends React.Component {
     this.fetch();
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
-    let newData = this.state.data;
+    let newData = this.state.data!;
     if (!isCheckbox) newData[event.target.id] = event.target.value;
     else {
       newData[event.target.id] = !newData[event.target.id];
@@ -76,27 +117,27 @@ class AdminJudgeDetails extends React.Component {
           toast.success("OK Deleted.");
           this.setState({redirectUrl: "/admin/users/"});
         })
-        .catch(err => {
+        .catch((err: unknown) => {
           toast.error(`Cannot delete. (${err})`);
         });
     }
   }
 
-  getTime(key) {
+  getTime(key: string) {
     if (this.state.data && this.state.data[key]) {
-      let time = new Date(this.state.data[key]);
+      let time = new Date(this.state.data[key] as string);
       time.setMinutes(time.getMinutes() - time.getTimezoneOffset());
       return time.toISOString().slice(0, 16);
     }
     return "";
   }
-  setTime(key, v) {
+  setTime(key: string, v: string) {
     let time = new Date(v);
     const data = this.state.data;
     this.setState({data: {...data, [key]: time.toISOString()}});
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     this.setState({errbox_errors: null});
 
@@ -109,9 +150,9 @@ class AdminJudgeDetails extends React.Component {
         toast.success("OK Updated.");
         this.fetch();
       })
-      .catch(err => {
-        const data = err.response.data;
-        toast.error(`Cannot update. (${err.response.status})`);
+      .catch((err: { response?: { status: number; data: unknown } }) => {
+        const data = err.response?.data;
+        toast.error(`Cannot update. (${err.response?.status})`);
         this.setState({errbox_errors: {errors: data}});
       });
   }
@@ -127,9 +168,9 @@ class AdminJudgeDetails extends React.Component {
       .then(() => {
         toast.success("OK Password Reset.");
       })
-      .catch(err => {
-        toast.error(`Password change failed. ${err.response.status}`);
-        this.setState({errbox_errors: {errors: err.response.data}});
+      .catch((err: { response?: { status: number; data: unknown } }) => {
+        toast.error(`Password change failed. ${err.response?.status}`);
+        this.setState({errbox_errors: {errors: err.response?.data}});
       });
   }
 
@@ -225,7 +266,7 @@ class AdminJudgeDetails extends React.Component {
                             type="text"
                             placeholder="User ID"
                             id="id"
-                            value={data.id || ""}
+                            value={data?.id || ""}
                             disabled
                             readOnly
                           />
@@ -241,7 +282,7 @@ class AdminJudgeDetails extends React.Component {
                             type="text"
                             placeholder="Username"
                             id="username"
-                            value={data.username || ""}
+                            value={data?.username || ""}
                             disabled
                             readOnly
                           />
@@ -256,7 +297,7 @@ class AdminJudgeDetails extends React.Component {
                             size="sm"
                             type="checkbox"
                             id="is_active"
-                            checked={data.is_active || false}
+                            checked={data?.is_active || false}
                             onChange={e =>
                               this.inputChangeHandler(e, {isCheckbox: true})
                             }
@@ -269,7 +310,7 @@ class AdminJudgeDetails extends React.Component {
                             size="sm"
                             type="checkbox"
                             id="is_staff"
-                            checked={data.is_staff || false}
+                            checked={data?.is_staff || false}
                             onChange={e =>
                               this.inputChangeHandler(e, {isCheckbox: true})
                             }
@@ -282,7 +323,7 @@ class AdminJudgeDetails extends React.Component {
                             size="sm"
                             type="checkbox"
                             id="is_superuser"
-                            checked={data.is_superuser || false}
+                            checked={data?.is_superuser || false}
                             onChange={e =>
                               this.inputChangeHandler(e, {isCheckbox: true})
                             }
@@ -310,36 +351,6 @@ class AdminJudgeDetails extends React.Component {
                       </Row>
 
                       <Row>
-                        {/* <Form.Label column="sm" lg={1}>
-                          {" "}
-                          First Name{" "}
-                        </Form.Label>
-                        <Col>
-                          {" "}
-                          <Form.Control
-                            size="sm"
-                            type="text"
-                            id="first_name"
-                            onChange={e => this.inputChangeHandler(e)}
-                            value={data.first_name}
-                          />
-                        </Col>
-
-                        <Form.Label column="sm" lg={1}>
-                          {" "}
-                          Last Name{" "}
-                        </Form.Label>
-                        <Col>
-                          {" "}
-                          <Form.Control
-                            size="sm"
-                            type="text"
-                            id="last_name"
-                            onChange={e => this.inputChangeHandler(e)}
-                            value={data.last_name}
-                          />
-                        </Col> */}
-
                         <Form.Label column="sm" lg={1}>
                           {" "}
                           Email{" "}
@@ -351,20 +362,12 @@ class AdminJudgeDetails extends React.Component {
                             type="text"
                             id="email"
                             onChange={e => this.inputChangeHandler(e)}
-                            value={data.email}
+                            value={data?.email}
                           />
                         </Col>
                       </Row>
-                      {/* <Row>
-                      <Form.Label column="sm" md={2}> Last Login </Form.Label>
-                      <Col> <Form.Control size="sm" type="datetime-local" id="last_login"
-                              value={this.getTime('last_login')}
-                              onChange={(e)=>this.setTime('last_login', e.target.value)}
-                      /></Col>
-                    </Row> */}
                       <Row>
                         <Col>
-                          {/* <sub>**Các thiết lập khác sẽ được thêm sau.</sub> */}
                         </Col>
                         <Col lg={4}>
                           <Button variant="dark" size="sm" type="submit" className="btn-svg">
@@ -388,8 +391,21 @@ class AdminJudgeDetails extends React.Component {
   }
 }
 
-class UserProfileSection extends React.Component {
-  constructor(props) {
+interface UserProfileSectionProps {
+  username: string;
+  parentFetch: () => void;
+}
+
+interface UserProfileSectionState {
+  loaded: boolean;
+  errors: unknown;
+  data: ProfileData | null;
+}
+
+class UserProfileSection extends React.Component<UserProfileSectionProps, UserProfileSectionState> {
+  username: string;
+
+  constructor(props: UserProfileSectionProps) {
     super(props);
     this.username = this.props.username
     this.state = {
@@ -407,11 +423,10 @@ class UserProfileSection extends React.Component {
         loaded: true, data: res.data,
       }) 
     })
-    .catch(err => {
+    .catch((err: { response?: { data: unknown } }) => {
       this.setState({
-        loaded: true, errors: err.response.data,
+        loaded: true, errors: err.response?.data,
       }) 
-      // console.log(err)
     })
   }
 
@@ -419,10 +434,10 @@ class UserProfileSection extends React.Component {
     this.fetch()
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     const data = this.state.data;
-    const apiCall = profileAPI.adminEditProfile({ username: this.username, data: data })
+    const apiCall = profileAPI.adminEditProfile({ username: this.username, data: data as unknown as Record<string, unknown> })
 
     const parent = this;
     toast.promise(apiCall, {
@@ -431,9 +446,9 @@ class UserProfileSection extends React.Component {
         parent.fetch(); 
         return "Success."; 
       }, },
-      error: { render({data}) { 
+      error: { render({data}: {data: { response?: { data: unknown } }}) { 
           parent.setState({
-            errors: data.response.data,
+            errors: data.response?.data,
           }); 
           return "Update Failed."; 
         }, 
@@ -441,15 +456,15 @@ class UserProfileSection extends React.Component {
     })
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
-    let newData = this.state.data;
+    let newData = this.state.data as Record<string, unknown>;
     if (!isCheckbox) newData[event.target.id] = event.target.value;
     else {
       newData[event.target.id] = !newData[event.target.id];
     }
-    this.setState({data: newData});
+    this.setState({data: newData as ProfileData});
   }
 
   render() {
@@ -476,7 +491,7 @@ class UserProfileSection extends React.Component {
                     type="text"
                     placeholder="First name"
                     id="first_name"
-                    value={data.first_name || ""}
+                    value={data?.first_name || ""}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -489,7 +504,7 @@ class UserProfileSection extends React.Component {
                     type="text"
                     placeholder="Last name"
                     id="last_name"
-                    value={data.last_name || ""}
+                    value={data?.last_name || ""}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -507,7 +522,7 @@ class UserProfileSection extends React.Component {
                     type="text"
                     id="display_name"
                     placeholder="None"
-                    value={data.display_name || ""}
+                    value={data?.display_name || ""}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -520,7 +535,7 @@ class UserProfileSection extends React.Component {
                     size="sm"
                     id="about"
                     placeholder="Thông tin về người dùng này"
-                    value={data.about || ""}
+                    value={data?.about || ""}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -536,7 +551,7 @@ class UserProfileSection extends React.Component {
                     type="text"
                     id="performance_points"
                     onChange={e => this.inputChangeHandler(e)}
-                    value={data.performance_points}
+                    value={data?.performance_points}
                   />
                 </Col>
 
@@ -550,7 +565,7 @@ class UserProfileSection extends React.Component {
                     id="problem_count"
                     min="0"
                     onChange={e => this.inputChangeHandler(e)}
-                    value={data.problem_count}
+                    value={data?.problem_count}
                   />
                 </Col>
               </Row>
@@ -567,7 +582,7 @@ class UserProfileSection extends React.Component {
                     min="0.0"
                     id="points"
                     onChange={e => this.inputChangeHandler(e)}
-                    value={data.points}
+                    value={data?.points}
                   />
                 </Col>
 
@@ -581,13 +596,12 @@ class UserProfileSection extends React.Component {
                     min="0"
                     id="rating"
                     onChange={e => this.inputChangeHandler(e)}
-                    value={data.rating}
+                    value={data?.rating}
                   />
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  {/* <sub>**Các thiết lập khác sẽ được thêm sau.</sub> */}
                 </Col>
                 <Col lg={4}>
                   <Button variant="dark" size="sm" type="submit" className="btn-svg">
@@ -605,7 +619,7 @@ class UserProfileSection extends React.Component {
 
 let wrappedPD = AdminJudgeDetails;
 wrappedPD = withParams(wrappedPD);
-const mapStateToProps = state => {
+const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};
 };
 wrappedPD = connect(mapStateToProps, null)(wrappedPD);

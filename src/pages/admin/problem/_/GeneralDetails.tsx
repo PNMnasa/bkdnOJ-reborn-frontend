@@ -14,8 +14,23 @@ import UserMultiSelect from "components/SelectMulti/User";
 import OrgMultiSelect from "components/SelectMulti/Org";
 import {qmClarify} from "helpers/components";
 
-class GeneralDetails extends React.Component {
-  constructor(props) {
+interface GeneralDetailsProps {
+  shortname: string;
+  data: Record<string, unknown>;
+  setProblemTitle?: (title: string) => void;
+  setErrors?: (e: unknown) => void;
+  refetch: (shortname?: string) => void;
+  navigate: (to: string) => void;
+}
+
+interface GeneralDetailsState {
+  data: Record<string, unknown>;
+  selectedPdf: File | null;
+  submitting: boolean;
+}
+
+class GeneralDetails extends React.Component<GeneralDetailsProps, GeneralDetailsState> {
+  constructor(props: GeneralDetailsProps) {
     super(props);
     this.state = {
       data: this.props.data,
@@ -23,17 +38,17 @@ class GeneralDetails extends React.Component {
       submitting: false,
     };
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: GeneralDetailsProps) {
     if (prevProps.data !== this.props.data) {
       this.setState({data: this.props.data});
     }
   }
 
-  setSelectedPdf(file) {
+  setSelectedPdf(file: File) {
     this.setState({selectedPdf: file});
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -43,26 +58,26 @@ class GeneralDetails extends React.Component {
     }
     this.setState({data: newData});
   }
-  getTime(key) {
+  getTime(key: string) {
     const data = this.state.data;
     if (data && data[key]) {
-      let time = new Date(data[key]);
+      let time = new Date(data[key] as string);
       time.setMinutes(time.getMinutes() - time.getTimezoneOffset());
       return time.toISOString().slice(0, 16);
     }
     return "";
   }
-  setTime(key, v) {
+  setTime(key: string, v: string) {
     let time = new Date(v);
     const data = this.state.data;
     this.setState({data: {...data, [key]: time.toISOString()}});
   }
-  setContent(v) {
+  setContent(v: string) {
     const {data} = this.state;
     this.setState({data: {...data, content: v}});
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     if (this.state.submitting) return;
     if (this.props.setErrors) {
@@ -72,7 +87,7 @@ class GeneralDetails extends React.Component {
     // eslint-disable-next-line no-unused-vars
     let {pdf, ...sendData} = this.state.data;
     delete sendData.allowed_languages;
-    let reqs = [];
+    let reqs: Promise<unknown>[] = [];
 
     reqs.push(
       problemAPI.adminEditProblemDetails({
@@ -94,20 +109,21 @@ class GeneralDetails extends React.Component {
 
     Promise.all(reqs)
       .then(results => {
+        const firstResult = results[0] as { data: Record<string, unknown> };
         toast.success("OK Updated.");
         this.setState({
-          data: results[0].data,
+          data: firstResult.data,
           submitting: false,
         });
         this.props.setProblemTitle &&
-          this.props.setProblemTitle(results[0].data.title);
-        if (results[0].data.shortname !== this.props.shortname) {
-          this.props.refetch(results[0].data.shortname);
-          this.props.navigate(`/admin/problem/${results[0].data.shortname}`);
+          this.props.setProblemTitle(firstResult.data.title as string);
+        if (firstResult.data.shortname !== this.props.shortname) {
+          this.props.refetch(firstResult.data.shortname as string);
+          this.props.navigate(`/admin/problem/${firstResult.data.shortname}`);
         } else this.props.refetch();
       })
-      .catch(err => {
-        const data = err.response.data;
+      .catch((err: { response?: { data: unknown } }) => {
+        const data = err.response?.data;
         this.setState({submitting: false});
         if (this.props.setErrors) {
           this.props.setErrors({errors: data});
@@ -115,24 +131,21 @@ class GeneralDetails extends React.Component {
       });
   }
 
-  downloadPdf(url) {
+  downloadPdf(url: string) {
     const toastId = toast.loading("Downloading..")
     commonAPI.downloadFile(url).then(response => {
       toast.update(toastId, {render: "Saved", type: "success", isLoading: false, autoClose: 3000})
-      // create file link in browser's memory
       const href = URL.createObjectURL(response.data);
 
-      // create "a" HTLM element with href to file & click
       const link = document.createElement('a');
       link.href = href;
-      link.setAttribute('download', 'problem.pdf'); //or any other extension
+      link.setAttribute('download', 'problem.pdf');
       document.body.appendChild(link);
       link.click();
 
-      // clean up "a" element & remove ObjectURL
       document.body.removeChild(link);
       URL.revokeObjectURL(href);
-    }).catch(err => {
+    }).catch((err: unknown) => {
       toast.update(toastId, {render: "Download PDF failed. Check console for more info.", type: "error", isLoading: false, autoClose: 3000})
       console.log("Cannot download pdf.", err)
     })
@@ -153,12 +166,6 @@ class GeneralDetails extends React.Component {
           <Accordion.Item eventKey="0" className="general">
             <Accordion.Header>Thiết lập chung</Accordion.Header>
             <Accordion.Body>
-              {/* <Row>
-                <Form.Label column="sm" lg={2}> Resource URL </Form.Label>
-                <Col> <Form.Control size="sm" type="text" placeholder="Problem URL" id="url"
-                        value={data.url} disabled
-                /></Col>
-              </Row> */}
               <Row>
                 <Form.Label column="sm" md={2} className="required">
                   {" "}
@@ -171,7 +178,7 @@ class GeneralDetails extends React.Component {
                     type="text"
                     placeholder="Problem Code"
                     id="shortname"
-                    value={data.shortname}
+                    value={data.shortname as string}
                     onChange={e => this.inputChangeHandler(e)}
                     required
                   />
@@ -188,7 +195,7 @@ class GeneralDetails extends React.Component {
                     type="text"
                     placeholder="Problem Title"
                     id="title"
-                    value={data.title}
+                    value={data.title as string}
                     onChange={e => this.inputChangeHandler(e)}
                     required
                   />
@@ -218,8 +225,8 @@ class GeneralDetails extends React.Component {
                 </Form.Label>
                 <Col className="pb-2">
                   <RichTextEditor
-                    value={data.content || ""}
-                    onChange={v => this.setContent(v)}
+                    value={(data.content as string) || ""}
+                    onChange={(v: string) => this.setContent(v)}
                     enableEdit={true}
                   />
                 </Col>
@@ -231,10 +238,10 @@ class GeneralDetails extends React.Component {
                 </Form.Label>
                 <Col md={6}>
                   {data.pdf ? (
-                    <a /*href={data.pdf}*/ className="text-truncate style-as-default-link"
-                        onClick={()=>this.downloadPdf(data.pdf)}
+                    <a className="text-truncate style-as-default-link"
+                        onClick={()=>this.downloadPdf(data.pdf as string)}
                     >
-                      {data.pdf}
+                      {data.pdf as string}
                     </a>
                   ) : (
                     "None"
@@ -242,8 +249,8 @@ class GeneralDetails extends React.Component {
                 </Col>
                 <Col md={6}>
                   <FileUploader
-                    onFileSelectSuccess={file => this.setSelectedPdf(file)}
-                    onFileSelectError={({error}) => alert(error)}
+                    onFileSelectSuccess={(file: File) => this.setSelectedPdf(file)}
+                    onFileSelectError={({error}: {error: string}) => alert(error)}
                   />
                 </Col>
               </Row>
@@ -261,8 +268,8 @@ class GeneralDetails extends React.Component {
                 <Col>
                   <UserMultiSelect
                     id="authors"
-                    value={data.authors || []}
-                    onChange={arr =>
+                    value={(data.authors as string[]) || []}
+                    onChange={(arr: string[]) =>
                       this.setState({data: {...data, authors: arr}})
                     }
                   />
@@ -286,8 +293,8 @@ class GeneralDetails extends React.Component {
                 <Col>
                   <UserMultiSelect
                     id="collaborators"
-                    value={data.collaborators || []}
-                    onChange={arr =>
+                    value={(data.collaborators as string[]) || []}
+                    onChange={(arr: string[]) =>
                       this.setState({data: {...data, collaborators: arr}})
                     }
                   />
@@ -307,8 +314,8 @@ class GeneralDetails extends React.Component {
                 <Col>
                   <UserMultiSelect
                     id="reviewers"
-                    value={data.reviewers || []}
-                    onChange={arr =>
+                    value={(data.reviewers as string[]) || []}
+                    onChange={(arr: string[]) =>
                       this.setState({data: {...data, reviewers: arr}})
                     }
                   />
@@ -330,7 +337,7 @@ class GeneralDetails extends React.Component {
                     size="sm"
                     type="checkbox"
                     id="is_public"
-                    checked={data.is_public}
+                    checked={data.is_public as boolean}
                     onChange={e =>
                       this.inputChangeHandler(e, {isCheckbox: true})
                     }
@@ -355,7 +362,7 @@ class GeneralDetails extends React.Component {
                     size="sm"
                     type="checkbox"
                     id="is_organization_private"
-                    checked={data.is_organization_private}
+                    checked={data.is_organization_private as boolean}
                     onChange={e =>
                       this.inputChangeHandler(e, {isCheckbox: true})
                     }
@@ -369,8 +376,8 @@ class GeneralDetails extends React.Component {
                 <Col sm={9}>
                   <OrgMultiSelect
                     id="organizations"
-                    value={data.organizations || []}
-                    onChange={arr =>
+                    value={(data.organizations as string[]) || []}
+                    onChange={(arr: string[]) =>
                       this.setState({data: {...data, organizations: arr}})
                     }
                   />
@@ -393,8 +400,8 @@ class GeneralDetails extends React.Component {
                 </Form.Label>
                 <Col>
                   <Form.Select
-                    aria-label={data.submission_visibility_mode}
-                    value={data.submission_visibility_mode || ""}
+                    aria-label={data.submission_visibility_mode as string}
+                    value={(data.submission_visibility_mode as string) || ""}
                     onChange={e => this.inputChangeHandler(e)}
                     size="sm"
                     id="submission_visibility_mode"
@@ -442,7 +449,7 @@ class GeneralDetails extends React.Component {
                     type="text"
                     placeholder="1.0"
                     id="time_limit"
-                    value={data.time_limit}
+                    value={data.time_limit as string}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -458,7 +465,7 @@ class GeneralDetails extends React.Component {
                     type="number"
                     placeholder="256000"
                     id="memory_limit"
-                    value={data.memory_limit}
+                    value={data.memory_limit as string}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -477,7 +484,7 @@ class GeneralDetails extends React.Component {
                     size="sm"
                     type="checkbox"
                     id="short_circuit"
-                    checked={data.short_circuit}
+                    checked={data.short_circuit as boolean}
                     onChange={e =>
                       this.inputChangeHandler(e, {isCheckbox: true})
                     }
@@ -504,7 +511,7 @@ class GeneralDetails extends React.Component {
                     size="sm"
                     type="number"
                     id="points"
-                    value={data.points}
+                    value={data.points as string}
                     onChange={e => this.inputChangeHandler(e)}
                   />
                 </Col>
@@ -519,7 +526,7 @@ class GeneralDetails extends React.Component {
                     size="sm"
                     type="checkbox"
                     id="partial"
-                    checked={data.partial}
+                    checked={data.partial as boolean}
                     onChange={e =>
                       this.inputChangeHandler(e, {isCheckbox: true})
                     }

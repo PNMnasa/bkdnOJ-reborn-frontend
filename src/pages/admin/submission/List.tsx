@@ -10,7 +10,24 @@ import {setTitle} from "helpers/setTitle";
 import "./List.scss";
 import "styles/ClassicPagination.scss";
 
-class SubmissionListItem extends React.Component {
+interface SubmissionListItemProps {
+  id: number | string;
+  date: string;
+  status: string;
+  result: string;
+  user: string;
+  contest_object: string | null;
+  problem: {
+    shortname: string;
+    title: string;
+    [key: string]: unknown;
+  };
+  selectChk: boolean;
+  onSelectChkChange: () => void;
+  [key: string]: unknown;
+}
+
+class SubmissionListItem extends React.Component<SubmissionListItemProps> {
   render() {
     const {id, date, status, result, user, contest_object, problem} =
       this.props;
@@ -47,7 +64,7 @@ class SubmissionListItem extends React.Component {
         <td>
           <input
             type="checkbox"
-            value={selectChk}
+            value={selectChk as unknown as string}
             onChange={() => onSelectChkChange()}
           />
         </td>
@@ -56,8 +73,25 @@ class SubmissionListItem extends React.Component {
   }
 }
 
-class AdminSubmissionList extends React.Component {
-  constructor(props) {
+interface SubmissionData {
+  id: number | string;
+  [key: string]: unknown;
+}
+
+interface AdminSubmissionListState {
+  submissions: SubmissionData[];
+  selectChk: boolean[];
+  currPage: number;
+  pageCount: number;
+  loaded: boolean;
+  errors: unknown;
+  selectedZip: File | null;
+  submitting: boolean;
+  count: number;
+}
+
+class AdminSubmissionList extends React.Component<Record<string, never>, AdminSubmissionListState> {
+  constructor(props: Record<string, never>) {
     super(props);
     this.state = {
       submissions: [],
@@ -69,11 +103,12 @@ class AdminSubmissionList extends React.Component {
 
       selectedZip: null,
       submitting: false,
+      count: 0,
     };
     setTitle("Admin | Submissions");
   }
 
-  selectChkChangeHandler(idx) {
+  selectChkChangeHandler(idx: number) {
     const {selectChk} = this.state;
     if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
@@ -86,7 +121,7 @@ class AdminSubmissionList extends React.Component {
     }
   }
 
-  callApi(params) {
+  callApi(params: { page: number }) {
     this.setState({loaded: false, errors: null});
 
     submissionApi
@@ -102,11 +137,11 @@ class AdminSubmissionList extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
           errors: {
-            errors: err.response.data || [
+            errors: err.response?.data || [
               "Cannot fetch submissions. Please retry again.",
             ],
           },
@@ -118,14 +153,14 @@ class AdminSubmissionList extends React.Component {
     this.callApi({page: this.state.currPage});
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: { selected: number }) => {
     this.callApi({page: event.selected});
   };
 
-  handleDeleteSelect(e) {
+  handleDeleteSelect(e: React.MouseEvent) {
     e.preventDefault();
 
-    let ids = [];
+    let ids: (number | string)[] = [];
     this.state.selectChk.forEach((v, i) => {
       if (v) ids.push(this.state.submissions[i].id);
     });
@@ -135,22 +170,20 @@ class AdminSubmissionList extends React.Component {
       return;
     }
 
-    // TODO: Write a bulk delete API for submissions
     const conf = window.confirm(
       "Xóa các Submission " + JSON.stringify(ids) + "?"
     );
     if (conf) {
-      let reqs = [];
+      let reqs: Promise<unknown>[] = [];
       ids.forEach(id => {
         reqs.push(submissionApi.adminDeleteSubmission({id}));
       });
 
       Promise.all(reqs)
-        .then(_res => {
-          // console.log(res);
+        .then(() => {
           this.callApi({page: this.state.currPage});
         })
-        .catch(err => {
+        .catch((err: { response?: { status: number } }) => {
           let msg = "Không thể xóa các submission này.";
           if (err.response) {
             if (err.response.status === 405)
@@ -171,19 +204,16 @@ class AdminSubmissionList extends React.Component {
 
     return (
       <div className="admin admin-submissions wrapper-vanilla">
-        {/* Options for Admins: Create New,.... */}
         <div className="admin-options">
           <sub>No options available yet</sub>
         </div>
 
-        {/* Place for displaying information about admin actions  */}
         <div className="admin-note text-center mb-1">
           {submitting && (
             <span className="loading_3dot">Đang xử lý yêu cầu</span>
           )}
         </div>
 
-        {/* Problem List */}
         <div className="admin-table submission-table">
           <h4>Submission List</h4>
           <ErrorBox errors={this.state.errors} />
@@ -213,7 +243,7 @@ class AdminSubmissionList extends React.Component {
             <tbody>
               {this.state.loaded === false && (
                 <tr>
-                  <td colSpan="7">
+                  <td colSpan={7}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>
@@ -223,15 +253,21 @@ class AdminSubmissionList extends React.Component {
                   this.state.submissions.map((sub, idx) => (
                     <SubmissionListItem
                       key={`sub-${sub.id}`}
-                      rowidx={idx}
                       {...sub}
+                      id={sub.id}
+                      date={sub.date as string}
+                      status={sub.status as string}
+                      result={sub.result as string}
+                      user={sub.user as string}
+                      contest_object={sub.contest_object as string | null}
+                      problem={sub.problem as SubmissionListItemProps["problem"]}
                       selectChk={this.state.selectChk[idx]}
                       onSelectChkChange={() => this.selectChkChangeHandler(idx)}
                     />
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="99">
+                    <td colSpan={99}>
                       <em>No Submission be found.</em>
                     </td>
                   </tr>

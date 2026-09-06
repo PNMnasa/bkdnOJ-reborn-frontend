@@ -8,24 +8,51 @@ import orgAPI from "api/organization";
 import "styles/ClassicPagination.scss";
 import {toast} from "react-toastify";
 
+interface MembersSearchData {
+  search: string;
+  ordering: string;
+  virtual?: string;
+  [key: string]: unknown;
+}
+
+interface MemberUser {
+  username: string;
+  first_name: string;
+  last_name: string;
+  rating: number | null;
+  [key: string]: unknown;
+}
+
 const INITIAL_STATE = {
   searchData: {
     search: "",
     ordering: "rating",
-  },
+  } as MembersSearchData,
 
-  members: [],
+  members: [] as MemberUser[],
   count: 0,
   currPage: 0,
   loaded: false,
-  errors: null,
+  errors: null as unknown,
 
-  params: {},
+  params: {} as Record<string, unknown>,
   modalShow: false,
+
+  virtual: undefined as string | undefined,
+  pageCount: 1,
+  selectChk: [] as boolean[],
 };
 
-class Members extends React.Component {
-  constructor(props) {
+type MembersState = typeof INITIAL_STATE;
+
+interface MembersProps {
+  slug: string;
+}
+
+class Members extends React.Component<MembersProps, MembersState> {
+  slug: string;
+
+  constructor(props: MembersProps) {
     super(props);
     this.slug = this.props.slug;
     this.state = {...INITIAL_STATE};
@@ -44,7 +71,7 @@ class Members extends React.Component {
 
   refetch(params = {page: 0}) {
     this.setState({loaded: false, errors: null});
-    let prms = {page: params.page + 1, ...this.state.searchData};
+    let prms: Record<string, unknown> = {page: params.page + 1, ...this.state.searchData};
 
     if (this.state.virtual) prms.virtual = this.state.virtual;
 
@@ -61,16 +88,15 @@ class Members extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
-        // console.log(err);
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || ["Cannot get members."],
+          errors: err.response?.data || ["Cannot get members."],
         });
       });
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: { selected: number }) => {
     this.refetch({page: event.selected});
   };
 
@@ -78,11 +104,11 @@ class Members extends React.Component {
     this.refetch();
   }
 
-  handleDeleteSelect(e) {
+  handleDeleteSelect(e: React.MouseEvent) {
     e.preventDefault();
     this.setState({errors: null});
 
-    let toBeRemoved = [];
+    let toBeRemoved: string[] = [];
     this.state.members.forEach((member, idx) => {
       if (this.state.selectChk[idx]) toBeRemoved.push(member.username);
     });
@@ -100,9 +126,8 @@ class Members extends React.Component {
         toast.success("OK Removed.");
         this.refetch();
       })
-      .catch(err => {
-        // this.setState({errors: err.response.data || ['Cannot remove these members.']})
-        toast.error(`Không thể xóa (lỗi ${err.response.status}).`);
+      .catch((err: { response?: { status: number } }) => {
+        toast.error(`Không thể xóa (lỗi ${err.response?.status}).`);
       });
   }
 
@@ -222,7 +247,7 @@ class Members extends React.Component {
                     <td>
                       <input
                         type="checkbox"
-                        value={this.state.selectChk[idx]}
+                        value={this.state.selectChk[idx] as unknown as string}
                         onChange={() =>
                           this.setState({
                             selectChk: this.state.selectChk.map((chk, i) =>
@@ -269,11 +294,6 @@ class Members extends React.Component {
                 Add{" "}
               </Button>
             </Col>
-            {/* <Col >
-            <Button size="sm" variant="danger" style={{width: "100%"}}
-              disabled={!this.state.loaded}
-              > Save </Button>
-          </Col> */}
           </Row>
         </div>
         <AddMemberModal
@@ -287,8 +307,21 @@ class Members extends React.Component {
   }
 }
 
-class AddMemberModal extends React.Component {
-  constructor(props) {
+interface AddMemberModalProps {
+  slug: string;
+  modalShow: boolean;
+  closeModalHandler: () => void;
+  refetch: () => void;
+}
+
+interface AddMemberModalState {
+  users: string;
+  submitting: boolean;
+  errors: unknown;
+}
+
+class AddMemberModal extends React.Component<AddMemberModalProps, AddMemberModalState> {
+  constructor(props: AddMemberModalProps) {
     super(props);
     this.state = {
       users: "",
@@ -297,16 +330,16 @@ class AddMemberModal extends React.Component {
     };
   }
 
-  submitHandler(e) {
+  submitHandler(e: React.FormEvent) {
     e.preventDefault();
 
     let {users} = this.state;
     users.trim();
     if (users.length === 0) {
       alert("Hãy thêm ít nhất 1 người dùng.");
-      return false;
+      return;
     }
-    users = users.split(/\s+/).filter(u => u !== "");
+    users = users.split(/\s+/).filter(u => u !== "").join(" ");
 
     this.setState({submitting: true, errors: null});
 
@@ -318,9 +351,9 @@ class AddMemberModal extends React.Component {
         this.props.refetch();
         this.setState({submitting: false});
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
-          errors: err.response.data,
+          errors: err.response?.data,
           submitting: false,
         });
       });
@@ -346,7 +379,7 @@ class AddMemberModal extends React.Component {
           <ErrorBox errors={errors} />
           <Form
             id="contest-participation-add-form"
-            onSubmit={e => this.submitHanlder(e)}
+            onSubmit={e => this.submitHandler(e)}
           >
             <div className="">Thêm thành viên vào tổ chức:</div>
             <div className="flex-center">{}</div>
