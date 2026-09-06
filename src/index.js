@@ -11,10 +11,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import toastConfig from 'configs/toast';
 
-// MathJax
-// import { MathJaxContext } from "better-react-mathjax";
-// import mathjaxConfig from 'configs/mathjax';
-
 import App from 'App';
 
 const rootElement = document.getElementById('root');

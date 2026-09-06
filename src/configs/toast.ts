@@ -1,6 +1,6 @@
-import type { ToastOptions } from "react-toastify";
+import type { ToastContainerProps } from "react-toastify";
 
-const config: ToastOptions = {
+const config: ToastContainerProps = {
   position: "bottom-right",
   autoClose: 5000,
   hideProgressBar: false,
