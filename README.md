@@ -14,5 +14,5 @@ This is the repository for the Front-end of bkdnOJ Reborn.
 
 3. Run
 ```
-   pnpm run
+   pnpm run <script>
 ```
