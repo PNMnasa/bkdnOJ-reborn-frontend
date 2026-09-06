@@ -15,11 +15,41 @@ import {qmClarify} from "helpers/components";
 
 const JUDGE_PROPS = ["name", "auth_key", "description", "is_blocked"];
 
-class AdminJudgeDetails extends React.Component {
-  constructor(props) {
+interface JudgeData {
+  name: string;
+  auth_key: string;
+  description: string;
+  is_blocked: boolean;
+  id?: number;
+  online?: boolean;
+  start_time?: string;
+  last_ip?: string;
+  ping?: unknown;
+  load?: unknown;
+  problems?: unknown;
+  runtimes?: unknown;
+  [key: string]: unknown;
+}
+
+interface AdminJudgeDetailsProps {
+  params: Record<string, string | undefined>;
+  user: unknown;
+}
+
+interface AdminJudgeDetailsState {
+  loaded: boolean;
+  errors: unknown;
+  data?: JudgeData;
+  redirectUrl?: string;
+}
+
+class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJudgeDetailsState> {
+  private id: string;
+
+  constructor(props: AdminJudgeDetailsProps) {
     super(props);
     const {id} = this.props.params;
-    this.id = id;
+    this.id = id || "";
     this.state = {
       loaded: false,
       errors: null,
@@ -37,10 +67,10 @@ class AdminJudgeDetails extends React.Component {
         });
         setTitle(`Admin | Judge. ${res.data.name}`);
       })
-      .catch(err => {
+      .catch((err: {response?: {data: unknown; status?: number}}) => {
         this.setState({
           loaded: true,
-          errors: {errors: err.response.data},
+          errors: {errors: err.response?.data},
         });
       });
   }
@@ -59,24 +89,26 @@ class AdminJudgeDetails extends React.Component {
     return null;
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: null as boolean | null}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
-    if (!isCheckbox) newData[event.target.id] = event.target.value;
-    else {
-      newData[event.target.id] = !newData[event.target.id];
+    if (newData) {
+      if (!isCheckbox) newData[event.target.id] = event.target.value;
+      else {
+        newData[event.target.id] = !newData[event.target.id];
+      }
+      this.setState({data: newData});
     }
-    this.setState({data: newData});
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     const id = this.id;
-    let cleanedData = {};
+    let cleanedData: Record<string, unknown> = {};
 
     JUDGE_PROPS.forEach(key => {
-      const v = this.state.data[key];
+      const v = this.state.data ? this.state.data[key] : undefined;
       cleanedData[key] = v;
     });
 
@@ -87,9 +119,9 @@ class AdminJudgeDetails extends React.Component {
         toast.success(`OK Edited.`);
         this.refetch();
       })
-      .catch(err => {
+      .catch((err: {response?: {data: unknown; status?: number}}) => {
         toast.error(`Cannot edit. (${err})`);
-        const data = err.response.data;
+        const data = err.response?.data;
         let errors = {...data};
         this.setState({errors: {errors}});
       });
@@ -109,9 +141,9 @@ class AdminJudgeDetails extends React.Component {
           toast.success("OK Deleted.");
           this.setState({redirectUrl: "/admin/judge/"});
         })
-        .catch(err => {
+        .catch((err: {response?: {data: unknown; status?: number}}) => {
           toast.error(`Cannot delete. (${err})`);
-          const data = err.response.data;
+          const data = err.response?.data;
           let errors = {...data};
           this.setState({errors: {errors}});
         });
@@ -160,7 +192,7 @@ class AdminJudgeDetails extends React.Component {
               <SpinLoader /> Loading...
             </span>
           )}
-          {loaded && (
+          {loaded && data && (
             <>
               <ErrorBox errors={errors} />
               {!errors && (
@@ -247,7 +279,6 @@ class AdminJudgeDetails extends React.Component {
                           type="checkbox"
                           id="online"
                           checked={data.online || false}
-                          // onChange={(e)=>this.inputChangeHandler(e, {isCheckbox: true})}
                           disabled
                         />
                       </Col>
@@ -287,7 +318,6 @@ class AdminJudgeDetails extends React.Component {
                           type="datetime-local"
                           id="start_time"
                           value={this.getStartTime() || ""}
-                          // onChange={(e)=>this.setStartTime(e.target.value)}
                           readOnly
                           disabled
                         />
@@ -302,8 +332,7 @@ class AdminJudgeDetails extends React.Component {
                           size="sm"
                           type="text"
                           id="last_ip"
-                          value={data.last_ip || ""}
-                          // onChange={(e)=>this.inputChangeHandler(e)}
+                          value={(data.last_ip as string) || ""}
                           readOnly
                           disabled
                         />
@@ -321,8 +350,7 @@ class AdminJudgeDetails extends React.Component {
                           size="sm"
                           type="text"
                           id="ping"
-                          value={data.ping || ""}
-                          // onChange={(e)=>this.inputChangeHandler(e)}
+                          value={(data.ping as string) || ""}
                           readOnly
                           disabled
                         />
@@ -337,8 +365,7 @@ class AdminJudgeDetails extends React.Component {
                           size="sm"
                           type="text"
                           id="load"
-                          value={data.load || ""}
-                          // onChange={(e)=>this.inputChangeHandler(e)}
+                          value={(data.load as string) || ""}
                           readOnly
                           disabled
                         />
@@ -400,9 +427,9 @@ class AdminJudgeDetails extends React.Component {
   }
 }
 
-let wrappedPD = AdminJudgeDetails;
+let wrappedPD: React.ComponentClass<AdminJudgeDetailsProps> = AdminJudgeDetails;
 wrappedPD = withParams(wrappedPD);
-const mapStateToProps = state => {
+const mapStateToProps = (state: {user: {user: unknown}}) => {
   return {user: state.user.user};
 };
 wrappedPD = connect(mapStateToProps, null)(wrappedPD);

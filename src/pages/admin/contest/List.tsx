@@ -23,7 +23,7 @@ import {qmClarify} from "helpers/components";
 
 const CLASSNAME = "Contest";
 
-export const INITIAL_FILTER = {
+export const INITIAL_FILTER: Record<string, string> = {
   search: "",
   is_visible: "",
   is_private_contest: "",
@@ -33,8 +33,24 @@ export const INITIAL_FILTER = {
   ordering: "-end_time",
 };
 
-class ContestListItem extends React.Component {
-  formatDateTime(date) {
+interface ContestListItemProps {
+  ckey: string;
+  name: string;
+  start_time: string;
+  end_time: string;
+  published: boolean;
+  is_visible: boolean;
+  is_private: boolean;
+  is_organization_private: boolean;
+  is_rated: boolean;
+  format_name: string;
+  selectChk: boolean;
+  onSelectChkChange: () => void;
+  [key: string]: unknown;
+}
+
+class ContestListItem extends React.Component<ContestListItemProps> {
+  formatDateTime(date: string) {
     const d = new Date(date);
     return (
       <div className="flex-center-col">
@@ -82,13 +98,10 @@ class ContestListItem extends React.Component {
         <td>{access_label}</td>
         <td>{is_rated ? "Yes" : "No"}</td>
         <td>{format_name}</td>
-        {/* <td className="text-truncate" style={{maxWidth: "200px"}}>
-          {(new Date(date)).toLocaleString()}
-        </td> */}
         <td>
           <input
             type="checkbox"
-            value={selectChk}
+            value={selectChk as unknown as string}
             onChange={() => onSelectChkChange()}
           />
         </td>
@@ -97,25 +110,52 @@ class ContestListItem extends React.Component {
   }
 }
 
+interface ContestItem {
+  key: string;
+  id: number;
+  name: string;
+  start_time: string;
+  end_time: string;
+  published: boolean;
+  is_visible: boolean;
+  is_private: boolean;
+  is_organization_private: boolean;
+  is_rated: boolean;
+  format_name: string;
+  [key: string]: unknown;
+}
+
+interface AdminContestListState {
+  searchData: Record<string, string>;
+  contests: ContestItem[];
+  selectChk: boolean[];
+  currPage: number;
+  pageCount: number;
+  loaded: boolean;
+  errors: unknown;
+  redirectUrl?: string;
+  count?: number;
+  submitting?: boolean;
+}
+
 class AdminContestList extends React.Component {
-  constructor(props) {
+  state: AdminContestListState = {
+    searchData: {...INITIAL_FILTER},
+    contests: [],
+    selectChk: [],
+    currPage: 0,
+    pageCount: 1,
+    loaded: false,
+    errors: null,
+    redirectUrl: undefined,
+  };
+
+  constructor(props: Record<string, unknown>) {
     super(props);
-    this.state = {
-      searchData: {...INITIAL_FILTER},
-
-      contests: [],
-      selectChk: [],
-      currPage: 0,
-      pageCount: 1,
-      loaded: false,
-      errors: null,
-
-      redirectUrl: null,
-    };
     setTitle("Admin | Contests");
   }
 
-  selectChkChangeHandler(idx) {
+  selectChkChangeHandler(idx: number) {
     const {selectChk} = this.state;
     if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
@@ -128,7 +168,7 @@ class AdminContestList extends React.Component {
     }
   }
 
-  callApi(params) {
+  callApi(params: {page: number}) {
     this.setState({loaded: false, errors: null});
 
     contestAPI
@@ -144,8 +184,7 @@ class AdminContestList extends React.Component {
           loaded: true,
         });
       })
-      .catch(_err => {
-        // console.log(err);
+      .catch((_err: unknown) => {
         this.setState({
           loaded: true,
           errors: ["Cannot fetch contests. Please retry again."],
@@ -156,20 +195,20 @@ class AdminContestList extends React.Component {
   componentDidMount() {
     this.callApi({page: this.state.currPage});
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_prevProps: Record<string, unknown>, prevState: AdminContestListState) {
     if (prevState.searchData !== this.state.searchData) {
       this.callApi({page: this.state.currPage});
     }
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: {selected: number}) => {
     this.callApi({page: event.selected});
   };
 
-  handleDeleteSelect(e) {
+  handleDeleteSelect(e: React.MouseEvent) {
     e.preventDefault();
 
-    let ids = [];
+    let ids: string[] = [];
     this.state.selectChk.forEach((v, i) => {
       if (v) ids.push(this.state.contests[i].key);
     });
@@ -179,29 +218,27 @@ class AdminContestList extends React.Component {
       return;
     }
 
-    // TODO: Write a bulk delete API for submissions
     const conf = window.confirm(
       `Xóa các ${CLASSNAME} ` + JSON.stringify(ids) + "?"
     );
     if (conf) {
-      let reqs = [];
+      let reqs: Promise<unknown>[] = [];
       ids.forEach(k => {
         reqs.push(contestAPI.deleteContest({key: k}));
       });
 
       Promise.all(reqs)
-        .then(_res => {
-          // console.log(res);
+        .then(() => {
           this.callApi({page: this.state.currPage});
         })
-        .catch(err => {
+        .catch((err: {response?: {status?: number}}) => {
           let msg = `Không thể xóa các ${CLASSNAME} này.`;
           if (err.response) {
             if (err.response.status === 405)
               msg += " Phương thức chưa được implemented.";
             if (err.response.status === 404)
               msg = `Không tìm thấy một trong số ${CLASSNAME} được chọn. Có lẽ chúng đã bị xóa?`;
-            if ([403, 401].includes(err.response.status))
+            if ([403, 401].includes(err.response.status!))
               msg = "Không có quyền cho thao tác này.";
           }
           this.setState({errors: [msg]});
@@ -217,7 +254,6 @@ class AdminContestList extends React.Component {
 
     return (
       <div className="admin admin-contests">
-        {/* Options for Admins: Create New,.... */}
         <div className="admin-options wrapper-vanilla m-0 mb-1">
           <div className="border d-inline-flex p-1">
             <Button
@@ -244,7 +280,6 @@ class AdminContestList extends React.Component {
           )}
         </div>
 
-        {/* Problem List */}
         <div className="admin-table contest-table wrapper-vanilla">
           <Filter
             searchData={this.state.searchData}
@@ -301,26 +336,33 @@ class AdminContestList extends React.Component {
             <tbody>
               {this.state.loaded === false && (
                 <tr>
-                  <td colSpan="9">
+                  <td colSpan={9}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>
               )}
               {this.state.loaded === true &&
-                (this.state.count > 0 ? (
+                ((this.state.count ?? 0) > 0 ? (
                   this.state.contests.map((sub, idx) => (
                     <ContestListItem
                       key={`cont-${sub.id}`}
-                      rowidx={idx}
                       ckey={sub.key}
-                      {...sub}
+                      name={sub.name}
+                      start_time={sub.start_time}
+                      end_time={sub.end_time}
+                      published={sub.published}
+                      is_visible={sub.is_visible}
+                      is_private={sub.is_private}
+                      is_organization_private={sub.is_organization_private}
+                      is_rated={sub.is_rated}
+                      format_name={sub.format_name}
                       selectChk={this.state.selectChk[idx]}
                       onSelectChkChange={() => this.selectChkChangeHandler(idx)}
                     />
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="99">
+                    <td colSpan={99}>
                       <em>No Contest can be found.</em>
                     </td>
                   </tr>
@@ -336,7 +378,7 @@ class AdminContestList extends React.Component {
                 breakLabel="..."
                 onPageChange={this.handlePageClick}
                 forcePage={this.state.currPage}
-                pageLabelBuilder={page => `[${page}]`}
+                pageLabelBuilder={(page: number) => `[${page}]`}
                 pageRangeDisplayed={3}
                 pageCount={this.state.pageCount}
                 renderOnZeroPageCount={null}

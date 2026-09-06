@@ -23,8 +23,19 @@ import {setTitle} from "helpers/setTitle";
 
 import "./Details.scss";
 
-class RateButton extends React.Component {
-  constructor(props) {
+interface RateButtonProps {
+  ckey: string;
+  setErrors?: (e: unknown) => void;
+}
+
+interface RateButtonState {
+  rateInfo: unknown;
+  fetchingInfo: boolean;
+  confirmRate: boolean;
+}
+
+class RateButton extends React.Component<RateButtonProps, RateButtonState> {
+  constructor(props: RateButtonProps) {
     super(props);
     this.state = {
       rateInfo: null,
@@ -42,16 +53,16 @@ class RateButton extends React.Component {
           let conf = window.confirm(res.data.msg + " Proceed?");
           this.setState({confirmRate: conf});
         })
-        .catch(err => {
-          let msg = `Cannot get Rating info. (${err.response.status})`;
-          if (err.response.data.detail) msg = err.response.data.detail;
+        .catch((err: {response?: {data: {detail?: string}; status?: number}}) => {
+          let msg = `Cannot get Rating info. (${err.response?.status})`;
+          if (err.response?.data?.detail) msg = err.response.data.detail;
           toast.error(msg, {toastId: `contest-cant-rate-${msg}`});
         })
         .finally(() => this.setState({fetchingInfo: false}));
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: RateButtonProps, prevState: RateButtonState) {
     if (prevState.confirmRate === false && this.state.confirmRate === true) {
       const data = {key: this.props.ckey};
       contestAPI
@@ -61,7 +72,7 @@ class RateButton extends React.Component {
     }
   }
 
-  clickHandler(e) {
+  clickHandler(e: React.MouseEvent) {
     e.preventDefault();
     if (this.state.confirmRate) {
       alert("Please refresh if you want to re-rate this contest.");
@@ -89,11 +100,36 @@ class RateButton extends React.Component {
   }
 }
 
-class AdminContestDetails extends React.Component {
-  constructor(props) {
+interface AdminContestDetailsProps {
+  params: Record<string, string | undefined>;
+}
+
+interface ContestData {
+  key: string;
+  modified: string;
+  standing_date: string;
+  standing_outdated_reason?: string;
+  is_rated?: boolean;
+  rating_floor?: number | string;
+  rating_ceiling?: number | string;
+  [key: string]: unknown;
+}
+
+interface AdminContestDetailsState {
+  loaded: boolean;
+  errors: unknown;
+  data?: ContestData;
+  redirectUrl?: string;
+  recomputeDisabled?: boolean;
+}
+
+class AdminContestDetails extends React.Component<AdminContestDetailsProps, AdminContestDetailsState> {
+  private key: string;
+
+  constructor(props: AdminContestDetailsProps) {
     super(props);
     const {key} = this.props.params;
-    this.key = key;
+    this.key = key || "";
     this.state = {
       loaded: false,
       errors: null,
@@ -110,12 +146,12 @@ class AdminContestDetails extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: {response?: {data: unknown; status?: number}}) => {
         this.setState({
           loaded: true,
           errors:
-            {errors: err.response.data} ||
-            `Cannot load contest. (${err.response.status})`,
+            {errors: err.response?.data} ||
+            `Cannot load contest. (${err.response?.status})`,
         });
       });
   }
@@ -138,7 +174,7 @@ class AdminContestDetails extends React.Component {
           toast.success("OK Deleted.");
           this.setState({redirectUrl: "/admin/contest/"});
         })
-        .catch(err => {
+        .catch((err: {response?: {data: unknown; status?: number}}) => {
           toast.error(`Cannot delete. (${err})`);
         });
     }
@@ -150,7 +186,7 @@ class AdminContestDetails extends React.Component {
 
     const {loaded, errors, data} = this.state;
     let standingRecomputeCss = "light";
-    if (loaded && !errors) {
+    if (loaded && !errors && data) {
       if (data.standing_outdated_reason) standingRecomputeCss = "danger";
       else if (data.modified != data.standing_date)
         standingRecomputeCss = "warning";
@@ -206,7 +242,7 @@ class AdminContestDetails extends React.Component {
             </span>
           )}
           <ErrorBox errors={this.state.errors} />
-          {loaded && !errors && (
+          {loaded && !errors && data && (
             <>
               <div className="m-1 p-1">
                 <h6>More Actions:</h6>
@@ -284,9 +320,9 @@ class AdminContestDetails extends React.Component {
                               toast.success("OK đã queue tác vụ.");
                               this.setState({recomputeDisabled: true});
                             })
-                            .catch(err => {
+                            .catch((err: {response?: {status?: number}}) => {
                               toast.error(
-                                `Không thể tính lại bảng điểm. (${err.response.status})`
+                                `Không thể tính lại bảng điểm. (${err.response?.status})`
                               );
                             });
                         }}
@@ -380,10 +416,6 @@ class AdminContestDetails extends React.Component {
                   <Tab eventKey="part" title="Participations">
                     <Participation ckey={this.key} />
                   </Tab>
-                  {/* <Tab eventKey="sub" title="Submissions">
-                <Submission
-                />
-              </Tab> */}
                 </Tabs>
               </div>
             </>
@@ -394,10 +426,6 @@ class AdminContestDetails extends React.Component {
   }
 }
 
-let wrappedPD = AdminContestDetails;
+let wrappedPD: React.ComponentClass<AdminContestDetailsProps> = AdminContestDetails;
 wrappedPD = withParams(wrappedPD);
 export default wrappedPD;
-// const mapStateToProps = state => {
-//     return { user : state.user.user }
-// }
-// wrappedPD = connect(mapStateToProps, null)(wrappedPD);

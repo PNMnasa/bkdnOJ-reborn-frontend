@@ -18,7 +18,20 @@ import {setTitle} from "helpers/setTitle";
 import "./List.scss";
 import "styles/ClassicPagination.scss";
 
-class JudgeListItem extends React.Component {
+interface JudgeListItemProps {
+  id: number;
+  name: string;
+  is_blocked: boolean;
+  online: boolean;
+  start_time: string;
+  ping?: number;
+  load?: number;
+  selectChk: boolean;
+  onSelectChkChange: () => void;
+  [key: string]: unknown;
+}
+
+class JudgeListItem extends React.Component<JudgeListItemProps> {
   render() {
     const {id, name, is_blocked, online, start_time, ping, load} = this.props;
     const {selectChk, onSelectChkChange} = this.props;
@@ -41,7 +54,7 @@ class JudgeListItem extends React.Component {
         <td>
           <input
             type="checkbox"
-            value={selectChk}
+            value={selectChk as unknown as string}
             onChange={() => onSelectChkChange()}
           />
         </td>
@@ -50,23 +63,46 @@ class JudgeListItem extends React.Component {
   }
 }
 
-class AdminJudgeList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      judges: [],
-      selectChk: [],
-      currPage: 0,
-      pageCount: 1,
-      loaded: false,
-      errors: null,
+interface JudgeItem {
+  id: number;
+  name: string;
+  is_blocked: boolean;
+  online: boolean;
+  start_time: string;
+  ping?: number;
+  load?: number;
+  [key: string]: unknown;
+}
 
-      submitting: false,
-    };
+interface AdminJudgeListState {
+  judges: JudgeItem[];
+  selectChk: boolean[];
+  currPage: number;
+  pageCount: number;
+  loaded: boolean;
+  errors: unknown;
+  submitting: boolean;
+  count?: number;
+  redirectUrl?: string;
+}
+
+class AdminJudgeList extends React.Component {
+  state: AdminJudgeListState = {
+    judges: [],
+    selectChk: [],
+    currPage: 0,
+    pageCount: 1,
+    loaded: false,
+    errors: null,
+    submitting: false,
+  };
+
+  constructor(props: Record<string, unknown>) {
+    super(props);
     setTitle("Admin | Judges");
   }
 
-  selectChkChangeHandler(idx) {
+  selectChkChangeHandler(idx: number) {
     const {selectChk} = this.state;
     if (idx >= selectChk.length) console.log("Invalid delete tick position");
     else {
@@ -79,7 +115,7 @@ class AdminJudgeList extends React.Component {
     }
   }
 
-  callApi(params) {
+  callApi(params: {page: number}) {
     this.setState({loaded: false, errors: null});
 
     judgeApi
@@ -95,10 +131,10 @@ class AdminJudgeList extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: {response?: {data?: unknown}}) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || "Cannot fetch judges. Please retry again.",
+          errors: err.response?.data || "Cannot fetch judges. Please retry again.",
         });
       });
   }
@@ -107,14 +143,14 @@ class AdminJudgeList extends React.Component {
     this.callApi({page: this.state.currPage});
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: {selected: number}) => {
     this.callApi({page: event.selected});
   };
 
-  handleDeleteSelect(e) {
+  handleDeleteSelect(e: React.MouseEvent) {
     e.preventDefault();
 
-    let ids = [];
+    let ids: number[] = [];
     this.state.selectChk.forEach((v, i) => {
       if (v) ids.push(this.state.judges[i].id);
     });
@@ -124,10 +160,9 @@ class AdminJudgeList extends React.Component {
       return;
     }
 
-    // TODO: Write a bulk delete API for submissions
     const conf = window.confirm("Xóa các Judge " + JSON.stringify(ids) + "?");
     if (conf) {
-      let reqs = [];
+      let reqs: Promise<unknown>[] = [];
       ids.forEach(id => {
         reqs.push(judgeApi.adminDeleteJudge({id}));
       });
@@ -136,7 +171,7 @@ class AdminJudgeList extends React.Component {
         .then(() => {
           this.callApi({page: this.state.currPage});
         })
-        .catch(err => {
+        .catch((err: {response?: {status?: number}}) => {
           let msg = "Không thể xóa các Judge này.";
           if (err.response) {
             if (err.response.status === 405)
@@ -144,7 +179,7 @@ class AdminJudgeList extends React.Component {
             if (err.response.status === 404)
               msg =
                 "Không tìm thấy một trong số Judge được chọn. Có lẽ chúng đã bị xóa?";
-            if ([403, 401].includes(err.response.status))
+            if ([403, 401].includes(err.response.status!))
               msg += " Không có quyền cho thao tác này.";
           }
           this.setState({errors: {errors: msg}});
@@ -218,17 +253,22 @@ class AdminJudgeList extends React.Component {
             <tbody>
               {this.state.loaded === false && (
                 <tr>
-                  <td colSpan="99">
+                  <td colSpan={99}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>
               )}
-              {this.state.loaded === true && this.state.count > 0 ? (
+              {this.state.loaded === true && (this.state.count ?? 0) > 0 ? (
                 this.state.judges.map((judge, idx) => (
                   <JudgeListItem
                     key={`judge-${judge.id}`}
-                    rowidx={idx}
-                    {...judge}
+                    id={judge.id}
+                    name={judge.name}
+                    is_blocked={judge.is_blocked}
+                    online={judge.online}
+                    start_time={judge.start_time}
+                    ping={judge.ping}
+                    load={judge.load}
                     selectChk={this.state.selectChk[idx]}
                     onSelectChkChange={() => this.selectChkChangeHandler(idx)}
                   />
@@ -251,7 +291,7 @@ class AdminJudgeList extends React.Component {
                 breakLabel="..."
                 onPageChange={this.handlePageClick}
                 forcePage={this.state.currPage}
-                pageLabelBuilder={page => `[${page}]`}
+                pageLabelBuilder={(page: number) => `[${page}]`}
                 pageRangeDisplayed={3}
                 pageCount={this.state.pageCount}
                 renderOnZeroPageCount={null}

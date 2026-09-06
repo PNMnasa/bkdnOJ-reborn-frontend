@@ -9,7 +9,15 @@ import { GiTrophyCup } from 'react-icons/gi';
 import logo from 'assets/images/bkdnoj-favicon-ring.png';
 import './AdminNav.scss';
 
-class AdminNav extends React.Component {
+interface AdminNavProps {
+  user?: {
+    is_staff?: boolean;
+    is_superuser?: boolean;
+  } | null;
+  profile?: unknown;
+}
+
+class AdminNav extends React.Component<AdminNavProps> {
   render() {
     const {user} = this.props;
     const isStaff = user && user.is_staff;
@@ -80,7 +88,7 @@ class AdminNav extends React.Component {
 }
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: {user: {user: {is_staff?: boolean; is_superuser?: boolean} | null}; profile: {profile: unknown}}) => {
   return {
     user: state.user.user,
     profile: state.profile.profile,

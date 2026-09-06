@@ -8,5 +8,5 @@ class Submission extends React.Component {
   }
 }
 
-let wrapped = Submission;
+let wrapped: React.ComponentClass = Submission;
 export default wrapped;

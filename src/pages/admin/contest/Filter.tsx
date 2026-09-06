@@ -1,13 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
 
 import {FaTimes, FaFilter} from "react-icons/fa";
 
-import {INITIAL_FILTER} from "./List.jsx";
+import {INITIAL_FILTER} from "./List";
 
-export default class Filter extends React.Component {
-  constructor(props) {
+interface FilterProps {
+  searchData?: Record<string, string>;
+  setSearchData?: (data: Record<string, string>) => void;
+}
+
+interface FilterState {
+  [key: string]: string;
+}
+
+export default class Filter extends React.Component<FilterProps, FilterState> {
+  constructor(props: FilterProps) {
     super(props);
     this.state = {
       ...INITIAL_FILTER,
@@ -134,11 +142,6 @@ export default class Filter extends React.Component {
         <Row>
           <Col>
             <span>
-              {/* Bộ lọc:{
-                this.props.searchData && <>
-                  <code>{JSON.stringify(this.props.searchData)}</code>
-                </>
-              } */}
             </span>
           </Col>
           <div className="d-flex flex-row-reverse">
@@ -146,7 +149,7 @@ export default class Filter extends React.Component {
               size="sm"
               variant="dark"
               className="ml-1 mr-1 btn-svg"
-              onClick={() => this.props.setSearchData({...data})}
+              onClick={() => this.props.setSearchData && this.props.setSearchData({...data})}
             >
               <FaFilter size={14} />
               <span className="d-none d-sm-inline">Filter</span>
@@ -156,7 +159,7 @@ export default class Filter extends React.Component {
               size="sm"
               variant="dark"
               className="ml-1 mr-1 btn-svg"
-              onClick={() => this.props.setSearchData({})}
+              onClick={() => this.props.setSearchData && this.props.setSearchData({})}
             >
               <FaTimes size={14} />
               <span className="d-none d-sm-inline">Clear</span>
@@ -167,8 +170,3 @@ export default class Filter extends React.Component {
     );
   }
 }
-
-Filter.propTypes = {
-  searchData: PropTypes.object,
-  setSearchData: PropTypes.func,
-};

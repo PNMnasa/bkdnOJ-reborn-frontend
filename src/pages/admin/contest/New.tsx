@@ -11,10 +11,16 @@ import "./Details.scss";
 
 const CONTEST_PROPS = ["key", "name", "start_time", "end_time", "time_limit"];
 
-class AdminContestNew extends React.Component {
-  constructor(props) {
+interface AdminContestNewState {
+  data: Record<string, unknown>;
+  redirectUrl?: string;
+  errors?: unknown;
+}
+
+class AdminContestNew extends React.Component<Record<string, unknown>, AdminContestNewState> {
+  constructor(props: Record<string, unknown>) {
     super(props);
-    let data = {};
+    let data: Record<string, unknown> = {};
     this.state = {data};
   }
 
@@ -22,7 +28,7 @@ class AdminContestNew extends React.Component {
     setTitle(`Admin | New Contest`);
   }
 
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: null as boolean | null}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -33,25 +39,25 @@ class AdminContestNew extends React.Component {
     this.setState({data: newData});
   }
 
-  getTime(key) {
+  getTime(key: string) {
     const data = this.state.data;
     if (data && data[key]) {
-      let time = new Date(data[key]);
+      let time = new Date(data[key] as string);
       time.setMinutes(time.getMinutes() - time.getTimezoneOffset());
       return time.toISOString().slice(0, 16);
     }
     return "";
   }
 
-  setTime(key, v) {
+  setTime(key: string, v: string) {
     let time = new Date(v);
     const data = this.state.data;
     this.setState({data: {...data, [key]: time.toISOString()}});
   }
 
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
-    let cleanedData = {};
+    let cleanedData: Record<string, unknown> = {};
     CONTEST_PROPS.forEach(key => {
       const v = this.state.data[key];
       cleanedData[key] = v;
@@ -63,9 +69,9 @@ class AdminContestNew extends React.Component {
         toast.success(`OK Created.`);
         this.setState({redirectUrl: `/admin/contest/${res.data.key}`});
       })
-      .catch(err => {
-        toast.error(`Cannot create. (${err.response.status})`);
-        const data = err.response.data;
+      .catch((err: {response?: {data: unknown; status?: number}}) => {
+        toast.error(`Cannot create. (${err.response?.status})`);
+        const data = err.response?.data;
         let errors = {...data};
         this.setState({errors});
       });
@@ -101,8 +107,8 @@ class AdminContestNew extends React.Component {
                   type="text"
                   placeholder="Mã định danh cho Contest"
                   id="key"
-                  value={data.key || ""}
-                  onChange={e => this.inputChangeHandler(e)}
+                  value={(data.key as string) || ""}
+                  onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                   required
                 />
               </Col>
@@ -119,8 +125,8 @@ class AdminContestNew extends React.Component {
                   type="text"
                   placeholder="Contest Name"
                   id="name"
-                  value={data.name || ""}
-                  onChange={e => this.inputChangeHandler(e)}
+                  value={(data.name as string) || ""}
+                  onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                   required
                 />
               </Col>
@@ -165,21 +171,6 @@ class AdminContestNew extends React.Component {
               </Col>
             </Row>
 
-            {/* <Row>
-              <Form.Label column="sm" md={3}> Time Limit </Form.Label>
-              <Col md={9}> <Form.Control size="sm" id="time_limit"
-                      value={data.time_limit || ''} onChange={(e)=>this.inputChangeHandler(e)}
-              />
-              </Col>
-              <Col xl={12}>
-                <sub>
-                  Giới hạn thời gian làm bài cho mỗi lần tham dự. Nếu nhập một số nguyên,
-                  mỗi lần tham dự thí sinh chỉ được làm bài từ Thời gian Tham dự cộng <code>time_limit</code>.
-                  Option này chủ yếu dành cho Virtual Participation (chưa triển khai).
-                </sub>
-              </Col>
-            </Row> */}
-
             <hr className="m-2" />
 
             <Row>
@@ -202,10 +193,5 @@ class AdminContestNew extends React.Component {
   }
 }
 
-let wrappedPD = AdminContestNew;
-// wrappedPD = withParams(wrappedPD);
-// const mapStateToProps = state => {
-//   return { user : state.user.user }
-// }
-// wrappedPD = connect(mapStateToProps, null)(wrappedPD);
+let wrappedPD: React.ComponentClass = AdminContestNew;
 export default wrappedPD;

@@ -19,15 +19,27 @@ import {
 
 import {qmClarify} from "helpers/components";
 
-const INIT_CONT_PROBLEM = {
+const INIT_CONT_PROBLEM: Record<string, unknown> = {
   points: 1,
   partial: false,
   is_pretested: false,
   max_submissions: null,
 };
 
-class RejudgeButton extends React.Component {
-  constructor(props) {
+interface RejudgeButtonProps {
+  ckey: string;
+  prob: Record<string, unknown>;
+  ridx?: number;
+}
+
+interface RejudgeButtonState {
+  judgeInfo: unknown;
+  fetchingInfo: boolean;
+  confirmRejudge: boolean;
+}
+
+class RejudgeButton extends React.Component<RejudgeButtonProps, RejudgeButtonState> {
+  constructor(props: RejudgeButtonProps) {
     super(props);
     this.state = {
       judgeInfo: null,
@@ -37,7 +49,7 @@ class RejudgeButton extends React.Component {
   }
 
   fetchRejudgeInfo() {
-    const data = {key: this.props.ckey, shortname: this.props.prob.shortname};
+    const data = {key: this.props.ckey, shortname: this.props.prob.shortname as string};
     this.setState({fetchingInfo: true}, () => {
       contestAPI
         .infoRejudgeContestProblem(data)
@@ -47,8 +59,8 @@ class RejudgeButton extends React.Component {
             this.setState({confirmRejudge: conf});
           });
         })
-        .catch(err => {
-          if (err.response.status === 400)
+        .catch((err: {response?: {status?: number}}) => {
+          if (err.response?.status === 400)
             toast.error("No submissions to rejudge.");
           else toast.error("Cannot get rejudge info.");
         })
@@ -56,12 +68,12 @@ class RejudgeButton extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: RejudgeButtonProps, prevState: RejudgeButtonState) {
     if (
       prevState.confirmRejudge === false &&
       this.state.confirmRejudge === true
     ) {
-      const data = {key: this.props.ckey, shortname: this.props.prob.shortname};
+      const data = {key: this.props.ckey, shortname: this.props.prob.shortname as string};
       contestAPI
         .rejudgeContestProblem(data)
         .then(() => toast.success(`OK Rejudging ${this.props.prob.shortname}.`))
@@ -69,7 +81,7 @@ class RejudgeButton extends React.Component {
     }
   }
 
-  clickHandler(e) {
+  clickHandler(e: React.MouseEvent) {
     e.preventDefault();
     if (!this.props.prob.id) return;
     if (this.state.confirmRejudge) {
@@ -94,11 +106,9 @@ class RejudgeButton extends React.Component {
     );
   }
 }
+
 class HelpModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {show: false};
-  }
+  state = {show: false};
   render() {
     return (
       <>
@@ -153,8 +163,29 @@ class HelpModal extends React.Component {
   }
 }
 
-class Problem extends React.Component {
-  constructor(props) {
+interface ProblemProps {
+  ckey: string;
+}
+
+interface ContestProblemItem {
+  shortname: string;
+  title?: string;
+  order?: number;
+  points?: number;
+  partial?: boolean;
+  id?: number;
+  [key: string]: unknown;
+}
+
+interface ProblemState {
+  ckey: string;
+  problems: ContestProblemItem[];
+  loaded: boolean;
+  errors: unknown;
+}
+
+class Problem extends React.Component<ProblemProps, ProblemState> {
+  constructor(props: ProblemProps) {
     super(props);
     this.state = {
       ckey: this.props.ckey,
@@ -175,11 +206,10 @@ class Problem extends React.Component {
           problems: res.data.results,
         });
       })
-      .catch(err => {
-        // console.log(err);
+      .catch((err: {response?: {detail?: unknown}}) => {
         this.setState({
           loaded: true,
-          errors: [err.response.detail],
+          errors: [err.response?.detail],
         });
       });
   }
@@ -189,7 +219,7 @@ class Problem extends React.Component {
   }
 
   // ---------
-  clarifyPopup(msg) {
+  clarifyPopup(msg: string) {
     return (
       <Link to="#" onClick={() => alert(msg)}>
         ?
@@ -198,18 +228,18 @@ class Problem extends React.Component {
   }
 
   // ---------
-  problemChangeHandler(idx, e, params = {}) {
+  problemChangeHandler(idx: number, e: React.ChangeEvent<HTMLInputElement> & {shortname?: string; title?: string}, params: Record<string, unknown> = {}) {
     const problems = this.state.problems;
-    let prob = {...problems[idx]};
+    let prob: ContestProblemItem = {...problems[idx]};
 
-    const isCheckbox = params.isCheckbox || false;
-    const isRawObject = params.rawObject || false;
+    const isCheckbox = !!params.isCheckbox;
+    const isRawObject = !!params.rawObject;
 
     if (isRawObject) {
       let valid = true;
       problems.forEach((p, i) => {
         if (i === idx) return;
-        if (p.shortname === e.shortname) {
+        if (p.shortname === (e.shortname || "")) {
           alert("Problem này đã tồn tại trong contest!");
           valid = false;
         }
@@ -227,7 +257,7 @@ class Problem extends React.Component {
   }
 
   // -------- Form Submit
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
 
     let conf = window.confirm("Bạn có chắc chắn với thay đổi này?");
@@ -241,9 +271,8 @@ class Problem extends React.Component {
           toast.success("OK Updated.");
           this.refetch();
         })
-        .catch(err => {
-          // console.log(err);
-          this.setState({errors: err.response.data});
+        .catch((err: {response?: {data?: unknown}}) => {
+          this.setState({errors: err.response?.data});
         });
   }
 
@@ -261,8 +290,8 @@ class Problem extends React.Component {
                 onClick={() => {
                   let probs = problems.slice();
                   probs.sort((p1, p2) => {
-                    const v1 = isNaN(p1.order) ? 9999 : p1.order;
-                    const v2 = isNaN(p2.order) ? 9999 : p2.order;
+                    const v1 = isNaN(p1.order as number) ? 9999 : (p1.order as number);
+                    const v2 = isNaN(p2.order as number) ? 9999 : (p2.order as number);
                     return v1 < v2 ? -1 : 0;
                   });
                   this.setState({problems: probs});
@@ -337,12 +366,6 @@ class Problem extends React.Component {
                         "Mặc định không tick: Nhận 0đ nếu có ít nhất một test sai."
                     )}
                   </th>
-                  {/* <th style={{whiteSpace: "nowrap"}} >
-                Pretested {this.clarifyPopup('Chỉ chấm với Pretest.')}
-              </th> */}
-                  {/* <th style={{whiteSpace: "nowrap"}} >
-                Max Subs {this.clarifyPopup('Giới hạn số lần nộp bài tối đa cho phép. Để trống nếu cho phép nộp không giới hạn.')}
-              </th> */}
                   <th>
                     Rejudge
                     {qmClarify(
@@ -350,9 +373,6 @@ class Problem extends React.Component {
                     )}
                   </th>
                   <th></th>
-                  {/* <th >
-                <Link to="#" onClick={(e) => this.handleDeleteSelect(e)}>Actions</Link>
-              </th> */}
                 </tr>
               </thead>
               <tbody>
@@ -379,17 +399,15 @@ class Problem extends React.Component {
                           size="sm"
                           type="number"
                           id="order"
-                          value={isNaN(prob.order) ? "" : prob.order}
-                          onChange={e => this.problemChangeHandler(ridx, e)}
+                          value={isNaN(prob.order as number) ? "" : (prob.order as number)}
+                          onChange={e => this.problemChangeHandler(ridx, e as React.ChangeEvent<HTMLInputElement>)}
                         />
                       </td>
                       <td>
-                        {/* <Form.Control size="sm" type="text" id="shortname" value={prob.shortname || ''}
-                                onChange={(e) => this.problemChangeHandler(ridx, e)} /> */}
                         <ProblemSelect
                           prob={{...prob}}
-                          onChange={val =>
-                            this.problemChangeHandler(ridx, val, {
+                          onChange={(val: {shortname: string; title: string}) =>
+                            this.problemChangeHandler(ridx, val as unknown as React.ChangeEvent<HTMLInputElement>, {
                               rawObject: true,
                             })
                           }
@@ -401,7 +419,7 @@ class Problem extends React.Component {
                           type="number"
                           id="points"
                           value={prob.points || ""}
-                          onChange={e => this.problemChangeHandler(ridx, e)}
+                          onChange={e => this.problemChangeHandler(ridx, e as React.ChangeEvent<HTMLInputElement>)}
                         />
                       </td>
                       <td>
@@ -412,18 +430,12 @@ class Problem extends React.Component {
                           id="partial"
                           checked={prob.partial || false}
                           onChange={e =>
-                            this.problemChangeHandler(ridx, e, {
+                            this.problemChangeHandler(ridx, e as React.ChangeEvent<HTMLInputElement>, {
                               isCheckbox: true,
                             })
                           }
                         />
                       </td>
-                      {/* <td> <Form.Control size="sm" type="checkbox" id="is_pretested" checked={prob.is_pretested || false}
-                                onChange={(e) => this.problemChangeHandler(ridx, e, {isCheckbox: true})} />
-                </td> */}
-                      {/* <td> <Form.Control size="sm" type="number" id="max_submissions" value={prob.max_submissions || ''}
-                                onChange={(e) => this.problemChangeHandler(ridx, e)} />
-                </td> */}
 
                       <td>
                         <RejudgeButton
@@ -488,7 +500,7 @@ class Problem extends React.Component {
                 className="ml-1 mr-1 btn-svg"
                 onClick={() =>
                   this.setState({
-                    problems: problems.concat({...INIT_CONT_PROBLEM}),
+                    problems: problems.concat({...INIT_CONT_PROBLEM} as ContestProblemItem),
                   })
                 }
               >
@@ -503,5 +515,5 @@ class Problem extends React.Component {
   }
 }
 
-let wrapped = Problem;
+let wrapped: React.ComponentClass<ProblemProps> = Problem;
 export default wrapped;

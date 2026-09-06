@@ -10,8 +10,21 @@ import {withNavigation} from "helpers/react-router";
 import UserMultiSelect from "components/SelectMulti/User";
 import OrgMultiSelect from "components/SelectMulti/Org";
 
-class General extends React.Component {
-  constructor(props) {
+interface GeneralProps {
+  ckey: string;
+  data: Record<string, unknown>;
+  refetch?: () => void;
+  navigate: (to: string) => void;
+}
+
+interface GeneralState {
+  ckey: string;
+  data: Record<string, unknown>;
+  errors: unknown;
+}
+
+class General extends React.Component<GeneralProps, GeneralState> {
+  constructor(props: GeneralProps) {
     super(props);
     this.state = {
       ckey: this.props.ckey,
@@ -21,7 +34,7 @@ class General extends React.Component {
   }
 
   // -------------- Setters Getters
-  inputChangeHandler(event, params = {isCheckbox: null}) {
+  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: null as boolean | null}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -31,16 +44,16 @@ class General extends React.Component {
     }
     this.setState({data: newData});
   }
-  getTime(key) {
+  getTime(key: string) {
     const data = this.state.data;
     if (data && data[key]) {
-      let time = new Date(data[key]);
+      let time = new Date(data[key] as string);
       time.setMinutes(time.getMinutes() - time.getTimezoneOffset());
       return time.toISOString().slice(0, 16);
     }
     return "";
   }
-  setTime(key, v) {
+  setTime(key: string, v: string) {
     let time = new Date(v);
     const data = this.state.data;
     this.setState({data: {...data, [key]: time.toISOString()}});
@@ -52,14 +65,14 @@ class General extends React.Component {
   }
 
   // ------------- Lifecycle
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: GeneralProps) {
     if (prevProps.data !== this.props.data) {
       this.setState({data: this.props.data});
     }
   }
 
   // ------------- form submit
-  formSubmitHandler(e) {
+  formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     this.setState({errors: null});
 
@@ -71,11 +84,11 @@ class General extends React.Component {
         toast.success("OK Updated.");
         if (results.data.key !== this.state.ckey)
           this.props.navigate(`/admin/contest/${results.data.key}`);
-        else this.props.refetch();
+        else this.props.refetch && this.props.refetch();
       })
-      .catch(err => {
-        toast.error(`Update Failed. (${err.response.status})`);
-        this.setState({errors: {errors: err.response.data}});
+      .catch((err: {response?: {data: unknown; status?: number}}) => {
+        toast.error(`Update Failed. (${err.response?.status})`);
+        this.setState({errors: {errors: err.response?.data}});
       });
   }
 
@@ -98,7 +111,7 @@ class General extends React.Component {
                 type="text"
                 placeholder="Contest id"
                 id="id"
-                value={data.id || ""}
+                value={(data.id as string) || ""}
                 disabled
                 readOnly
               />
@@ -115,8 +128,8 @@ class General extends React.Component {
                 type="text"
                 placeholder="Contest key/shortname/code"
                 id="key"
-                value={data.key || ""}
-                onChange={e => this.inputChangeHandler(e)}
+                value={(data.key as string) || ""}
+                onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
               />
             </Col>
           </Row>
@@ -132,8 +145,8 @@ class General extends React.Component {
                 type="text"
                 placeholder="Contest Name"
                 id="name"
-                value={data.name || ""}
-                onChange={e => this.inputChangeHandler(e)}
+                value={(data.name as string) || ""}
+                onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
               />
             </Col>
           </Row>
@@ -180,20 +193,6 @@ class General extends React.Component {
                     </sub>
                   </Col>
                 </Row>
-                {/* <Row>
-              <Form.Label column="sm" lg={2}> Time Limit (phút) </Form.Label>
-              <Col lg={10}> <Form.Control size="sm" id="time_limit"
-                      value={data.time_limit || ''} onChange={(e)=>this.inputChangeHandler(e)}
-              />
-              </Col>
-              <Col xl={12}>
-                <sub>
-                  Giới hạn thời gian làm bài cho mỗi lần tham dự. Nếu nhập một số nguyên,
-                  mỗi lần tham dự thí sinh chỉ được làm bài từ Thời gian Tham dự cộng <code>time_limit</code>.
-                  Option này chủ yếu dành cho Virtual Participation (chưa triển khai).
-                </sub>
-              </Col>
-            </Row> */}
 
                 <Row id="fronzen-settings">
                   <Form.Label column="sm" lg={3}>
@@ -206,9 +205,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="enable_frozen"
-                      checked={data.enable_frozen || false}
+                      checked={(data.enable_frozen as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -252,8 +251,8 @@ class General extends React.Component {
                       size="sm"
                       type="number"
                       id="scoreboard_cache_duration"
-                      value={data.scoreboard_cache_duration}
-                      onChange={e => this.inputChangeHandler(e)}
+                      value={data.scoreboard_cache_duration as string | number}
+                      onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                     />
                   </Col>
                   <Col xl={12}>
@@ -271,17 +270,15 @@ class General extends React.Component {
                   </Form.Label>
                   <Col md={10}>
                     <Form.Select
-                      aria-label={data.format_name}
-                      value={data.format_name || "icpc"}
-                      onChange={e => this.inputChangeHandler(e)}
+                      aria-label={data.format_name as string}
+                      value={(data.format_name as string) || "icpc"}
+                      onChange={e => this.inputChangeHandler(e as unknown as React.ChangeEvent<HTMLInputElement>)}
                       size="sm"
                       id="format_name"
                       className="mb-1 w-100"
                     >
-                      {/* <option value="default">Mặc định (tương tự ioi)</option> */}
                       <option value="icpc">ICPC</option>
                       <option value="ioi">IOI</option>
-                      {/* <option value="ioi16">IOI (sau 2016)</option> */}
                     </Form.Select>
                   </Col>
 
@@ -297,8 +294,8 @@ class General extends React.Component {
                       as="textarea"
                       placeholder="JSON - Describe custom contest rules"
                       id="format_config"
-                      value={data.format_config || ""}
-                      onChange={e => this.inputChangeHandler(e)}
+                      value={(data.format_config as string) || ""}
+                      onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                     />
                   </Col>
                 </Row>
@@ -309,13 +306,10 @@ class General extends React.Component {
                     Mô tả{" "}
                   </Form.Label>
                   <Col>
-                    {/* <Form.Control size="sm" xl={12} as="textarea" placeholder="Contest Description" id="description"
-                      value={data.description || ''} onChange={(e) => this.inputChangeHandler(e)}
-                  /> */}
                     <RichTextEditor
-                      value={data.description || ""}
+                      value={(data.description as string) || ""}
                       enableEdit={true}
-                      onChange={v => {
+                      onChange={(v: string) => {
                         let newData = this.state.data;
                         let key = "description";
                         newData[key] = v;
@@ -336,35 +330,13 @@ class General extends React.Component {
                       size="sm"
                       type="number"
                       id="points_precision"
-                      value={data.points_precision || 6}
-                      onChange={e => this.inputChangeHandler(e)}
+                      value={(data.points_precision as number) || 6}
+                      onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                     />
                   </Col>
                 </Row>
               </Accordion.Body>
             </Accordion.Item>
-
-            {/* <Accordion.Item eventKey="0" className="options">
-            <Accordion.Header>Lựa chọn thêm</Accordion.Header>
-            <Accordion.Body>
-
-              <Row>
-                <Form.Label column="sm" xs={6}> Chấm bằng Pretest? </Form.Label>
-                <Col xs={6}> <Form.Control size="sm" type="checkbox" id="run_pretests_only"
-                        checked={data.run_pretests_only || false}
-                        onChange={(e)=>this.inputChangeHandler(e, {isCheckbox: true})}
-                /></Col>
-              </Row>
-
-              <Row>
-                <Form.Label column="sm" xs={6}> Cho phép Thi sinh gửi yêu cầu Clarifications? </Form.Label>
-                <Col xs={6}> <Form.Control size="sm" type="checkbox" id="use_clarifications"
-                        checked={data.use_clarifications || false}
-                        onChange={(e)=>this.inputChangeHandler(e, {isCheckbox: true})}
-                /></Col>
-              </Row>
-            </Accordion.Body>
-          </Accordion.Item> */}
 
             <Accordion.Item eventKey="1" className="accessibility">
               <Accordion.Header>Quyền truy cập</Accordion.Header>
@@ -377,8 +349,8 @@ class General extends React.Component {
                   <Col md={10} className="mt-1 mb-1">
                     <UserMultiSelect
                       id="authors"
-                      value={data.authors || []}
-                      onChange={arr =>
+                      value={(data.authors as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({data: {...data, authors: arr}})
                       }
                     />
@@ -401,8 +373,8 @@ class General extends React.Component {
                   <Col md={10} className="mt-1 mb-1">
                     <UserMultiSelect
                       id="collaborators"
-                      value={data.collaborators || []}
-                      onChange={arr =>
+                      value={(data.collaborators as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({data: {...data, collaborators: arr}})
                       }
                     />
@@ -422,8 +394,8 @@ class General extends React.Component {
                   <Col md={10} className="mt-1 mb-1">
                     <UserMultiSelect
                       id="reviewers"
-                      value={data.reviewers || []}
-                      onChange={arr =>
+                      value={(data.reviewers as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({data: {...data, reviewers: arr}})
                       }
                     />
@@ -453,9 +425,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="published"
-                      checked={data.published || false}
+                      checked={(data.published as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -480,9 +452,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="is_visible"
-                      checked={data.is_visible || false}
+                      checked={(data.is_visible as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -507,9 +479,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="is_private"
-                      checked={data.is_private || false}
+                      checked={(data.is_private as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -521,8 +493,8 @@ class General extends React.Component {
                   <Col md={10} className="mt-1 mb-1">
                     <UserMultiSelect
                       id="private_contestants"
-                      value={data.private_contestants || []}
-                      onChange={arr =>
+                      value={(data.private_contestants as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({
                           data: {...data, private_contestants: arr},
                         })
@@ -548,9 +520,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="is_organization_private"
-                      checked={data.is_organization_private || false}
+                      checked={(data.is_organization_private as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -562,8 +534,8 @@ class General extends React.Component {
                   <Col md={10}>
                     <OrgMultiSelect
                       id="organizations"
-                      value={data.organizations || []}
-                      onChange={arr =>
+                      value={(data.organizations as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({data: {...data, organizations: arr}})
                       }
                     />
@@ -585,8 +557,8 @@ class General extends React.Component {
                   <Col className="mt-1 mb-1">
                     <UserMultiSelect
                       id="banned_users"
-                      value={data.banned_users || []}
-                      onChange={arr =>
+                      value={(data.banned_users as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({data: {...data, banned_users: arr}})
                       }
                     />
@@ -609,9 +581,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="is_rated"
-                      checked={data.is_rated || false}
+                      checked={(data.is_rated as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -629,8 +601,8 @@ class General extends React.Component {
                       type="number"
                       placeholder="0"
                       id="rating_floor"
-                      value={data.rating_floor || ""}
-                      onChange={e => this.inputChangeHandler(e)}
+                      value={(data.rating_floor as string) || ""}
+                      onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                     />
                   </Col>
 
@@ -645,8 +617,8 @@ class General extends React.Component {
                       type="number"
                       placeholder="999999"
                       id="rating_ceiling"
-                      value={data.rating_ceiling || ""}
-                      onChange={e => this.inputChangeHandler(e)}
+                      value={(data.rating_ceiling as string) || ""}
+                      onChange={e => this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>)}
                     />
                   </Col>
                 </Row>
@@ -659,9 +631,9 @@ class General extends React.Component {
                       size="sm"
                       type="checkbox"
                       id="rate_all"
-                      checked={data.rate_all || false}
+                      checked={(data.rate_all as boolean) || false}
                       onChange={e =>
-                        this.inputChangeHandler(e, {isCheckbox: true})
+                        this.inputChangeHandler(e as React.ChangeEvent<HTMLInputElement>, {isCheckbox: true})
                       }
                     />
                   </Col>
@@ -681,8 +653,8 @@ class General extends React.Component {
                   <Col xs={9}>
                     <UserMultiSelect
                       id="rate_exclude"
-                      value={data.rate_exclude || []}
-                      onChange={arr =>
+                      value={(data.rate_exclude as unknown[]) || []}
+                      onChange={(arr: unknown[]) =>
                         this.setState({data: {...data, rate_exclude: arr}})
                       }
                     />
@@ -712,6 +684,6 @@ class General extends React.Component {
   }
 }
 
-let wrapped = General;
+let wrapped: React.ComponentClass<GeneralProps> = General;
 wrapped = withNavigation(wrapped);
 export default wrapped;

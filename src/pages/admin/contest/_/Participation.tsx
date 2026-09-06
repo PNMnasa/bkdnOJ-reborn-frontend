@@ -17,8 +17,25 @@ import contestAPI from "api/contest";
 import "./Participation.scss";
 import "styles/ClassicPagination.scss";
 
-class Filters extends React.Component {
-  constructor (props) {
+interface FiltersProps {
+  value?: Record<string, unknown>;
+  onChange?: (data: Record<string, unknown>) => void;
+  setFilters: (filters: Record<string, unknown>) => void;
+  disabled?: boolean;
+}
+
+interface FiltersState {
+  filters: Record<string, unknown>;
+  filterByTypeChk?: boolean;
+  filterByOrgChk?: boolean;
+  filterByOrgNoneOrg?: boolean;
+  filterByOrgNoneOrgChk?: boolean;
+  filterBySearchChk?: boolean;
+  selectedOrgs?: unknown[];
+}
+
+class Filters extends React.Component<FiltersProps, FiltersState> {
+  constructor (props: FiltersProps) {
     super(props);
     this.state = {
       filters: {},
@@ -26,12 +43,12 @@ class Filters extends React.Component {
   }
 
   setFilters() {
-    var filters = {}
+    var filters: Record<string, unknown> = {}
     const state = this.state;
     if (state.filterByTypeChk) filters.virtual = state.filters.virtual;
     if (state.filterByOrgChk) {
       filters.organizations = state.filters.organizations || [];
-      if (state.filterByOrgNoneOrg) filters.organizations.push('');
+      if (state.filterByOrgNoneOrg) (filters.organizations as unknown[]).push('');
     }
     if (state.filterBySearchChk) filters.search = state.filters.search;
     this.props.setFilters(filters)
@@ -110,7 +127,7 @@ class Filters extends React.Component {
                 <label htmlFor="part-filter-org-none" className="ml-1">Include None</label>
               </span>
               <OrgMultiSelect isDisabled={!this.state.filterByOrgChk}
-                onChange={sel => {
+                onChange={(sel: {slug: string}[]) => {
                   this.setState({
                     selectedOrgs: sel,
                     filters: {
@@ -139,7 +156,7 @@ class Filters extends React.Component {
             <Col className="ml-2 d-inline-flex">
               <input type="text" className="w-100" disabled={!this.state.filterBySearchChk }
                       placeholder="Search prefix username.."
-                      value={this.state.filters.search || ""}
+                      value={(this.state.filters.search as string) || ""}
                       onChange={e => this.setState({
                         filters: {
                           ...filters,
@@ -176,7 +193,7 @@ class Filters extends React.Component {
   }
 }
 
-const INITIAL_STATE = {
+const INITIAL_STATE: Record<string, unknown> = {
   participations: [],
   count: null,
   currPage: 0,
@@ -191,12 +208,52 @@ const INITIAL_STATE = {
 };
 const VIRTUAL_TYPE = ["LIVE", "SPECTATE"];
 
-class Participation extends React.Component {
-  constructor(props) {
+interface ParticipationProps {
+  ckey: string;
+}
+
+interface ParticipationItem {
+  id: number;
+  user: {
+    username: string;
+    first_name: string;
+    last_name: string;
+    display_name?: string;
+    avatar: string;
+  };
+  real_start: string;
+  virtual: string;
+  organization?: {
+    slug: string;
+    name: string;
+    logo_url?: string;
+  };
+  is_disqualified: boolean;
+  [key: string]: unknown;
+}
+
+interface ParticipationState {
+  participations: ParticipationItem[];
+  count: number | null;
+  currPage: number;
+  pageCount: number;
+  loaded: boolean;
+  errors: unknown;
+  virtual: string | null;
+  selectChk: boolean[];
+  filters: Record<string, unknown>;
+  addParticipationModalShow: boolean;
+  setOrganizationModalShow: boolean;
+}
+
+class Participation extends React.Component<ParticipationProps, ParticipationState> {
+  private ckey: string;
+
+  constructor(props: ParticipationProps) {
     super(props);
     this.ckey = this.props.ckey;
     this.state = {
-      ...INITIAL_STATE,
+      ...(INITIAL_STATE as ParticipationState),
       filters: {},
       addParticipationModalShow: false,
       setOrganizationModalShow: false,
@@ -216,7 +273,7 @@ class Participation extends React.Component {
   }
 
   resetFetch() {
-    this.setState(INITIAL_STATE, () => this.refetch());
+    this.setState({...INITIAL_STATE} as ParticipationState, () => this.refetch());
   }
 
   refetch(params = {page: 0}) {
@@ -239,8 +296,7 @@ class Participation extends React.Component {
           loaded: true,
         });
       })
-      .catch(_err => {
-        // console.log(err);
+      .catch((_err: unknown) => {
         this.setState({
           loaded: true,
           errors: ["Cannot fetch Participations for this contest."],
@@ -248,22 +304,22 @@ class Participation extends React.Component {
       });
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: {selected: number}) => {
     this.refetch({page: event.selected});
   };
 
-  setErrors(errData) {
+  setErrors(errData: unknown) {
     this.setState({ errors: errData })
   }
 
   componentDidMount() {
     this.refetch();
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_prevProps: ParticipationProps, prevState: ParticipationState) {
     if (prevState.filters !== this.state.filters) this.refetch()
   }
 
-  genMessageActOnParticipations(action, params, affected) {
+  genMessageActOnParticipations(action: string, params: Record<string, unknown>, affected: unknown[]) {
     let stringified = JSON.stringify(affected);
     if (stringified.length > 255) {
       stringified = stringified.substring(0, 255-4)+"...]"
@@ -287,8 +343,8 @@ class Participation extends React.Component {
     return `Unrecognized action '${action}'`
   }
 
-  actOnParticipations(action, params) {
-    let partIds = [], partUsers = []
+  actOnParticipations(action: string, params?: Record<string, unknown>) {
+    let partIds: number[] = [], partUsers: string[] = []
     this.state.participations.map( (p, i) => {
       if (this.state.selectChk[i]) {
         partIds.push(p.id);
@@ -301,7 +357,7 @@ class Participation extends React.Component {
       return;
     }
     const conf = window.confirm(this.genMessageActOnParticipations(
-      action, params, partUsers,
+      action, params || {}, partUsers,
     ))
     if (!conf) return;
 
@@ -313,7 +369,7 @@ class Participation extends React.Component {
       }
     }
 
-    const apiCall =  contestAPI.actContestParticipation({
+    const apiCall = contestAPI.actContestParticipation({
       key: this.ckey, data,
     });
     const parent = this;
@@ -327,7 +383,7 @@ class Participation extends React.Component {
       },
       error: {
         render({data}) {
-          parent.setErrors(data.response.data);
+          parent.setErrors(data.response?.data);
           return "Update Failed.";
         },
       },
@@ -496,7 +552,7 @@ class Participation extends React.Component {
                     breakLabel="..."
                     onPageChange={this.handlePageClick}
                     forcePage={this.state.currPage}
-                    pageLabelBuilder={page => `[${page}]`}
+                    pageLabelBuilder={(page: number) => `[${page}]`}
                     pageRangeDisplayed={3}
                     pageCount={this.state.pageCount}
                     renderOnZeroPageCount={null}
@@ -512,7 +568,7 @@ class Participation extends React.Component {
           ckey={this.ckey}
           modalShow={this.state.setOrganizationModalShow}
           closeModalHandler={() => this.closeSetOrganizationModal()}
-          actOnParticipations={(act, data)=>this.actOnParticipations(act, data)}
+          actOnParticipations={(act: string, data?: Record<string, unknown>)=>this.actOnParticipations(act, data)}
           refetch={() => this.refetch()}
         />
         <AddParticipationModal
@@ -526,8 +582,22 @@ class Participation extends React.Component {
   }
 }
 
-class SetOrganizationModal extends React.Component {
-  constructor(props) {
+interface SetOrganizationModalProps {
+  ckey: string;
+  modalShow: boolean;
+  closeModalHandler: () => void;
+  actOnParticipations: (act: string, data?: Record<string, unknown>) => void;
+  refetch: () => void;
+}
+
+interface SetOrganizationModalState {
+  selectedOrg: {slug: string} | null;
+  submitting?: boolean;
+  errors?: unknown;
+}
+
+class SetOrganizationModal extends React.Component<SetOrganizationModalProps, SetOrganizationModalState> {
+  constructor(props: SetOrganizationModalProps) {
     super(props);
     this.state = {
       selectedOrg: null,
@@ -551,7 +621,7 @@ class SetOrganizationModal extends React.Component {
         <Modal.Body>
           Lựa chọn tổ chức đến gán cho các lượt đăng ký:
           <OrgSingleSelect
-            onChange={sel => this.setState({selectedOrg: sel})}
+            onChange={(sel: {slug: string}) => this.setState({selectedOrg: sel})}
             value={this.state.selectedOrg}
           />
         </Modal.Body>
@@ -569,10 +639,11 @@ class SetOrganizationModal extends React.Component {
             variant="danger"
             className="btn-svg"
             onClick={() => {
-              this.props.actOnParticipations(
-                'set-org', 
-                {organization: this.state.selectedOrg.slug}
-              );
+              if (this.state.selectedOrg)
+                this.props.actOnParticipations(
+                  'set-org', 
+                  {organization: this.state.selectedOrg.slug}
+                );
               this.closeModalHandler();
             }}
           >
@@ -584,8 +655,24 @@ class SetOrganizationModal extends React.Component {
   }
 }
 
-class AddParticipationModal extends React.Component {
-  constructor(props) {
+interface AddParticipationModalProps {
+  ckey: string;
+  modalShow: boolean;
+  closeModalHandler: () => void;
+  refetch: () => void;
+}
+
+interface AddParticipationModalState {
+  addPartType: string | null;
+  setOrgAuto: boolean;
+  selectedOrg: {slug: string} | null;
+  users: string;
+  submitting: boolean;
+  errors: unknown;
+}
+
+class AddParticipationModal extends React.Component<AddParticipationModalProps, AddParticipationModalState> {
+  constructor(props: AddParticipationModalProps) {
     super(props);
     this.state = {
       addPartType: null,
@@ -597,7 +684,7 @@ class AddParticipationModal extends React.Component {
     };
   }
 
-  submitHandler(e) {
+  submitHandler(e: React.FormEvent) {
     e.preventDefault();
 
     let {addPartType, setOrgAuto, selectedOrg, users} = this.state;
@@ -610,12 +697,12 @@ class AddParticipationModal extends React.Component {
       alert("Hãy thêm ít nhất 1 người dùng.");
       return false;
     }
-    users = users.split(/\s+/).filter(u => u !== "");
+    const userList = users.split(/\s+/).filter(u => u !== "");
 
     this.setState({submitting: true, errors: null});
 
-    let data = {
-      users, 
+    let data: Record<string, unknown> = {
+      users: userList, 
       participation_type: addPartType,
       set_org_auto: setOrgAuto,
     };
@@ -628,9 +715,9 @@ class AddParticipationModal extends React.Component {
         this.props.refetch();
         this.setState({submitting: false});
       })
-      .catch(err => {
+      .catch((err: {response?: {data: unknown; status?: number}}) => {
         this.setState({
-          errors: err.response.data,
+          errors: err.response?.data,
           submitting: false,
         });
       });
@@ -656,7 +743,7 @@ class AddParticipationModal extends React.Component {
           <ErrorBox errors={errors} />
           <Form
             id="contest-participation-add-form"
-            onSubmit={e => this.submitHanlder(e)}
+            onSubmit={e => this.submitHandler(e)}
           >
             <div className=""><strong>* Thêm họ với tư cách tham dự:</strong></div>
             <div className="flex-center">
@@ -697,7 +784,7 @@ class AddParticipationModal extends React.Component {
               </label>
             <OrgSingleSelect
               disabled={this.state.setOrgAuto}
-              onChange={sel => this.setState({selectedOrg: sel})}
+              onChange={(sel: {slug: string}) => this.setState({selectedOrg: sel})}
               value={this.state.selectedOrg}
             />
             </div>
@@ -730,5 +817,5 @@ class AddParticipationModal extends React.Component {
   }
 }
 
-let wrapped = Participation;
+let wrapped: React.ComponentClass<ParticipationProps> = Participation;
 export default wrapped;
