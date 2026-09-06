@@ -1,4 +1,6 @@
-const config = {
+import type { ToastOptions } from "react-toastify";
+
+const config: ToastOptions = {
   position: "bottom-right",
   autoClose: 5000,
   hideProgressBar: false,

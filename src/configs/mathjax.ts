@@ -3,14 +3,14 @@ const config = {
   tex: {
     packages: { "[+]": ["html"] },
     inlineMath: [
-      ["$", "$"]
+      ["$", "$"],
       // ["\\(", "\\)"]
     ],
     displayMath: [
-      ["$$", "$$"]
+      ["$$", "$$"],
       // ["\\[", "\\]"]
-    ]
-  }
+    ],
+  },
 };
 
 export default config;
