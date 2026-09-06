@@ -1,21 +1,24 @@
 import React from "react";
-import {Row, Col, Button} from "react-bootstrap";
-import {BiArrowFromRight, BiArrowFromLeft} from "react-icons/bi";
+import { Row, Col, Button } from "react-bootstrap";
+import { BiArrowFromRight, BiArrowFromLeft } from "react-icons/bi";
+import type { ReactNode } from "react";
 
 import "./ListSidebar.scss";
 import OutsideAlerter from "helpers/OutsiderAlerter";
 
-class Offcanvas extends React.Component {
+interface OffcanvasProps {
+  sideComponents: ReactNode[];
+  closeCanvas: () => void;
+}
+
+class Offcanvas extends React.Component<OffcanvasProps> {
   render() {
     const sideComponents = this.props.sideComponents;
 
     return (
       <div id="offcanvas" className="offcanvas">
         {sideComponents.map((comp, indx) => (
-          <div
-            key={`side-component-${indx}`}
-            className="side-component rounded"
-          >
+          <div key={`side-component-${indx}`} className="side-component rounded">
             {comp}
           </div>
         ))}
@@ -43,13 +46,15 @@ class Offcanvas extends React.Component {
      - mainContent: a React Component, will appear in the main content section
      - sideComponents: a list of React Components, appear on the side or off-canvas
  */
-export default class ListSidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      offcanvasShow: false,
-    };
-  }
+interface ListSidebarProps {
+  mainContent?: ReactNode;
+  sideComponents?: ReactNode[];
+}
+
+export default class ListSidebar extends React.Component<ListSidebarProps> {
+  state = {
+    offcanvasShow: false,
+  };
 
   render() {
     const mainContent = this.props.mainContent || <p>This is main content</p>;
@@ -63,10 +68,7 @@ export default class ListSidebar extends React.Component {
               isDetecting={this.state.offcanvasShow}
               outsideClickHandler={() => this.close()}
             >
-              <Offcanvas
-                closeCanvas={() => this.close()}
-                sideComponents={sideComponents}
-              />
+              <Offcanvas closeCanvas={() => this.close()} sideComponents={sideComponents} />
             </OutsideAlerter>
           </div>
 
@@ -104,19 +106,15 @@ export default class ListSidebar extends React.Component {
   }
 
   open() {
-    this.setState({offcanvasShow: true}, () => {
+    this.setState({ offcanvasShow: true }, () => {
       const sidenav = document.getElementById("offcanvas");
       if (sidenav) sidenav.style.width = "350px";
-      // const main = document.getElementById("offcanvas-menu")
-      // if (main) main.style.marginRight = "250px";
     });
   }
   close() {
-    this.setState({offcanvasShow: false}, () => {
+    this.setState({ offcanvasShow: false }, () => {
       const sidenav = document.getElementById("offcanvas");
       if (sidenav) sidenav.style.width = "0";
-      // const main = document.getElementById("offcanvas-menu")
-      // if (main) main.style.marginRight = "0";
     });
   }
 }

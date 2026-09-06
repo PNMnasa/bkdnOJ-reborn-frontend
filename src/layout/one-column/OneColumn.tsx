@@ -1,8 +1,13 @@
 import React from "react";
+import type { ReactNode } from "react";
 
 import "./OneColumn.scss";
 
-export default class OneColumn extends React.Component {
+interface OneColumnProps {
+  mainContent?: ReactNode | ReactNode[];
+}
+
+export default class OneColumn extends React.Component<OneColumnProps> {
   render() {
     let mainContent = this.props.mainContent;
     if (!mainContent) {
@@ -12,7 +17,7 @@ export default class OneColumn extends React.Component {
 
     return (
       <div className="one-column-wrapper">
-        {mainContent.map((Content, idx) => (
+        {mainContent.map((content, idx) => (
           // TODO: Would multiple OneColumn layout affects each others?
           //       Because there would be multiple div with the same key?
           <div
@@ -20,7 +25,7 @@ export default class OneColumn extends React.Component {
             className="one-column-element"
             id={`one-column-element-i-${idx}`}
           >
-            {Content}
+            {content}
           </div>
         ))}
       </div>
