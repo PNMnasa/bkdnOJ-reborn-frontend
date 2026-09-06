@@ -1,25 +1,45 @@
 import React from "react";
-import {Navigate} from "react-router-dom";
-import {Modal, Button} from "react-bootstrap";
+import { Navigate } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
 
-import {BsExclamationCircle, BsFillLightningChargeFill} from "react-icons/bs";
-import {FaPaperPlane, FaExternalLinkAlt} from "react-icons/fa";
+import { BsExclamationCircle, BsFillLightningChargeFill } from "react-icons/bs";
+import { FaPaperPlane, FaExternalLinkAlt } from "react-icons/fa";
 
-import {shouldStopPolling, isNoTestcaseStatus} from "constants/statusFilter";
+import { shouldStopPolling, isNoTestcaseStatus } from "constants/statusFilter";
 
 import submissionApi from "api/submission";
 import SubmitForm from "./SubmitForm";
 import "./SubmitModal.scss";
 
-const __SUBMIT_MODAL_POLL_DELAY = 3000; // ms
-const __SUBMIT_MODAL_MAX_POLL_DURATION = 30 * 1000; // ms
+const __SUBMIT_MODAL_POLL_DELAY = 3000;
+const __SUBMIT_MODAL_MAX_POLL_DURATION = 30 * 1000;
 
-class SubmitModalResult extends React.Component {
-  constructor(props) {
+interface TestCase {
+  case: number | string;
+  status: string;
+  [key: string]: unknown;
+}
+
+interface SubmitModalResultProps {
+  subId: number | string | null;
+  subErrors?: string | null;
+}
+
+interface SubmitModalResultState {
+  subId: number | string | null;
+  data: { status: string; test_cases: TestCase[]; current_testcase?: number; result?: string };
+  couldNotFetch: boolean;
+  isPolling: boolean;
+}
+
+class SubmitModalResult extends React.Component<SubmitModalResultProps, SubmitModalResultState> {
+  private timer?: ReturnType<typeof setInterval>;
+
+  constructor(props: SubmitModalResultProps) {
     super(props);
     this.state = {
       subId: props.subId,
-      data: {status: "...", test_cases: []},
+      data: { status: "...", test_cases: [] },
       couldNotFetch: false,
       isPolling: false,
     };
@@ -27,73 +47,65 @@ class SubmitModalResult extends React.Component {
 
   pollResult() {
     if (this.state.couldNotFetch || shouldStopPolling(this.state.data.status)) {
-      clearInterval(this.timer);
-      this.setState({ isPolling: false })
+      this.clearTimer();
+      this.setState({ isPolling: false });
       return;
     }
     submissionApi
-      .getSubmissionResult({id: this.state.subId})
-      .then(res => {
-        this.setState({data: res.data});
+      .getSubmissionResult({ id: this.state.subId })
+      .then((res) => {
+        this.setState({ data: res.data });
       })
-      .catch(_err => {
-        // console.log("Error when Polling", err);
-        this.setState({ couldNotFetch: true, isPolling: false })
+      .catch(() => {
+        this.setState({ couldNotFetch: true, isPolling: false });
       });
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer);
+    this.clearTimer();
   }
 
-  /* Is used when websocket is not available
-    fetching data every 3 seconds */
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: SubmitModalResultProps) {
     if (prevProps.subId !== this.props.subId) {
-      this.setState({subId: this.props.subId}, () => {
-        clearInterval(this.timer);
-        this.setState({ isPolling: true })
-        this.timer = setInterval(
-          () => this.pollResult(),
-          __SUBMIT_MODAL_POLL_DELAY
-        );
+      this.setState({ subId: this.props.subId }, () => {
+        this.clearTimer();
+        this.setState({ isPolling: true });
+        this.timer = setInterval(() => this.pollResult(), __SUBMIT_MODAL_POLL_DELAY);
 
-        setTimeout(
-          () => {
-            clearInterval(this.timer),
-            this.setState({ isPolling: false })
-          },
-          __SUBMIT_MODAL_MAX_POLL_DURATION
-        );
+        setTimeout(() => {
+          this.clearTimer();
+          this.setState({ isPolling: false });
+        }, __SUBMIT_MODAL_MAX_POLL_DURATION);
       });
     }
   }
 
+  clearTimer() {
+    if (this.timer) clearInterval(this.timer);
+  }
+
   render() {
-    const {subErrors} = this.props;
+    const { subErrors } = this.props;
     if (subErrors) return <div className="note">{subErrors}</div>;
 
-    const {subId, data, couldNotFetch, isPolling} = this.state;
-    if (couldNotFetch)
-      return <div className="note">Submitted. Check Details for more info.</div>;
-    
+    const { subId, data, couldNotFetch, isPolling } = this.state;
+    if (couldNotFetch) return <div className="note">Submitted. Check Details for more info.</div>;
+
     if (subId === null || data.status === "...")
       return <div className="note loading_3dot">Submitting</div>;
 
-    if ((data.status !== "D") && !isPolling)
+    if (data.status !== "D" && !isPolling)
       return <div className="note">Submitted. Check Details for more info.</div>;
 
-    if (data.status === "QU")
-      return <div className="note loading_3dot">Queuing</div>;
-    if (data.status === "P")
-      return <div className="note loading_3dot">Processing</div>;
+    if (data.status === "QU") return <div className="note loading_3dot">Queuing</div>;
+    if (data.status === "P") return <div className="note loading_3dot">Processing</div>;
 
     if (data.status === "G") {
       return (
         <div className="note loading_3dot">{`Judging case ${data.current_testcase}`}</div>
       );
     }
-    const verdict = data.status === "D" ? data.result : data.status;
+    const verdict = data.status === "D" ? data.result || data.status : data.status;
 
     if (!isNoTestcaseStatus(verdict)) {
       for (let i = 0; i < data.test_cases.length; i++) {
@@ -126,8 +138,31 @@ class SubmitModalResult extends React.Component {
   }
 }
 
-export default class SubmitModal extends React.Component {
-  constructor(props) {
+interface SubmitModalProps {
+  show: boolean;
+  onHide: () => void;
+  prob: string;
+  lang: Lang[];
+  contest?: { key: string; [key: string]: unknown } | null;
+}
+
+interface Lang {
+  id: number;
+  name: string;
+  short_name?: string;
+  ace?: string;
+  [key: string]: unknown;
+}
+
+interface SubmitModalState {
+  subId: number | string | null;
+  errors: string | null;
+  redirect: boolean;
+  submitting: boolean;
+}
+
+export default class SubmitModal extends React.Component<SubmitModalProps, SubmitModalState> {
+  constructor(props: SubmitModalProps) {
     super(props);
     this.state = {
       subId: null,
@@ -136,28 +171,25 @@ export default class SubmitModal extends React.Component {
       submitting: false,
     };
   }
-  setErrors(err) {
-    this.setState({errors: err});
+
+  setErrors(err: string) {
+    this.setState({ errors: err });
   }
-  setSubId(id) {
-    this.setState({subId: id});
+  setSubId(id: number | string) {
+    this.setState({ subId: id });
   }
 
   onHide() {
-    this.setState({subId: null, submitting: false});
+    this.setState({ subId: null, submitting: false });
     this.props.onHide();
   }
 
   render() {
-    const {contest} = this.props;
+    const { contest } = this.props;
 
     if (!!this.state.redirect && !!this.state.subId) {
       if (contest)
-        return (
-          <Navigate
-            to={`/contest/${contest.key}/submission/${this.state.subId}`}
-          />
-        );
+        return <Navigate to={`/contest/${contest.key}/submission/${this.state.subId}`} />;
       else return <Navigate to={`/submission/${this.state.subId}`} />;
     }
 
@@ -183,8 +215,8 @@ export default class SubmitModal extends React.Component {
             lang={this.props.lang}
             contest={this.props.contest}
             submitting={this.state.submitting}
-            setSubId={subId => this.setSubId(subId)}
-            setSubErrors={err => this.setErrors(err)}
+            setSubId={(subId) => this.setSubId(subId)}
+            setSubErrors={(err) => this.setErrors(err)}
           />
         </Modal.Body>
 
@@ -203,15 +235,10 @@ export default class SubmitModal extends React.Component {
                 >
                   <BsExclamationCircle />
                 </div>
-                <span className="warning">
-                  This editor only store your most recent code!
-                </span>
+                <span className="warning">This editor only store your most recent code!</span>
               </>
             ) : (
-              <SubmitModalResult
-                subId={this.state.subId}
-                subErrors={this.state.errors}
-              />
+              <SubmitModalResult subId={this.state.subId} subErrors={this.state.errors} />
             )}
           </div>
 
@@ -222,17 +249,14 @@ export default class SubmitModal extends React.Component {
           {this.state.subId === null ? (
             <Button
               variant="dark"
-              onClick={() => this.setState({submitting: true})}
+              onClick={() => this.setState({ submitting: true })}
               disabled={this.state.submitting}
             >
               {"Submit "}
               <FaPaperPlane size={12} />
             </Button>
           ) : (
-            <Button
-              variant="dark"
-              onClick={() => this.setState({redirect: true})}
-            >
+            <Button variant="dark" onClick={() => this.setState({ redirect: true })}>
               {"Details "}
               <FaExternalLinkAlt size={12} />
             </Button>
