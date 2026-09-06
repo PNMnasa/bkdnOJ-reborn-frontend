@@ -1,18 +1,14 @@
-// Lib Imports
 import React from "react";
-import {connect} from "react-redux";
-import {Routes, Route, Navigate} from "react-router-dom";
-import {unstable_HistoryRouter as HistoryRouter} from "react-router-dom";
-import {createBrowserHistory} from "history";
+import { connect } from "react-redux";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
-// Helpers
+import { ListSidebar, OneColumn } from "layout";
 
-// Components
-import {ListSidebar, OneColumn} from "layout";
+import { Content, SubFilterSidebar, RecentSubmissionSidebar } from "components";
 
-import {Content, SubFilterSidebar, RecentSubmissionSidebar} from "components";
-
-import {SignIn, SignUp, SignOut, UserProfile} from "pages";
+import { SignIn, SignUp, SignOut, UserProfile } from "pages";
 import {
   SubmissionList,
   SubmissionDetails,
@@ -48,19 +44,18 @@ import {
 
 import UserApp from "pages/user/UserApp";
 
-// Styles
 import "App.scss";
 
-const history = createBrowserHistory({window});
+const history = createBrowserHistory({ window });
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+interface AppProps {
+  user: { is_staff?: boolean; [key: string]: unknown } | null;
+}
 
-  componentDidUpdate(prevProps) {
+class App extends React.Component<AppProps> {
+  componentDidUpdate(prevProps: AppProps) {
     if (prevProps.user !== this.props.user) {
-      this.setState({user: this.props.user || null});
+      this.setState({ user: this.props.user || null });
     }
   }
 
@@ -69,12 +64,10 @@ class App extends React.Component {
   }
 
   isAdmin() {
-    return this.isAuthenticated() && this.props.user.is_staff;
+    return this.isAuthenticated() && !!this.props.user?.is_staff;
   }
 
   render() {
-    // TODO:  If you access the url directly, App won't have time to
-    //        load user => access directly /admin won't work
     return (
       <HistoryRouter history={history}>
         <Routes>
@@ -87,7 +80,7 @@ class App extends React.Component {
                   element={
                     <div
                       className="shadow text-dark d-flex d-flex flex-column justify-content-center text-center"
-                      style={{minHeight: "400px"}}
+                      style={{ minHeight: "400px" }}
                     >
                       <h4>Admin Home Page</h4>
                     </div>
@@ -139,9 +132,7 @@ class App extends React.Component {
                 />
                 <Route
                   path="submission/:id"
-                  element={
-                    <OneColumn mainContent={<AdminSubmissionDetails />} />
-                  }
+                  element={<OneColumn mainContent={<AdminSubmissionDetails />} />}
                 />
 
                 <Route
@@ -149,7 +140,6 @@ class App extends React.Component {
                   element={<OneColumn mainContent={<AdminContestList />} />}
                 />
                 <Route
-                  exact
                   path="contests/new"
                   element={<OneColumn mainContent={<AdminContestNew />} />}
                 />
@@ -176,7 +166,7 @@ class App extends React.Component {
                   element={
                     <div
                       className="shadow text-dark d-flex d-flex flex-column justify-content-center text-center"
-                      style={{minHeight: "400px"}}
+                      style={{ minHeight: "400px" }}
                     >
                       <h4>Not Implemented</h4>
                     </div>
@@ -199,8 +189,6 @@ class App extends React.Component {
               </>
             )}
 
-            {/* <Route path="/test/pdf" element={ <PDFViewer /> } /> */}
-
             <Route
               path="/problems"
               element={<OneColumn mainContent={<ProblemList />} />}
@@ -209,22 +197,13 @@ class App extends React.Component {
               path="/problem/:shortname"
               element={<OneColumn mainContent={<ProblemDetails />} />}
             />
-            {/* <Route path="/problem/:shortname/submit"
-              element={<ListSidebar mainContent={<Submit />} />}
-            /> */}
 
-            {/* <Route
-              path="/submissions"
-              element={<OneColumn mainContent={<SubmissionList />} />}
-            /> */}
             <Route
               path="/submissions"
               element={
                 <ListSidebar
                   mainContent={<SubmissionList />}
-                  sideComponents={[
-                    <SubFilterSidebar key={"SubFilterSidebar"} />,
-                  ]}
+                  sideComponents={[<SubFilterSidebar key={"SubFilterSidebar"} />]}
                 />
               }
             />
@@ -259,11 +238,7 @@ class App extends React.Component {
                 element={
                   <ListSidebar
                     mainContent={<ProblemList />}
-                    sideComponents={[
-                      <RecentSubmissionSidebar
-                        key={"RecentSubmissionSidebar"}
-                      />,
-                    ]}
+                    sideComponents={[<RecentSubmissionSidebar key={"RecentSubmissionSidebar"} />]}
                   />
                 }
               />
@@ -272,11 +247,7 @@ class App extends React.Component {
                 element={
                   <ListSidebar
                     mainContent={<ProblemDetails />}
-                    sideComponents={[
-                      <RecentSubmissionSidebar
-                        key={"RecentSubmissionSidebar"}
-                      />,
-                    ]}
+                    sideComponents={[<RecentSubmissionSidebar key={"RecentSubmissionSidebar"} />]}
                   />
                 }
               />
@@ -287,9 +258,7 @@ class App extends React.Component {
                     mainContent={<SubmissionList />}
                     sideComponents={[
                       <SubFilterSidebar key={"SubFilterSidebar"} />,
-                      <RecentSubmissionSidebar
-                        key={"RecentSubmissionSidebar"}
-                      />,
+                      <RecentSubmissionSidebar key={"RecentSubmissionSidebar"} />,
                     ]}
                   />
                 }
@@ -299,11 +268,7 @@ class App extends React.Component {
                 element={
                   <ListSidebar
                     mainContent={<SubmissionDetails />}
-                    sideComponents={[
-                      <RecentSubmissionSidebar
-                        key={"RecentSubmissionSidebar"}
-                      />,
-                    ]}
+                    sideComponents={[<RecentSubmissionSidebar key={"RecentSubmissionSidebar"} />]}
                   />
                 }
               />
@@ -319,11 +284,10 @@ class App extends React.Component {
 
             <Route
               path="/404"
-              exact
               element={
                 <div
                   className="shadow text-dark d-flex d-flex flex-column justify-content-center text-center"
-                  style={{minHeight: "200px", minWidth: "400px"}}
+                  style={{ minHeight: "200px", minWidth: "400px" }}
                 >
                   <h4>404 | Page Not Found</h4>
                 </div>
@@ -336,9 +300,11 @@ class App extends React.Component {
     );
   }
 }
-const mapStateToProps = state => {
+
+const mapStateToProps = (state: { user: { user: AppProps["user"] } }) => {
   return {
     user: state.user.user,
   };
 };
+
 export default connect(mapStateToProps, null)(App);

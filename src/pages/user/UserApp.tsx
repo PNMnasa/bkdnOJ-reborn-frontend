@@ -1,12 +1,16 @@
 import React from "react";
-import {Container} from "react-bootstrap";
-import {Outlet} from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { Outlet } from "react-router-dom";
 
-import {Header, Navbar, SubHeader, Footer, ScrollToTopBtn} from "components";
+import { Header, Navbar, SubHeader, Footer, ScrollToTopBtn } from "components";
 
 import "./UserApp.scss";
 
-export default class UserApp extends React.Component {
+interface UserAppProps {
+  [key: string]: unknown;
+}
+
+export default class UserApp extends React.Component<UserAppProps> {
   render() {
     return (
       <>
@@ -15,7 +19,6 @@ export default class UserApp extends React.Component {
         <SubHeader />
 
         <div className="content-wrapper">
-          {/* <ScrollToTop /> */}
           <Container className="content">
             <Outlet />
           </Container>
