@@ -1,35 +1,29 @@
 import axios from "axios";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
-import {
-  __ls_get_access_token,
-  __ls_remove_credentials,
-} from "helpers/localStorageHelpers";
-import {log} from "helpers/logger";
+import { __ls_get_access_token, __ls_remove_credentials } from "helpers/localStorageHelpers";
+import { log } from "helpers/logger";
 
-import {getConnectionUrl} from "./urls";
+import { getConnectionUrl } from "./urls";
 
 const axiosFormClient = axios.create({
   baseURL: getConnectionUrl(),
   headers: {
     Accept: "application/json",
     "Content-Type": "multipart/form-data",
-    // 'X-CSRFTOKEN': csrfToken,
   },
 });
-// axiosFormClient.defaults.xsrfCookieName = 'csrftoken'
-// axiosFormClient.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 axiosFormClient.interceptors.request.use(
-  config => {
+  (config) => {
     const access_token = __ls_get_access_token();
     if (access_token) {
       config.headers["Authorization"] = "Bearer " + access_token;
     }
     return config;
   },
-  error => {
-    Promise.reject(error);
+  (error) => {
+    return Promise.reject(error);
   }
 );
 
@@ -38,7 +32,7 @@ axiosFormClient.interceptors.response.use(
     return response;
   },
   function (error) {
-    let error_obj = JSON.parse(JSON.stringify(error));
+    const error_obj = JSON.parse(JSON.stringify(error));
     if (error_obj.message && error_obj.message === "Network Error") {
       log("Network Error detected.");
       toast.error(
@@ -61,8 +55,7 @@ axiosFormClient.interceptors.response.use(
       });
     }
 
-    // let res = JSON.stringify(error)
-    let res = error.response;
+    const res = error.response;
     switch (res.status) {
       case 401:
         break;

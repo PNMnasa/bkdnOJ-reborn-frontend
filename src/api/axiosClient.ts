@@ -1,32 +1,28 @@
 import axios from "axios";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
-import {
-  __ls_get_access_token,
-  __ls_remove_credentials,
-} from "helpers/localStorageHelpers";
+import { __ls_get_access_token, __ls_remove_credentials } from "helpers/localStorageHelpers";
 
-import {getConnectionUrl} from "./urls";
+import { getConnectionUrl } from "./urls";
 
 const axiosClient = axios.create({
   baseURL: getConnectionUrl(),
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
-    // 'Access-Control-Allow-Origin': '*',
   },
 });
 
 axiosClient.interceptors.request.use(
-  config => {
+  (config) => {
     const access_token = __ls_get_access_token();
     if (access_token) {
       config.headers["Authorization"] = "Bearer " + access_token;
     }
     return config;
   },
-  error => {
-    Promise.reject(error);
+  (error) => {
+    return Promise.reject(error);
   }
 );
 
@@ -35,9 +31,8 @@ axiosClient.interceptors.response.use(
     return response;
   },
   function (error) {
-    let error_obj = JSON.parse(JSON.stringify(error));
+    const error_obj = JSON.parse(JSON.stringify(error));
     if (error_obj.message && error_obj.message === "Network Error") {
-      // log('Network Error detected.')
       toast.error(
         "Cannot connect to the server. Please check your internet or contact the admins.",
         {
@@ -60,16 +55,12 @@ axiosClient.interceptors.response.use(
       });
     }
 
-    // let res = JSON.stringify(error)
-    let res = error.response;
+    const res = error.response;
     switch (res.status) {
       case 429:
-        toast.error(
-          "Too many requests. Please try again after 1 minute.",
-          {
-            toastId: "too-many-req",
-          }
-        );
+        toast.error("Too many requests. Please try again after 1 minute.", {
+          toastId: "too-many-req",
+        });
       case 401:
         break;
       case 403:
@@ -80,7 +71,6 @@ axiosClient.interceptors.response.use(
             window.location.href = "/sign-in";
           }
         }
-      //ak;
       default:
         break;
     }
