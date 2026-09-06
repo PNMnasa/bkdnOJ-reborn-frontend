@@ -37,10 +37,10 @@ import { addClass } from "helpers/dom_functions";
 const __STANDING_POLL_DELAY = 5000;
 const __STANDING_HIGHLIGHT_TIME = 5000;
 
-const getClassNameFromPoint = (point, maxPoint) => {
+const getClassNameFromPoint = (point: number | undefined, maxPoint: number) => {
   let ptsClsName = "";
   if (maxPoint > 0) {
-    const percent = Math.round((point / maxPoint) * 100);
+    const percent = Math.round(((point || 0) / maxPoint) * 100);
 
     if (percent <= 25) ptsClsName = "one-fourth";
     else if (percent <= 50) ptsClsName = "two-fourth";
@@ -51,13 +51,83 @@ const getClassNameFromPoint = (point, maxPoint) => {
   return ptsClsName;
 };
 
-const getStandingCellKey = (username, problem_code) => {
+const getStandingCellKey = (username: string, problem_code: string) => {
   if (!username) username = ""
   if (!problem_code) problem_code = ""
   return `standing-cell-${username}-${problem_code.toLowerCase()}`
 }
 
-class StandingItem extends React.Component {
+interface StandingUserShape {
+  username: string;
+  first_name?: string;
+  last_name?: string;
+  rating?: number;
+  avatar?: string;
+  [key: string]: unknown;
+}
+
+interface StandOrgShape {
+  slug: string;
+  name: string;
+  short_name?: string;
+  logo_url?: string;
+  [key: string]: unknown;
+}
+
+interface ProblemMapEntry {
+  pos: number;
+  points: number;
+  shortname: string;
+}
+
+interface StandingProblemShape {
+  id: string;
+  points: number;
+  shortname: string;
+  label: string;
+  partial?: boolean;
+  [key: string]: unknown;
+}
+
+interface StandingRowShape {
+  user: string;
+  score: number;
+  cumtime: number;
+  frozen_score?: number;
+  frozen_cumtime?: number;
+  format_data?: string;
+  format_data_compact?: string;
+  fullname?: string;
+  organization?: StandOrgShape;
+  [key: string]: unknown;
+}
+
+interface StandingItemProps {
+  rowIdx: number;
+  user: string;
+  score: number;
+  cumtime: number;
+  frozen_score?: number;
+  frozen_cumtime?: number;
+  format_data?: string;
+  isFavorite?: boolean;
+  filteredRank?: number;
+  contestId?: string;
+  userMapping: Record<string, StandingUserShape>;
+  probMapping: Record<string, ProblemMapEntry>;
+  orgMapping: Record<string, StandOrgShape>;
+  isFrozen: boolean;
+  displayMode?: string;
+  className?: string;
+  orgOverride?: StandOrgShape | null;
+  contest?: { format_name?: string; [key: string]: unknown };
+  setSubListData: (data: { user: string; problem: string }) => void;
+  bestSolutions?: unknown;
+  setBestSolutions?: (best: unknown) => void;
+  [key: string]: unknown;
+}
+
+class StandingItem extends React.Component<StandingItemProps> {
   render() {
     const {
       rowIdx,
@@ -74,13 +144,15 @@ class StandingItem extends React.Component {
 
     const {userMapping, probMapping, orgMapping, isFrozen} = this.props;
 
-    let best = Array(Object.keys(probMapping).length).fill(<></>);
-    let data = JSON.parse(format_data);
+    let best: React.ReactNode[] = Array(Object.keys(probMapping).length).fill(<></>);
+    let data = JSON.parse(format_data || "{}") as Record<
+      string,
+      { points?: number; sub_time?: number; tries?: number; tries_after_frozen?: number }
+    >;
     if (data && data.constructor === Object)
       Object.keys(data).forEach(k => {
-        const prob_data = data[k]; // => {'time': ..., 'points': ...}
+        const prob_data = data[k];
 
-        // this might not exists because admin of contest decide to delete them, but the contest data is still there
         if (!probMapping[k]) return;
 
         const i = probMapping[k].pos;
@@ -90,16 +162,16 @@ class StandingItem extends React.Component {
 
         const ptsClsName = getClassNameFromPoint(points, problemMaxPoints);
 
-        let displaySubTime = sub_time;
-        if (this.props.contest.format_name === "icpc") displaySubTime = Math.floor(sub_time/60)
+        let displaySubTime = sub_time || 0;
+        if (this.props.contest?.format_name === "icpc") displaySubTime = Math.floor((sub_time || 0) / 60)
         else
-        if (this.props.contest.format_name === "ioi") displaySubTime = Math.floor(sub_time)
+        if (this.props.contest?.format_name === "ioi") displaySubTime = Math.floor(sub_time || 0)
 
         best[i] = (
           <div
             className={
               `flex-center-col points-container ` +
-              (tries_after_frozen > 0 ? "frozen" : ptsClsName)
+              ((tries_after_frozen || 0) > 0 ? "frozen" : ptsClsName)
             }
             id={getStandingCellKey(user, probMapping[k].shortname)}
             onClick={() =>
@@ -114,7 +186,7 @@ class StandingItem extends React.Component {
               {(!!tries || !!tries_after_frozen) && (
                 <span className="extra">
                   (<span className="tries">{tries}</span>
-                  {tries_after_frozen > 0 && (
+                  {(tries_after_frozen || 0) > 0 && (
                     <span className="frozen_tries">+{tries_after_frozen}</span>
                   )}
                   )
@@ -127,7 +199,7 @@ class StandingItem extends React.Component {
         );
       });
 
-    let showScore, showCumtime;
+    let showScore: number | undefined, showCumtime: number | undefined;
     if (isFrozen) {
       showScore = frozen_score;
       showCumtime = frozen_cumtime;
@@ -136,9 +208,9 @@ class StandingItem extends React.Component {
       showCumtime = cumtime;
     }
 
-    let org = ""
+    let org: StandOrgShape | undefined;
     try {
-      org = this.props.orgOverride || (orgMapping[userMapping[user].organization])
+      org = this.props.orgOverride || orgMapping[userMapping[user].organization as string] || undefined;
     } catch (_err) {
       // console.log(err)
     }
@@ -182,6 +254,7 @@ class StandingItem extends React.Component {
               displayMode={this.props.displayMode}
               user={userMapping[user]}
               organization={org}
+              ranks={[]}
               isFavorite={isFavorite}
               contestId={contestId}
             />
@@ -198,7 +271,7 @@ class StandingItem extends React.Component {
         </td>
 
         {best.map((c, i) => (
-          <td className="td-p-best" key={`ct-st-pb-${user.username}-${i}`}>
+          <td className="td-p-best" key={`ct-st-pb-${user}-${i}`}>
             {c}
           </td>
         ))}
@@ -207,10 +280,83 @@ class StandingItem extends React.Component {
   }
 }
 
-class ContestStanding extends React.Component {
-  static contextType = ContestContext;
+interface StandingFilterEntryShape {
+  isOrgFilterEnable?: boolean;
+  isFavoriteOnly?: boolean;
+  filteredOrg?: string[];
+  favoriteTeams?: string[];
+  [key: string]: unknown;
+}
 
-  constructor(props) {
+interface ContestStandingProps {
+  user: StandingUserShape | null;
+  standingFilter: Record<string, StandingFilterEntryShape>;
+  [key: string]: unknown;
+}
+
+interface ContestStatusShape {
+  key: string;
+  name?: string;
+  is_registered?: boolean;
+  spectate_allow?: boolean;
+  [key: string]: unknown;
+}
+
+interface SubListDataShape {
+  user: string;
+  problem: string;
+}
+
+interface BestSolutionShape {
+  user: string;
+  points: number;
+  sub_time: number;
+}
+
+interface ContestStandingState {
+  probId2idx: Record<string, ProblemMapEntry>;
+  orgMapping: Record<string, StandOrgShape>;
+  userMapping: Record<string, StandingUserShape> | null;
+
+  problems: StandingProblemShape[] | null;
+  organizations: StandOrgShape[];
+  standing: StandingRowShape[];
+  bestSolutions: Record<string, BestSolutionShape>;
+
+  isFrozen: boolean;
+  frozenEnabled: boolean;
+  frozenTime?: string;
+  canBreakIce: boolean;
+  iceBroken: boolean;
+
+  displayMode: "user" | "org";
+
+  loaded: boolean;
+  errors: unknown;
+
+  contest: ContestStatusShape | null;
+  user: StandingUserShape | null;
+  scoreboardCache: number;
+
+  isPollingOn: boolean;
+  isPolling: boolean;
+
+  subListShow: boolean;
+  subListData: SubListDataShape | null;
+  highlightUser: string;
+
+  filterEnabled: boolean;
+  filteredRanks: number[];
+}
+
+class ContestStanding extends React.Component<ContestStandingProps, ContestStandingState> {
+  static contextType = ContestContext;
+  declare context: Record<string, unknown>;
+
+  private timer?: ReturnType<typeof setInterval>;
+  private bestSolutions: Record<string, unknown> = {};
+
+  constructor(props: ContestStandingProps) {
     super(props);
     this.state = {
       probId2idx: {},
@@ -218,9 +364,12 @@ class ContestStanding extends React.Component {
       userMapping: null,
 
       problems: null,
+      organizations: [],
       standing: [],
+      bestSolutions: {},
 
       isFrozen: true,
+      frozenEnabled: false,
       canBreakIce: false,
       iceBroken: false,
 
@@ -231,6 +380,7 @@ class ContestStanding extends React.Component {
 
       contest: null,
       user: null,
+      scoreboardCache: 0,
 
       isPollingOn: true,
       isPolling: false,
@@ -245,7 +395,7 @@ class ContestStanding extends React.Component {
     };
   }
 
-  setSubListData(data) {
+  setSubListData(data: SubListDataShape) {
     this.setState({subListShow: true, subListData: data});
   }
 
@@ -266,7 +416,8 @@ class ContestStanding extends React.Component {
   /* Hide certain rows based on Standing Filters */
   filterStanding() {
     const contestId = this.state.contest?.key;
-    const standingFilter = this.props.standingFilter[contestId] || {};
+    const standingFilter: StandingFilterEntryShape =
+      (contestId && this.props.standingFilter[contestId]) || {};
     const participants = this.state.standing
 
     const {
@@ -279,18 +430,18 @@ class ContestStanding extends React.Component {
     const isFilterEnable = isOrgFilterEnable || isFavoriteOnly;
     let baseFilteredRank = 1;
 
-    let filteredRankOfParticipants = Array(participants.length).fill(0);
-    let filterEn;
+    let filteredRankOfParticipants: number[] = Array(participants.length).fill(0);
+    let filterEn: boolean;
     if (!isFilterEnable) {
       filterEn = false;
     } else {
       filterEn = true;
       participants.forEach((part, idx) => {
         const {user} = part;
-        const isFavorite = favoriteTeams.includes(user);
-        const orgName = this.state.userMapping[user].organization;
-        const isShow = (filteredOrg.includes(orgName) && isOrgFilterEnable) || 
-          (isFavorite && isFavoriteOnly) ;
+        const isFavorite = (favoriteTeams || []).includes(user);
+        const orgName = this.state.userMapping?.[user]?.organization as string | undefined;
+        const isShow = ((filteredOrg || []).includes(orgName || "") && !!isOrgFilterEnable) ||
+          (isFavorite && !!isFavoriteOnly) ;
         if (isShow) {
           filteredRankOfParticipants[idx] = baseFilteredRank++
         }
@@ -303,7 +454,18 @@ class ContestStanding extends React.Component {
   }
 
   /* Receive results of Contest Standing api and handle */
-  handleContestStanding(res) {
+  handleContestStanding(res: {
+    data: {
+      results: StandingRowShape[];
+      problems: StandingProblemShape[];
+      organizations: StandOrgShape[];
+      is_frozen_enabled?: boolean;
+      frozen_time?: string;
+      is_frozen?: boolean;
+      can_break_ice?: boolean;
+      scoreboard_cache_duration?: number;
+    };
+  }) {
     this.setState({
       loaded: true,
       isPolling: false,
@@ -314,16 +476,16 @@ class ContestStanding extends React.Component {
       problems: res.data.problems,
       organizations: res.data.organizations,
 
-      frozenEnabled: res.data.is_frozen_enabled,
+      frozenEnabled: res.data.is_frozen_enabled || false,
       frozenTime: res.data.frozen_time,
-      isFrozen: res.data.is_frozen,
+      isFrozen: res.data.is_frozen || false,
       canBreakIce: res.data.can_break_ice || false,
 
-      scoreboardCache: res.data.scoreboard_cache_duration,
+      scoreboardCache: res.data.scoreboard_cache_duration || 0,
     });
 
     // Contest - Problems mapping
-    let problemMap = {}; // problemMap here is a list of problems in the contest -> their id
+    let problemMap: Record<string, ProblemMapEntry> = {};
     let uniq = 0;
     res.data.problems.forEach(prob => {
       if (problemMap[prob.id]) return;
@@ -337,17 +499,20 @@ class ContestStanding extends React.Component {
     this.setState({probId2idx: problemMap});
 
     // Contest - Organization mapping
-    let organizationMap = {}; // organizationMap here is a list of problems in the contest -> their id
+    let organizationMap: Record<string, StandOrgShape> = {};
     res.data.organizations.forEach(org => {
       organizationMap[org.slug] = org;
     });
     this.setState({orgMapping: organizationMap});
 
     // Best Solutions -
-    let bestSolutionMap = {}
-    res.data.results.forEach(row => {
+    let bestSolutionMap: Record<string, BestSolutionShape> = {}
+    res.data.results.forEach((row: StandingRowShape) => {
       try {
-        let data = JSON.parse(row.format_data);
+        let data = JSON.parse(row.format_data || "{}") as Record<
+          string,
+          { sub_time?: number; points?: number }
+        >;
         const user = row.user;
 
         Object.keys(data).forEach(probId => {
@@ -360,17 +525,17 @@ class ContestStanding extends React.Component {
           if (points === 0) return;
           if (!bestSolutionMap[probCode]) shouldUpdate = true
           else {
-            if (points > 0 && bestSolutionMap[probCode].points < points) shouldUpdate = true;
+            if ((points || 0) > 0 && bestSolutionMap[probCode].points < (points || 0)) shouldUpdate = true;
             else
             if (
-              bestSolutionMap[probCode].points === points && 
-              bestSolutionMap[probCode].sub_time > sub_time
+              bestSolutionMap[probCode].points === points &&
+              bestSolutionMap[probCode].sub_time > (sub_time || 0)
             ) shouldUpdate = true
           }
-          if (shouldUpdate) 
+          if (shouldUpdate)
             bestSolutionMap = {
-              ...bestSolutionMap, 
-              [probCode]: {user, points, sub_time}
+              ...bestSolutionMap,
+              [probCode]: {user, points: points || 0, sub_time: sub_time || 0}
             }
         })
       } catch (_err) {
@@ -383,20 +548,21 @@ class ContestStanding extends React.Component {
   async refetch(polling = false) {
     // Dont do fetch if user is viewing the modal
     if (this.state.subListShow) return;
+    if (!this.state.contest) return;
 
     if (polling) this.setState({isPolling: true});
     else this.setState({loaded: false, errors: null});
 
-    const params = this.state.iceBroken ? {view_full: 1} : {view_full: 0};
+    const params: Record<string, unknown> = this.state.iceBroken ? {view_full: 1} : {view_full: 0};
 
-    let apis = [];
+    let apis: Promise<unknown>[] = [];
     // if participants profiles are not loaded, queue this api
     if (!this.state.userMapping) {
       apis.push(
         contestAPI
-          .getContestParticipants({key: this.state.contest.key})
-          .then(res => {
-            let userMapping = {};
+          .getContestParticipants({key: this.state.contest!.key})
+          .then((res: { data: StandingUserShape[] }) => {
+            let userMapping: Record<string, StandingUserShape> = {};
             res.data.forEach(user => {
               userMapping[user.username] = user;
             });
@@ -410,18 +576,18 @@ class ContestStanding extends React.Component {
     // Contest Standing
     apis.push(
       contestAPI
-        .getContestStanding({key: this.state.contest.key, params})
+        .getContestStanding({key: this.state.contest!.key, params})
         .then(res => this.handleContestStanding(res))
-        .catch(err => {
+        .catch((err: { response?: { data?: unknown; status?: number } }) => {
           clearInterval(this.timer);
           this.setState({
             isPollingOn: false,
             loaded: true,
-            errors: err.response && err.response.data,
+            errors: err.response?.data,
           }, () => this.filterStanding());
           toast.error(
             `Standing not available at the moment. (${
-              err.response.status || "NETWORK_ERR"
+              err.response?.status || "NETWORK_ERR"
             })`,
             {
               toastId: "contest-standing-na",
@@ -433,14 +599,14 @@ class ContestStanding extends React.Component {
     await Promise.all(apis);
   }
 
-  setHighlightUser(username) {
+  setHighlightUser(username: string) {
     this.setState({highlightUser: username}, () => {
       setTimeout(() => {
         this.setState({highlightUser: ""});
       }, __STANDING_HIGHLIGHT_TIME);
     });
   }
-  scrollToCurrentStanding(username) {
+  scrollToCurrentStanding(username: string) {
     const userDiv = document.getElementById(`standing-${username}`);
     if (!userDiv) return;
 
@@ -452,16 +618,20 @@ class ContestStanding extends React.Component {
     this.setHighlightUser(username);
   }
 
+  setBestSolutions(_bestSolutions: unknown): void {
+    // no-op
+  }
+
   componentDidMount() {
     this.setState({
-      contest: (this.context && this.context.contest) || null,
+      contest: (this.context && this.context.contest as ContestStatusShape) || null,
       user: (this.props && this.props.user) || null,
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: ContestStandingProps, prevState: ContestStandingState) {
     const {user} = this.props;
-    const {contest} = this.context;
+    const contest = (this.context.contest as ContestStatusShape) || null;
     if (!contest) return; // skip if no contest
 
     if (prevState.contest !== contest || prevState.user !== user) {
@@ -489,8 +659,7 @@ class ContestStanding extends React.Component {
 
   highlightBestSolutions() {
     const bestSolutions = this.state.bestSolutions;
-    if (!bestSolutions) return;
-    Object.keys(bestSolutions).forEach(probCode => {
+    Object.keys(bestSolutions || {}).forEach(probCode => {
       const {user} = bestSolutions[probCode];
       const bestCellId = getStandingCellKey(user, probCode);
       const elem = document.getElementById(bestCellId);
@@ -500,7 +669,6 @@ class ContestStanding extends React.Component {
   }
 
   generateCSV() {
-    // let csvData = ""
     const {
       filterEnabled,
       filteredRanks,
@@ -510,32 +678,35 @@ class ContestStanding extends React.Component {
       probId2idx,
       isFrozen,
     } = this.state;
-    const contest = this.context.contest;
+    const contest = this.context.contest as ContestStatusShape;
+
+    const probList = problems || [];
+    const userMap = userMapping || {};
 
     // prep problem_id to label
-    let probId2Label = {};
-    problems.forEach(prob => { probId2Label[prob.id] = prob.label })
+    let probId2Label: Record<string, string> = {};
+    probList.forEach(prob => { probId2Label[prob.id] = prob.label })
 
     // preparing csv raw data
     let raw = "frozen,rank,vrank,account,name,org,orgname,score,pen";
-    problems.forEach(prob => {
+    probList.forEach(prob => {
       raw += ",";
       if (prob.label) raw += prob.label;
     })
     raw += "\n";
 
-    const appendToCsvRaw = (csv, content, nl=false) => {
-      if (!content) content = "";
-      content = content.replaceAll(",", " ")
+    const appendToCsvRaw = (csv: string, content?: string, nl=false) => {
+      let cc = content || "";
+      cc = cc.replaceAll(",", " ")
       if (csv) csv +=",";
-      csv += content;
+      csv += cc;
       if (nl) csv += "\n";
       return csv;
     }
-    
+
     standing.forEach((part, idx) => {
       // Check skips
-      if (filterEnabled && filteredRanks[idx] == 0) return; 
+      if (filterEnabled && filteredRanks[idx] == 0) return;
 
       // frozen
       if (isFrozen) raw += "Y";
@@ -548,10 +719,10 @@ class ContestStanding extends React.Component {
 
       // account, name
       let fullname = "";
-      if (userMapping[part.user]) {
-        fullname = userMapping[part.user].first_name;
-        if (fullname && userMapping[part.user].last_name) fullname += " ";
-        fullname += userMapping[part.user].last_name;
+      if (userMap[part.user]) {
+        fullname = userMap[part.user].first_name || "";
+        if (fullname && userMap[part.user].last_name) fullname += " ";
+        fullname += userMap[part.user].last_name || "";
       }
       raw = appendToCsvRaw(raw, part.user)
       raw = appendToCsvRaw(raw, part.fullname)
@@ -565,17 +736,20 @@ class ContestStanding extends React.Component {
       raw = appendToCsvRaw(raw, orgname)
 
       // score, pen
-      let score,pen;
+      let score: number, pen: number;
       if (isFrozen) {
-        score = part.frozen_score; pen = part.frozen_cumtime;
+        score = part.frozen_score || 0; pen = part.frozen_cumtime || 0;
       } else {
         score = part.score; pen = part.cumtime;
       }
       raw += ","+score+","+pen;
 
       // problems
-      let data = JSON.parse(part.format_data);
-      let cols = {}
+      let data = JSON.parse(part.format_data || "{}") as Record<
+        string,
+        { points?: number; tries?: number; sub_time?: number }
+      >;
+      let cols: Record<string, string> = {}
       Object.keys(data).forEach(probId => {
         const probLabel = probId2Label[probId] || "?";
         const prob = probId2idx[probId]
@@ -584,12 +758,12 @@ class ContestStanding extends React.Component {
         let substat="";
         if (data[probId].points == 0) substat+="0";
         else {
-          substat += data[probId].points+"/"+data[probId].tries+"/"+Math.floor(data[probId].sub_time/60);
+          substat += data[probId].points+"/"+data[probId].tries+"/"+Math.floor((data[probId].sub_time || 0)/60);
         }
         cols[probLabel] = substat;
       })
 
-      problems.forEach(prob => {
+      probList.forEach(prob => {
         raw += ","
         if (cols[prob.label]) {
           raw += cols[prob.label]
@@ -620,21 +794,22 @@ class ContestStanding extends React.Component {
       filteredRanks,
     } = this.state;
     const contestId = this.state.contest?.key;
-    const contest = this.context.contest;
-    const isRegistered = contest.is_registered;
+    const contest = this.context.contest as ContestStatusShape;
+    const isRegistered = !!contest?.is_registered;
 
     // Props
-    const standingFilter = this.props.standingFilter[contestId] || {};
-    const { favoriteTeams, } = standingFilter;
+    const standingFilter: StandingFilterEntryShape =
+      (contestId && this.props.standingFilter[contestId]) || {};
+    const { favoriteTeams } = standingFilter;
 
     return (
       <div className="wrapper-vanilla p-2" id="contest-standing">
         <div className="standing-lbl">
           <h4 className="standing-head">
-            Standing {isPolling && <SpinLoader size={18} margin="0 2px" />}
+            Standing {isPolling && <SpinLoader size="18" margin="0 2px" />}
           </h4>
 
-          <ErrorBox errors={this.state.errors} />
+          <ErrorBox errors={this.state.errors as string | string[] | Record<string, unknown> | null} />
 
           <div className="flex-center-col standing-notice">
             {scoreboardCache > 0 && (
@@ -644,7 +819,7 @@ class ContestStanding extends React.Component {
               </span>
             )}
             {frozenEnabled &&
-              (new Date() < new Date(frozenTime) ? (
+              (new Date() < new Date(String(frozenTime || "")) ? (
                 <span className="frozen-time">
                   Will be Frozen after {getLocalDateWithTimezone(frozenTime)}.
                 </span>
@@ -663,7 +838,7 @@ class ContestStanding extends React.Component {
                   className="btn-svg"
                   onClick={() => this.meltingIce()}
                 >
-                  <AiOutlineEye size={20} /> 
+                  <AiOutlineEye size={20} />
                   <span className="d-none d-md-block">Peek</span>
                 </Button>
               ) : (
@@ -696,7 +871,7 @@ class ContestStanding extends React.Component {
               </Button>
             )}
             <StandingFilter
-              contestId={this.state.contest?.key}
+              contestId={this.state.contest?.key || ""}
               orgList={this.state.organizations}
             />
             {
@@ -714,7 +889,7 @@ class ContestStanding extends React.Component {
                     <Button
                       variant="warning"
                       className="btn-svg "
-                      onClick={() => this.scrollToCurrentStanding(this.props.user.username)}
+                      onClick={() => this.scrollToCurrentStanding(this.props.user?.username || "")}
                     >
                       <BiTargetLock size={20} />
                       <span className="d-none d-md-block">My Standing</span>
@@ -777,7 +952,7 @@ class ContestStanding extends React.Component {
               </thead>
               <tbody>{
                 standing.map((part, idx) => {
-                  let userFilteredRank = undefined;
+                  let userFilteredRank: number | undefined = undefined;
                   if (filterEnabled) {
                     userFilteredRank = filteredRanks[idx]
                     if (!userFilteredRank) return <></>;
@@ -785,7 +960,7 @@ class ContestStanding extends React.Component {
 
                   const {user} = part;
                   const isHighlight = this.state.highlightUser === user;
-                  const isFavorite = favoriteTeams.includes(user);
+                  const isFavorite = (favoriteTeams || []).includes(user);
 
                   return (
                     <StandingItem
@@ -796,7 +971,7 @@ class ContestStanding extends React.Component {
                       orgOverride={part.organization || null}
                       orgMapping={this.state.orgMapping}
                       probMapping={this.state.probId2idx}
-                      userMapping={this.state.userMapping}
+                      userMapping={this.state.userMapping as Record<string, StandingUserShape>}
                       rowIdx={idx}
                       isFrozen={isFrozen}
                       displayMode={displayMode}
@@ -806,7 +981,7 @@ class ContestStanding extends React.Component {
                       {...part}
                       setSubListData={d => this.setSubListData(d)}
 
-                      contest={this.context.contest}
+                      contest={this.context.contest as { format_name?: string; [key: string]: unknown }}
                       bestSolutions={this.bestSolutions}
                       setBestSolutions={newBest => this.setBestSolutions(newBest)}
                     />
@@ -818,7 +993,7 @@ class ContestStanding extends React.Component {
               onHide={() => this.clearSubListData()}
               data={{
                 ...this.state.subListData,
-                contest: this.state.contest.key,
+                contest: (this.state.contest && this.state.contest.key) || "",
               }}
             />
           </>
@@ -828,12 +1003,16 @@ class ContestStanding extends React.Component {
   }
 }
 
-let wrapped = ContestStanding;
-const mapStateToProps = state => {
+let wrapped: React.ComponentType<ContestStandingProps> = ContestStanding as React.ComponentType<ContestStandingProps>;
+const mapStateToProps = (state: {
+  user: { user: StandingUserShape | null };
+  standingFilter: { standingFilter: Record<string, StandingFilterEntryShape> };
+}) => {
   return {
     user: state.user.user,
     standingFilter: state.standingFilter.standingFilter,
     // profile: state.profile.profile,
   };
 };
-export default connect(mapStateToProps, null)(wrapped);
+wrapped = connect(mapStateToProps, null)(wrapped) as React.ComponentType<ContestStandingProps>;
+export default wrapped;

@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Dropdown} from "react-bootstrap";
+import type { ChangeEvent } from "react";
 
 import "./ContestStanding.scss";
 import "styles/Ratings.scss";
@@ -13,22 +14,47 @@ import {
   toggleOrgFilter,
 } from "redux/StandingFilter/action";
 
-const ClearIcon = props => {
+interface ClearIconProps {
+  onClick?: () => void;
+  [key: string]: unknown;
+}
+
+const ClearIcon = (props: ClearIconProps) => {
   return <BiTrash className="clear-icon" size={18} {...props} />;
 };
 
-const StandingFilter = ({contestId, orgList}) => {
+interface OrgShape {
+  slug: string;
+  name: string;
+  [key: string]: unknown;
+}
+
+interface StandingFilterProps {
+  contestId: string;
+  orgList?: OrgShape[];
+  [key: string]: unknown;
+}
+
+interface StandingFilterEntry {
+  filteredOrg: string[];
+  isOrgFilterEnable: boolean;
+  favoriteTeams: string[];
+  isFavoriteOnly: boolean;
+}
+
+const StandingFilter = ({contestId, orgList}: StandingFilterProps) => {
   const filter = useSelector(
-    state => state.standingFilter.standingFilter[contestId]
+    (state: { standingFilter: { standingFilter: Record<string, StandingFilterEntry | undefined> } }) =>
+      state.standingFilter.standingFilter[contestId]
   );
   const dispatch = useDispatch();
-  const [selectedOrg, setSelectedOrg] = React.useState([]);
+  const [selectedOrg, setSelectedOrg] = React.useState<string[]>([]);
 
   const isOrgFilterEnable = filter?.isOrgFilterEnable;
   const isFavoriteEnable = filter?.isFavoriteOnly;
 
-  const onOrgFilterSelectChange = e => {
-    let selectedIds = [];
+  const onOrgFilterSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    let selectedIds: string[] = [];
     const options = e.target.options;
     for (let i = 0; i < options.length; i++) {
       if (options[i].selected) selectedIds.push(options[i].value);
@@ -36,11 +62,11 @@ const StandingFilter = ({contestId, orgList}) => {
     setSelectedOrg(selectedIds);
   };
 
-  const onToggleOrgFilter = e => {
+  const onToggleOrgFilter = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(toggleOrgFilter({contestId, isEnable: e.target.checked}));
   };
-  const onToggleFavoriteFilter = e => {
-    dispatch(toggleFavoriteOnly({contestId, isEnable: e.target.checked}));
+  const onToggleFavoriteFilter = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(toggleFavoriteOnly({contestId, isEnable: e.target.checked, isClearAll: false}));
   };
 
   const onSaveClick = () => {
@@ -107,7 +133,7 @@ const StandingFilter = ({contestId, orgList}) => {
             <label>
               <input
                 type="checkbox"
-                checked={isFavoriteEnable}
+                checked={!!isFavoriteEnable}
                 onChange={onToggleFavoriteFilter}
               />
               <span>With Favorites</span>

@@ -3,7 +3,7 @@ import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import {VscError} from "react-icons/vsc";
 
 import {OneColumn} from "layout";
@@ -41,8 +41,40 @@ import {addContest} from "redux/StandingFilter/action";
 */
 const DESCRIPTION_POLL_DURATION_MS = 60 * 1000;
 
-class ContestApp extends React.Component {
-  constructor(props) {
+interface ContestShape {
+  key: string;
+  name: string;
+  description?: string;
+  start_time: string;
+  end_time: string;
+  updated_recently?: boolean;
+  is_registered?: boolean;
+  spectate_allow?: boolean;
+  [key: string]: unknown;
+}
+
+interface ContestAppProps {
+  params: Record<string, string | undefined>;
+  navigate: ReturnType<typeof useNavigate>;
+  standingFilter: Record<string, unknown>;
+  addContestFilter: (contestId: string) => void;
+  [key: string]: unknown;
+}
+
+interface ContestAppState {
+  loaded: boolean;
+  contest_key: string | undefined;
+  contest: ContestShape | null;
+  redirectUrl: string | null;
+
+  showNav: boolean;
+  errors?: unknown;
+}
+
+class ContestApp extends React.Component<ContestAppProps, ContestAppState> {
+  private pollDescIntr?: ReturnType<typeof setInterval>;
+
+  constructor(props: ContestAppProps) {
     super(props);
 
     this.state = {
@@ -55,13 +87,12 @@ class ContestApp extends React.Component {
     };
   }
 
-  getContestStatus(contest) {
+  getContestStatus(contest: ContestShape): string | null {
     if (!contest) return null;
 
     const start_time = new Date(contest.start_time);
     const end_time = new Date(contest.end_time);
-    if (start_time === null || end_time === null) return null;
-    if (isNaN(start_time) || isNaN(end_time)) return null;
+    if (isNaN(start_time.getTime()) || isNaN(end_time.getTime())) return null;
 
     let now = new Date();
     if (now < start_time) {
@@ -74,18 +105,18 @@ class ContestApp extends React.Component {
   }
 
   pollDescription() {
-    contestAPI.getContest({key: this.state.contest_key, params: {"description": 1}})
-    .then(res => {
+    contestAPI.getContest({key: this.state.contest_key!, params: {"description": 1}})
+    .then((res: { data: { updated_recently?: boolean; description?: string } }) => {
       const data = res.data;
-      if (data.updated_recently) {
-        const contest = this.state.contest;
+      const contest = this.state.contest;
+      if (data.updated_recently && contest) {
         if (data.description !== contest.description) {
           this.setState({ contest: {...contest, description: data.description} })
           window.alert("Có cập nhập mới đến các đội, xin hãy xem ở mục About.")
         }
       }
     })
-    .catch(_err => {
+    .catch(() => {
       clearInterval(this.pollDescIntr)
     })
   }
@@ -95,11 +126,11 @@ class ContestApp extends React.Component {
 
   componentDidMount() {
     contestAPI
-      .getContest({key: this.state.contest_key})
-      .then(res => {
+      .getContest({key: this.state.contest_key!})
+      .then((res: { data: ContestShape }) => {
         let contest = res.data;
 
-        contest.status = this.getContestStatus(contest);
+        contest.status = this.getContestStatus(contest) as unknown;
         this.setState({
           contest: contest,
           loaded: true,
@@ -116,29 +147,27 @@ class ContestApp extends React.Component {
         clearInterval(this.pollDescIntr)
         this.pollDescIntr = setInterval(() => this.pollDescription(), DESCRIPTION_POLL_DURATION_MS)
       })
-      .catch(err => {
+      .catch((err: { response?: { data?: unknown; status?: number } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || ["Contest not available"],
+          errors: err.response?.data || ["Contest not available"],
         });
         let msg =
-          (err.response.data &&
-            err.response.data.detail &&
-            err.response.data.detail) ||
-          `Contest is not available. (${err.response.status || "NETWORK_ERR"})`;
+          ((err.response?.data as { detail?: string } | undefined) &&
+            (err.response?.data as { detail?: string }).detail) ||
+          `Contest is not available. (${err.response?.status || "NETWORK_ERR"})`;
 
         toast.error(msg, {
           toastId: "contest-na",
           autoClose: false,
         });
-        // this.props.navigate( -1, { replace: true } )
       });
   }
 
   render() {
     const {contest, loaded, showNav} = this.state;
 
-    let mains = contest
+    let mains: React.ReactNode[] = contest
       ? [
           <ContestBanner contestLoaded={loaded} contest={contest} />,
           <ContestNav />,
@@ -157,8 +186,6 @@ class ContestApp extends React.Component {
             <VscError size={30} color="red" />
           </div>,
         ];
-    // console.log(mains)
-    // if (showNav) mains.splice(1, 0, <ContestNav/>)
 
     return (
       <div id="contest-app">
@@ -177,21 +204,24 @@ class ContestApp extends React.Component {
   }
 }
 
-let wrapped = withParams(ContestApp);
-wrapped = withNavigation(wrapped);
+let wrapped = withParams(ContestApp as never) as never;
+wrapped = withNavigation(wrapped) as never;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: {
+  user: { user: unknown };
+  contest: { contest: unknown };
+  standingFilter: { standingFilter: Record<string, unknown> };
+}) => {
   return {
     user: state.user.user,
-    // profile: state.profile.profile,
     contest: state.contest.contest,
     standingFilter: state.standingFilter.standingFilter,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    addContestFilter: contestId => dispatch(addContest({contestId})),
+    addContestFilter: (contestId: string) => dispatch(addContest({contestId})),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(wrapped);
+export default connect(mapStateToProps, mapDispatchToProps)(wrapped) as unknown as React.ComponentType;

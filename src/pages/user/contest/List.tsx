@@ -15,8 +15,48 @@ import {getDuration} from "helpers/durationFormatter";
 import "./List.scss";
 import "styles/ClassicPagination.scss";
 
-class ContestListItem extends React.Component {
-  constructor(props) {
+interface ContestShape {
+  key: string;
+  name: string;
+  start_time: string;
+  end_time?: string;
+  time_limit?: string;
+  user_count?: number;
+  spectate_allow?: boolean;
+  register_allow?: boolean;
+  is_registered?: boolean;
+  [key: string]: unknown;
+}
+
+interface ProfileShape {
+  current_contest?: { contest: { key: string }; virtual: number };
+  [key: string]: unknown;
+}
+
+interface UserShape {
+  username?: string;
+  is_staff?: boolean;
+  [key: string]: unknown;
+}
+
+interface ContestListItemProps {
+  data: ContestShape;
+  type: string;
+  user: UserShape | null;
+  profile?: ProfileShape | null;
+  refetch?: () => void;
+  rowid?: number;
+  [key: string]: unknown;
+}
+
+interface ContestListItemState {
+  time_label: string;
+}
+
+class ContestListItem extends React.Component<ContestListItemProps, ContestListItemState> {
+  private timer?: ReturnType<typeof setInterval>;
+
+  constructor(props: ContestListItemProps) {
     super(props);
     this.state = {
       time_label: "Loading..",
@@ -26,8 +66,8 @@ class ContestListItem extends React.Component {
   updateTimeLeftLabel() {
     const contest = this.props.data;
     let start_time = new Date(contest.start_time);
-    let end_time = new Date(contest.end_time);
-    if (isNaN(start_time) || isNaN(end_time)) {
+    let end_time = new Date(contest.end_time || "");
+    if (isNaN(start_time.getTime()) || isNaN(end_time.getTime())) {
       clearInterval(this.timer);
       return;
     }
@@ -37,10 +77,10 @@ class ContestListItem extends React.Component {
     let t = 0;
     if (now < start_time) {
       lbl = "Contest Starting In ";
-      t = Math.floor((start_time - now) / 1000);
+      t = Math.floor((start_time.getTime() - now.getTime()) / 1000);
     } else if (now < end_time) {
       lbl = "Contest is Running: ";
-      t = Math.floor((end_time - now) / 1000);
+      t = Math.floor((end_time.getTime() - now.getTime()) / 1000);
     } else {
       lbl = "Contest is Finished";
       t = 0;
@@ -89,7 +129,7 @@ class ContestListItem extends React.Component {
   }
   parseDuration() {
     if (this.props.data.time_limit) return this.props.data.time_limit;
-    return getDuration(this.props.data.start_time, this.props.data.end_time);
+    return getDuration(this.props.data.start_time, this.props.data.end_time || "");
   }
   parseParticipation() {
     const type = this.props.type;
@@ -98,25 +138,26 @@ class ContestListItem extends React.Component {
     }
   }
 
-  isInContest(ckey) {
+  isInContest(ckey: string) {
     const {profile} = this.props;
-    // console.log(profile);
     if (!profile || !profile.current_contest) return false;
     if (profile.current_contest.contest.key !== ckey) return false;
     return true;
   }
-  isParticipant(ckey) {
+  isParticipant(ckey: string) {
     if (!this.isInContest(ckey)) return false;
     const {profile} = this.props;
-    return profile.current_contest.virtual === 0;
+    if (!profile) return false;
+    return profile.current_contest!.virtual === 0;
   }
-  isSpectator(ckey) {
+  isSpectator(ckey: string) {
     if (!this.isInContest(ckey)) return false;
     const {profile} = this.props;
-    return profile.current_contest.virtual === -1;
+    if (!profile) return false;
+    return profile.current_contest!.virtual === -1;
   }
 
-  registerContest(ckey, ooc) {
+  registerContest(ckey: string, ooc?: boolean) {
     let conf = false;
     if (ooc) {
       conf = window.confirm(
@@ -136,7 +177,7 @@ class ContestListItem extends React.Component {
           toastId: "contest-registered",
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data?: { detail?: string } } }) => {
         const msg =
           (err.response && err.response.data && err.response.data.detail) ||
           `Đăng ký contest "${ckey}" thất bại.`;
@@ -205,54 +246,7 @@ class ContestListItem extends React.Component {
 
               {
                 /* Active: Present contest that doesnt have Live Participation of user */
-                type === "present" && (
-                  <>
-                    {user && !is_registered && (
-                      <>
-                        {spectate_allow ? (
-                          <span className="d-inline-flex align-items-center">
-                            <Link
-                              to="#"
-                              onClick={() => this.registerContest(ckey, true)}
-                            >{`Register (out of competition) >>`}</Link>
-                          </span>
-                        ) : register_allow ? (
-                          <span className="d-inline-flex align-items-center">
-                            <Link
-                              to="#"
-                              onClick={() => this.registerContest(ckey)}
-                            >{`Register >>`}</Link>
-                          </span>
-                        ) : (
-                          <span className="d-inline-flex align-items-center">
-                            <span style={{color: "red"}}>
-                              Register is not Allowed.
-                            </span>
-                          </span>
-                        )}
-                      </>
-                    )}
-                    {user && is_registered && spectate_allow && (
-                      <Link to={`/contest/${ckey}`}>{`Spectate >>`}</Link>
-                    )}
-                    {!user && (
-                      <span className="d-inline-flex align-items-center">
-                        <Link
-                          to={`/sign-in`}
-                        >{`Log in to Participate >>`}</Link>
-                      </span>
-                    )}
-                    <span className="d-inline-flex align-items-center">
-                      <Link
-                        to={`/contest/${ckey}/standing`}
-                      >{`Current Standing >>`}</Link>
-                    </span>
-                  </>
-                )
-              }
-              {
-                /* Future: Not started yet */
-                type === "future" && (
+                (type === "present" || type === "future") && (
                   <>
                     {user && !is_registered && (
                       <>
@@ -315,11 +309,28 @@ class ContestListItem extends React.Component {
   }
 }
 
-class NPContestList extends React.Component {
-  constructor(props) {
+interface NPContestListProps {
+  selectedOrg: { slug?: string | null };
+  user: UserShape | null;
+  profile?: ProfileShape | null;
+  [key: string]: unknown;
+}
+
+interface NPContestListState {
+  contests: {
+    active: ContestShape[];
+    present: ContestShape[];
+    future: ContestShape[];
+  };
+  loaded: boolean;
+  errors: unknown;
+}
+
+class NPContestList extends React.Component<NPContestListProps, NPContestListState> {
+  constructor(props: NPContestListProps) {
     super(props);
     this.state = {
-      contest: [],
+      contests: {active: [], present: [], future: []},
       loaded: false,
       errors: null,
     };
@@ -328,31 +339,31 @@ class NPContestList extends React.Component {
   callApi() {
     this.setState({loaded: false, errors: null});
 
-    let prms = {};
+    let prms: Record<string, unknown> = {};
     if (this.props.selectedOrg.slug) {
       prms.org = this.props.selectedOrg.slug;
     }
 
     contestAPI
       .getContests(prms)
-      .then(cont => {
+      .then((cont: { data: { active: ContestShape[]; present: ContestShape[]; future: ContestShape[] } }) => {
         this.setState({
           contests: cont.data,
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || "Cannot fetch contests at the moment.",
+          errors: err.response?.data || "Cannot fetch contests at the moment.",
         });
       });
   }
 
   componentDidMount() {
-    this.callApi({page: this.state.currPage});
+    this.callApi();
   }
-  componentDidUpdate(prevProps, _prevState) {
+  componentDidUpdate(prevProps: NPContestListProps, _prevState: NPContestListState) {
     if (prevProps.selectedOrg !== this.props.selectedOrg) {
       this.callApi();
     }
@@ -363,7 +374,7 @@ class NPContestList extends React.Component {
     return (
       <div className="npast-contest">
         <h4>Ongoing/Upcoming Contests</h4>
-        <ErrorBox errors={this.state.errors} />
+        <ErrorBox errors={this.state.errors as string | string[] | Record<string, unknown> | null} />
         <Table responsive hover size="sm" striped bordered className="rounded">
           <thead>
             <tr>
@@ -377,7 +388,7 @@ class NPContestList extends React.Component {
           <tbody>
             {this.state.loaded === false && (
               <tr>
-                <td colSpan="6">
+                <td colSpan={6}>
                   <SpinLoader margin="10px" />
                 </td>
               </tr>
@@ -423,7 +434,7 @@ class NPContestList extends React.Component {
                   0 && (
                   <>
                     <tr>
-                      <td colSpan="99">
+                      <td colSpan={99}>
                         <em>No contest planned yet.</em>
                       </td>
                     </tr>
@@ -438,13 +449,31 @@ class NPContestList extends React.Component {
   }
 }
 
-class ContestList extends React.Component {
-  constructor(props) {
+interface ContestListProps {
+  user: UserShape | null;
+  profile?: ProfileShape | null;
+  selectedOrg: { slug?: string | null };
+  [key: string]: unknown;
+}
+
+interface ContestListState {
+  pastContests: ContestShape[];
+  currPage: number;
+  pageCount: number;
+  count: number;
+
+  loaded: boolean;
+  errors: unknown;
+}
+
+class ContestList extends React.Component<ContestListProps, ContestListState> {
+  constructor(props: ContestListProps) {
     super(props);
     this.state = {
       pastContests: [],
       currPage: 0,
       pageCount: 1,
+      count: 0,
 
       loaded: false,
       errors: null,
@@ -455,14 +484,14 @@ class ContestList extends React.Component {
   callApi(params = {page: 0}) {
     this.setState({loaded: false, errors: null});
 
-    let prms = {page: params.page + 1};
+    let prms: Record<string, unknown> = {page: params.page + 1};
     if (this.props.selectedOrg.slug) {
       prms.org = this.props.selectedOrg.slug;
     }
 
     contestAPI
       .getPastContests(prms)
-      .then(pastcont => {
+      .then((pastcont: { data: { results: ContestShape[]; count: number; total_pages: number } }) => {
         this.setState({
           pastContests: pastcont.data.results,
           count: pastcont.data.count,
@@ -471,10 +500,10 @@ class ContestList extends React.Component {
           loaded: true,
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || "Cannot fetch contests at the moment.",
+          errors: err.response?.data || "Cannot fetch contests at the moment.",
         });
       });
   }
@@ -482,13 +511,13 @@ class ContestList extends React.Component {
   componentDidMount() {
     this.callApi({page: this.state.currPage});
   }
-  componentDidUpdate(prevProps, _prevState) {
+  componentDidUpdate(prevProps: ContestListProps, _prevState: ContestListState) {
     if (prevProps.selectedOrg !== this.props.selectedOrg) {
       this.callApi();
     }
   }
 
-  handlePageClick = event => {
+  handlePageClick = (event: { selected: number }) => {
     this.callApi({page: event.selected});
   };
 
@@ -503,7 +532,7 @@ class ContestList extends React.Component {
         <div className="contest-table wrapper-vanilla">
           <div className="past-contest">
             <h4>Past Contests</h4>
-            <ErrorBox errors={errors} />
+            <ErrorBox errors={errors as string | string[] | Record<string, unknown> | null} />
             <Table
               responsive
               hover
@@ -524,7 +553,7 @@ class ContestList extends React.Component {
               <tbody>
                 {loaded === false && (
                   <tr>
-                    <td colSpan="6">
+                    <td colSpan={6}>
                       <SpinLoader margin="10px" />
                     </td>
                   </tr>
@@ -542,7 +571,7 @@ class ContestList extends React.Component {
                     ))}{" "}
                     {count === 0 && (
                       <tr>
-                        <td colSpan="99">
+                        <td colSpan={99}>
                           <em>No contest yet.</em>
                         </td>
                       </tr>
@@ -560,7 +589,7 @@ class ContestList extends React.Component {
                   breakLabel="..."
                   onPageChange={this.handlePageClick}
                   forcePage={this.state.currPage}
-                  pageLabelBuilder={page => `[${page}]`}
+                  pageLabelBuilder={(page: number) => `[${page}]`}
                   pageRangeDisplayed={3}
                   pageCount={this.state.pageCount}
                   renderOnZeroPageCount={null}
@@ -576,8 +605,12 @@ class ContestList extends React.Component {
   }
 }
 
-let wrapped = ContestList;
-const mapStateToProps = state => {
+let wrapped: React.ComponentType<ContestListProps> = ContestList as React.ComponentType<ContestListProps>;
+const mapStateToProps = (state: {
+  user: { user: UserShape | null };
+  profile: { profile: ProfileShape | null };
+  myOrg: { selectedOrg: { slug?: string | null } };
+}) => {
   return {
     user: state.user.user,
     profile: state.profile.profile,

@@ -6,15 +6,26 @@ import {FaWrench} from "react-icons/fa";
 
 import {addClass, removeClass} from "helpers/dom_functions";
 import {withNavigation} from "helpers/react-router";
+import {useNavigate} from "react-router-dom";
 
-class ContestController extends React.Component {
-  constructor(props) {
+interface ContestControllerProps {
+  showNav: boolean;
+  setShowNav: (v: boolean) => void;
+  ckey: string;
+  user?: { is_staff?: boolean } | null;
+  navigate: ReturnType<typeof useNavigate>;
+  [key: string]: unknown;
+}
+
+class ContestController extends React.Component<ContestControllerProps> {
+  constructor(props: ContestControllerProps) {
     super(props);
   }
 
   toggleNav() {
     const {showNav} = this.props;
     const comp = document.getElementById("one-column-element-i-1");
+    if (!comp) return;
     if (showNav) addClass(comp, "d-none");
     else removeClass(comp, "d-none");
     this.props.setShowNav(!showNav);
@@ -62,26 +73,23 @@ class ContestController extends React.Component {
             <span className="d-none d-md-inline">Adm.</span>
           </Button>
         )}
-
-        {/* <Button onClick={(e)=>alert('Click')} className="btn-svg"
-          id="ct-ctrl-live"
-          size="sm" variant="light"
-        >
-          <VscRecord style={{color: "red"}}/> Live
-        </Button> */}
       </div>
     );
   }
 }
 
-let wrapped = ContestController;
-wrapped = withNavigation(wrapped);
-const mapStateToProps = state => {
+let wrapped: React.ComponentType<ContestControllerProps> = ContestController as React.ComponentType<ContestControllerProps>;
+wrapped = withNavigation(wrapped as never) as never;
+const mapStateToProps = (state: { user: { user: { is_staff?: boolean } | null } }) => {
   return {user: state.user.user};
 };
-wrapped = connect(mapStateToProps, null)(wrapped);
-export default wrapped;
+wrapped = connect(mapStateToProps, null)(wrapped) as unknown as React.ComponentType<ContestControllerProps>;
+export default wrapped as React.ComponentType<{
+  showNav: boolean;
+  setShowNav: (v: boolean) => void;
+  ckey: string;
+}>;
 
-const btnStyle = {
+const btnStyle: React.CSSProperties = {
   height: "30px",
 };

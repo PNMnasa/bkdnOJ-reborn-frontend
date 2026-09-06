@@ -2,8 +2,21 @@ import React from "react";
 
 import {SpinLoader} from "components";
 
-export default class ContestBanner extends React.Component {
-  constructor(props) {
+interface ContestBannerProps {
+  contestLoaded?: boolean;
+  contest: Record<string, unknown> | null;
+  [key: string]: unknown;
+}
+
+interface ContestBannerState {
+  time_label: string;
+  contest: Record<string, unknown> | null;
+}
+
+export default class ContestBanner extends React.Component<ContestBannerProps, ContestBannerState> {
+  private timer?: ReturnType<typeof setInterval>;
+
+  constructor(props: ContestBannerProps) {
     super(props);
     this.state = {
       time_label: "...",
@@ -32,9 +45,9 @@ export default class ContestBanner extends React.Component {
 
   updateTimeLeftLabel() {
     const contest = this.state.contest;
-    let start_time = new Date(contest.start_time);
-    let end_time = new Date(contest.end_time);
-    if (isNaN(start_time) || isNaN(end_time)) {
+    let start_time = new Date(String(contest && contest.start_time));
+    let end_time = new Date(String(contest && contest.end_time));
+    if (isNaN(start_time.getTime()) || isNaN(end_time.getTime())) {
       return;
     }
 
@@ -43,10 +56,10 @@ export default class ContestBanner extends React.Component {
     let t = 0;
     if (now < start_time) {
       lbl = "Contest Starting In ";
-      t = Math.floor((start_time - now) / 1000);
+      t = Math.floor((start_time.getTime() - now.getTime()) / 1000);
     } else if (now < end_time) {
       lbl = "Contest is Running: ";
-      t = Math.floor((end_time - now) / 1000);
+      t = Math.floor((end_time.getTime() - now.getTime()) / 1000);
     } else {
       lbl = "Contest is Finished";
       t = 0;
@@ -75,9 +88,9 @@ export default class ContestBanner extends React.Component {
   }
 
   componentDidMount() {
-    this.componentDidUpdate();
+    this.componentDidUpdate(this.props, this.state);
   }
-  componentDidUpdate(_prevProps, _prevState) {
+  componentDidUpdate(_prevProps: ContestBannerProps, _prevState: ContestBannerState) {
     if (this.props.contest !== this.state.contest) {
       const {contest} = this.props;
       this.setState({contest}, () => {

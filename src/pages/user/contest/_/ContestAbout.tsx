@@ -15,19 +15,26 @@ import ContestContext from "context/ContestContext";
 import "pages/user/problem/__List.scss";
 import "./ContestAbout.scss";
 
-class ContestAbout extends React.Component {
-  constructor(props) {
+interface ContestAboutProps {
+  [key: string]: unknown;
+}
+
+class ContestAbout extends React.Component<ContestAboutProps> {
+  static contextType = ContestContext;
+  declare context: Record<string, unknown>;
+
+  constructor(props: ContestAboutProps) {
     super(props);
     setTitle("About");
   }
 
   componentDidMount() {
-    const contest = this.context.contest;
-    setTitle(`${contest.name} | About`);
+    const contest = this.context.contest as { name?: string } | undefined;
+    setTitle(`${contest?.name} | About`);
   }
 
   render() {
-    const contest = this.context.contest;
+    const contest = this.context.contest as { description?: string } | undefined;
     const description = contest?.description;
     return (
       <div className="wrapper-vanilla m-0.5 contest-about">
@@ -47,14 +54,24 @@ class ContestAbout extends React.Component {
   }
 }
 
-ContestAbout.contextType = ContestContext;
+interface ContestInfoShape {
+  start_time?: string;
+  end_time?: string;
+  user_count?: number;
+  is_rated?: boolean;
+  format_name?: string;
+  is_registered?: boolean;
+  register_allow?: string;
+  key?: string;
+  [key: string]: unknown;
+}
 
 const ContestInfo = () => {
-  const {contest} = React.useContext(ContestContext);
+  const {contest} = React.useContext(ContestContext) as { contest: ContestInfoShape };
 
-  const startTime = new Date(contest.start_time);
-  const endTime = new Date(contest.end_time);
-  const contestLength = (endTime - startTime) / 1000;
+  const startTime = new Date(contest.start_time as string);
+  const endTime = new Date(contest.end_time as string);
+  const contestLength = (endTime.getTime() - startTime.getTime()) / 1000;
   let contestLengthString = "";
   if (contestLength > 0) {
     contestLengthString = secondsToHHMMSS(contestLength)
@@ -86,12 +103,12 @@ const ContestInfo = () => {
 };
 
 const JoinContestBtn = () => {
-  const {contest} = React.useContext(ContestContext);
+  const {contest} = React.useContext(ContestContext) as { contest: ContestInfoShape };
   const contestKey = contest.key;
 
   let isAllowToRegister = true;
-  let tooltipText;
-  let displayText;
+  let tooltipText: string | undefined;
+  let displayText: string | undefined;
   if (contest.is_registered) {
     displayText = "Registered";
     tooltipText = "Registered";
@@ -109,10 +126,9 @@ const JoinContestBtn = () => {
     }
   }
 
-  const isDisable = !isAllowToRegister || contest.is_registered;
-  // should we hide the button when not allowed to register?
+  const isDisable = !isAllowToRegister || !!contest.is_registered;
 
-  const registerContest = (ckey, ooc) => {
+  const registerContest = (ckey: string, ooc?: boolean) => {
     let conf;
     if (ooc) {
       conf = window.confirm(
@@ -132,21 +148,18 @@ const JoinContestBtn = () => {
           toastId: "contest-registered",
         });
       })
-      .catch(err => {
+      .catch((err: { response?: { data?: { detail?: string } } }) => {
         const msg =
           (err.response && err.response.data && err.response.data.detail) ||
           `Đăng ký contest "${ckey}" thất bại.`;
         toast.error(msg, {toastId: "contest-register-failed"});
       })
-      .finally(() => {
-        // TODO: reload page
-        // console.log("done");
-      });
+      .finally(() => {});
   };
 
   const onRegister = () => {
     if (!isDisable)
-      return registerContest(contestKey, contest.register_allow === "SPECTATE");
+      return registerContest(contestKey as string, contest.register_allow === "SPECTATE");
   };
 
   return (
@@ -164,7 +177,7 @@ const JoinContestBtn = () => {
 };
 
 const ContestAuthors = () => {
-  const {contest} = React.useContext(ContestContext);
+  const {contest} = React.useContext(ContestContext) as { contest: { authors?: { username: string }[] } };
 
   const isHidden = contest.authors?.length === 0;
   const authorList = () => {
@@ -175,7 +188,7 @@ const ContestAuthors = () => {
         key={`contest-author-${author.username}`}
       >
         {author.username}
-        {idx !== contest.authors.length - 1 ? ", " : ""}
+        {idx !== contest.authors!.length - 1 ? ", " : ""}
       </a>
     ));
   };
