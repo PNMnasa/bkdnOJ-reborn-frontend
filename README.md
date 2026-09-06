@@ -9,10 +9,10 @@ This is the repository for the Front-end of bkdnOJ Reborn.
 
 2. Install 
 ```
-   npm i -f
+   pnpm i
 ```
 
 3. Run
 ```
-   npm run
+   pnpm run
 ```
