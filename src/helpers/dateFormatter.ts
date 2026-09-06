@@ -1,24 +1,24 @@
 /* eslint-disable no-unused-vars */
-function getWeekDayShort(dateobj) {
-  return dateobj.toLocaleDateString("en-US", {weekday: "short"});
+function getWeekDayShort(dateobj: Date): string {
+  return dateobj.toLocaleDateString("en-US", { weekday: "short" });
 }
-function getWeekDayLong(dateobj) {
-  return dateobj.toLocaleDateString("en-US", {weekday: "long"});
+function getWeekDayLong(dateobj: Date): string {
+  return dateobj.toLocaleDateString("en-US", { weekday: "long" });
 }
-function getMonthShort(dateobj) {
-  return dateobj.toLocaleDateString("en-US", {month: "short"});
+function getMonthShort(dateobj: Date): string {
+  return dateobj.toLocaleDateString("en-US", { month: "short" });
 }
-function getDaySuffix(num) {
+function getDaySuffix(num: number): string {
   if (9 < num < 19) return "th";
   if (num % 10 === 1) return "st";
   if (num % 10 === 2) return "nd";
   if (num % 10 === 3) return "rd";
   return "th";
 }
-export function getYearMonthDate(date) {
+export function getYearMonthDate(date?: string | number | Date | null): string {
   if (!date) return "N/A";
   const d = new Date(date);
-  if (!isFinite(d)) return "N/A";
+  if (!isFinite(d.getTime())) return "N/A";
 
   const mm = d.getMonth() + 1;
   const dd = d.getDate();
@@ -32,10 +32,10 @@ export function getYearMonthDate(date) {
     dd
   );
 }
-export function getHourMinuteSecond(date) {
+export function getHourMinuteSecond(date?: string | number | Date | null): string {
   if (!date) return "N/A";
   const d = new Date(date);
-  if (!isFinite(d)) return "N/A";
+  if (!isFinite(d.getTime())) return "N/A";
 
   return (
     ("0" + d.getHours()).slice(-2) +
@@ -46,35 +46,29 @@ export function getHourMinuteSecond(date) {
   );
 }
 
-export function getLocalDateWithTimezone(date) {
+export function getLocalDateWithTimezone(date?: string | number | Date | null): string {
   if (!date) return "N/A";
   const d = new Date(date);
-  if (!isFinite(d)) return "N/A";
+  if (!isFinite(d.getTime())) return "N/A";
 
-  const datelen = date.length;
-  return d.toLocaleString() + ` (${date.substring(datelen - 6)})`;
+  const datelen = String(date).length;
+  return d.toLocaleString() + ` (${String(date).substring(datelen - 6)})`;
 }
 
-export default function dateFormatter(date, short = false) {
+export default function dateFormatter(date?: string | number | Date | null, short = false): string {
   if (!date) return "N/A";
   const d = new Date(date);
-  if (!isFinite(d)) return "N/A";
+  if (!isFinite(d.getTime())) return "N/A";
   const now = new Date();
 
-  var timeString =
+  let timeString =
     ("0" + d.getHours()).slice(-2) +
     ":" +
     ("0" + d.getMinutes()).slice(-2) +
     ":" +
     ("0" + d.getSeconds()).slice(-2);
 
-  // const year = d.getFullYear();
-  // const day = d.getDate();
-
-  // if (now.getUTCFullYear() === year)
-  //     return `${getMonthShort(d)} ${day}${getDaySuffix(day)}, ${getWeekDayShort(d)}, ${timeString}`
-
-  var dateString =
+  let dateString =
     d.getFullYear() +
     "/" +
     ("0" + (d.getMonth() + 1)).slice(-2) +

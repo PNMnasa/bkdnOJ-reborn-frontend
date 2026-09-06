@@ -1,10 +1,10 @@
 // https://stackoverflow.com/a/61602724/13020109
-// ScrollToTop helps scroll to top every time ReactRouter 
+// ScrollToTop helps scroll to top every time ReactRouter
 // make a transition
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function ScrollToTop() {
+export default function ScrollToTop(): null {
   const { pathname } = useLocation();
 
   useEffect(() => {

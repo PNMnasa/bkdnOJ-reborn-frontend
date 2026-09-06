@@ -1,4 +1,4 @@
-const fileFromBlob = async (blob, name="file.csv") => {
+const fileFromBlob = async (blob: Blob, name = "file.csv"): Promise<void> => {
   const a = document.createElement("a");
   a.download = name;
   a.href = URL.createObjectURL(blob);
