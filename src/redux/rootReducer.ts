@@ -1,8 +1,8 @@
-import {combineReducers} from "redux";
-import counterReducer from "./Counter/reducer.js";
+import { combineReducers } from "redux";
+import counterReducer from "./Counter/reducer";
 
-import userReducer from "./User/reducer.js";
-import profileReducer from "./Profile/reducer.js";
+import userReducer from "./User/reducer";
+import profileReducer from "./Profile/reducer";
 import contestReducer from "./Contest/reducer";
 
 import standingFilterReducer from "./StandingFilter/reducer";
@@ -25,3 +25,4 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
+export type RootState = ReturnType<typeof rootReducer>;

@@ -1,2 +1,0 @@
-export const START_POLLING = 'RS_START_POLLING';
-export const STOP_POLLING = 'RS_STOP_POLLING';

@@ -1,3 +1,4 @@
+import { AnyAction } from "redux";
 import {
   SET_CONTEST_PARAMS,
   SET_PUBLIC_PARAMS,
@@ -6,9 +7,9 @@ import {
   CLEAR_ALL_PARAMS,
 } from "./types";
 
-const INITIAL_STATE = {};
+const INITIAL_STATE: Record<string, Record<string, unknown>> = {};
 
-const reducer = (state = INITIAL_STATE, action) => {
+const reducer = (state = INITIAL_STATE, action: AnyAction) => {
   switch (action.type) {
     case SET_CONTEST_PARAMS:
     case SET_PUBLIC_PARAMS:

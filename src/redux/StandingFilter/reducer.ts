@@ -1,3 +1,4 @@
+import { AnyAction } from "redux";
 import {
   ADD_CONTEST,
   ADD_FAVORITE_TEAM,
@@ -6,16 +7,23 @@ import {
   TOGGLE_ORG_FILTER,
 } from "./types";
 
-const INIT_STATE = {
+interface StandingFilterEntry {
+  filteredOrg: string[];
+  isOrgFilterEnable: boolean;
+  favoriteTeams: string[];
+  isFavoriteOnly: boolean;
+}
+
+const INIT_STATE: { standingFilter: Record<string, StandingFilterEntry> } = {
   standingFilter: {},
 };
 
-const reducer = (state = INIT_STATE, action) => {
-  let newStandingFilter;
+const reducer = (state = INIT_STATE, action: AnyAction) => {
+  let newStandingFilter: Record<string, StandingFilterEntry>;
 
   switch (action.type) {
     case ADD_CONTEST:
-      newStandingFilter = {...state.standingFilter};
+      newStandingFilter = { ...state.standingFilter };
       newStandingFilter[action.contestId] = {
         filteredOrg: [],
         isOrgFilterEnable: false,
@@ -28,7 +36,7 @@ const reducer = (state = INIT_STATE, action) => {
       };
 
     case ADD_ORG:
-      newStandingFilter = {...state.standingFilter};
+      newStandingFilter = { ...state.standingFilter };
       newStandingFilter[action.contestId].filteredOrg = action.orgList;
       return {
         ...state,
@@ -36,13 +44,13 @@ const reducer = (state = INIT_STATE, action) => {
       };
 
     case ADD_FAVORITE_TEAM:
-      newStandingFilter = {...state.standingFilter};
+      newStandingFilter = { ...state.standingFilter };
       if (action.isFavorite) {
         newStandingFilter[action.contestId].favoriteTeams.push(action.teamName);
       } else {
         newStandingFilter[action.contestId].favoriteTeams = newStandingFilter[
           action.contestId
-        ].favoriteTeams.filter(team => team !== action.teamName);
+        ].favoriteTeams.filter((team) => team !== action.teamName);
       }
 
       return {
@@ -51,7 +59,7 @@ const reducer = (state = INIT_STATE, action) => {
       };
 
     case TOGGLE_ORG_FILTER:
-      newStandingFilter = {...state.standingFilter};
+      newStandingFilter = { ...state.standingFilter };
       newStandingFilter[action.contestId].isOrgFilterEnable = action.isEnable;
       return {
         ...state,
@@ -59,7 +67,7 @@ const reducer = (state = INIT_STATE, action) => {
       };
 
     case TOGGLE_FAVORITE_ONLY:
-      newStandingFilter = {...state.standingFilter};
+      newStandingFilter = { ...state.standingFilter };
       newStandingFilter[action.contestId].isFavoriteOnly = action.isEnable;
       if (action.isClearAll) {
         newStandingFilter[action.contestId].favoriteTeams = [];
