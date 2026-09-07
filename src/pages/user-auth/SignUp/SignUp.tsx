@@ -64,7 +64,7 @@ export default class SignUp extends React.Component<{}, SignUpState> {
           },
         },
         error: {
-          render({ data: _data }: { data: { response: { data: unknown } } }) {
+          render({ data: _data }: any) {
             return "Sign Up Failed.";
           },
         },

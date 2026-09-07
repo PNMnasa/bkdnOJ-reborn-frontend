@@ -10,6 +10,7 @@ import logo from 'assets/images/bkdnoj-favicon-ring.png';
 import './AdminNav.scss';
 
 interface AdminNavProps {
+  className?: string;
   user?: {
     is_staff?: boolean;
     is_superuser?: boolean;
@@ -19,12 +20,12 @@ interface AdminNavProps {
 
 class AdminNav extends React.Component<AdminNavProps> {
   render() {
-    const {user} = this.props;
+    const {user, className} = this.props;
     const isStaff = user && user.is_staff;
     const isSuperuser = user && user.is_superuser;
 
     return (
-      <ul className="admin-nav nav navbar-nav sidebar" id="admin-sidebar">
+      <ul className={`admin-nav nav navbar-nav sidebar${className ? " " + className : ""}`} id="admin-sidebar">
         <li className='nav-header-item'>
           <Link to='/' replace className='nav-link'>Site</Link>
         </li>

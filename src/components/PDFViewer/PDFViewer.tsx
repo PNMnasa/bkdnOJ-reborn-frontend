@@ -13,7 +13,7 @@ interface PDFViewerProps {
 
 function PDFViewer({ pdf }: PDFViewerProps) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const pdfUrl = pdf;
+  const pdfUrl = pdf as string | undefined;
 
   let httpHeaders: Record<string, string> = {};
   const access_token = __ls_get_access_token();
@@ -26,7 +26,7 @@ function PDFViewer({ pdf }: PDFViewerProps) {
       {pdf ? (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
           <Viewer
-            fileUrl={pdfUrl}
+            fileUrl={pdfUrl!}
             defaultScale={SpecialZoomLevel.PageWidth}
             withCredentials={true}
             httpHeaders={httpHeaders}

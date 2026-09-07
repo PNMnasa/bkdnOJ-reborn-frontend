@@ -94,7 +94,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
     this.fetch();
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data!;
@@ -446,9 +446,9 @@ class UserProfileSection extends React.Component<UserProfileSectionProps, UserPr
         parent.fetch(); 
         return "Success."; 
       }, },
-      error: { render({data}: {data: { response?: { data: unknown } }}) { 
+      error: { render(data: any) { 
           parent.setState({
-            errors: data.response?.data,
+            errors: data.data?.response?.data,
           }); 
           return "Update Failed."; 
         }, 
@@ -456,7 +456,7 @@ class UserProfileSection extends React.Component<UserProfileSectionProps, UserPr
     })
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data as Record<string, unknown>;
@@ -617,7 +617,7 @@ class UserProfileSection extends React.Component<UserProfileSectionProps, UserPr
   }
 }
 
-let wrappedPD = AdminJudgeDetails;
+let wrappedPD: React.ComponentType<any> = AdminJudgeDetails;
 wrappedPD = withParams(wrappedPD);
 const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};

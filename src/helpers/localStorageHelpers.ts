@@ -23,9 +23,9 @@ export function __ls_get_refresh_token(): string | null {
 export function __ls_set_auth_user(data: unknown) {
   localStorage.setItem(LS_AUTH_USER, JSON.stringify(data));
 }
-export function __ls_get_auth_user(): unknown {
+export function __ls_get_auth_user(): Record<string, unknown> | null {
   const val = localStorage.getItem(LS_AUTH_USER);
-  return val ? JSON.parse(val) : null;
+  return val ? (JSON.parse(val) as Record<string, unknown>) : null;
 }
 
 export function __ls_remove_credentials() {
@@ -50,5 +50,5 @@ export function __ls_get_user_csv_log(): string | string[] {
   return localStorage.getItem(LS_GEN_USER_CSV_LOG) || [];
 }
 export function __ls_set_user_csv_log(arr: string | string[]) {
-  localStorage.setItem(LS_GEN_USER_CSV_LOG, arr || []);
+  localStorage.setItem(LS_GEN_USER_CSV_LOG, Array.isArray(arr) ? arr.join(",") : arr || "");
 }

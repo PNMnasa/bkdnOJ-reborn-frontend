@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 
 import { FaUniversity } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
@@ -160,7 +161,7 @@ const mapStateToProps = (state: { ranks: { ranks: Rank[] } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     toggleFavorite: ({ contestId, teamName, isFavorite }: { contestId: string; teamName: string; isFavorite: boolean }) =>
       dispatch(
@@ -173,4 +174,4 @@ const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCard);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCard) as React.ComponentType<any>;

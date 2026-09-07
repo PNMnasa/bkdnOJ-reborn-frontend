@@ -88,7 +88,7 @@ class SubHeader extends React.Component<SubHeaderProps, SubHeaderState> {
             <span>{this.state.curTime}</span>
           </div>
         </Container>
-        <SwitchOrgModal show={this.state.orgModalShow} setShow={(b) => this.toggleOrgModal(b)} />
+        <SwitchOrgModal show={this.state.orgModalShow} setShow={(b: boolean) => this.toggleOrgModal(b)} />
       </div>
     );
   }

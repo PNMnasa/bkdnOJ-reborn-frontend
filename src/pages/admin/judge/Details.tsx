@@ -89,7 +89,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
     return null;
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: null as boolean | null}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: null as boolean | null}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -121,7 +121,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
       })
       .catch((err: {response?: {data: unknown; status?: number}}) => {
         toast.error(`Cannot edit. (${err})`);
-        const data = err.response?.data;
+        const data = err.response?.data as Record<string, unknown> | undefined;
         let errors = {...data};
         this.setState({errors: {errors}});
       });
@@ -143,7 +143,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
         })
         .catch((err: {response?: {data: unknown; status?: number}}) => {
           toast.error(`Cannot delete. (${err})`);
-          const data = err.response?.data;
+          const data = err.response?.data as Record<string, unknown> | undefined;
           let errors = {...data};
           this.setState({errors: {errors}});
         });
@@ -427,7 +427,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
   }
 }
 
-let wrappedPD: React.ComponentClass<AdminJudgeDetailsProps> = AdminJudgeDetails;
+let wrappedPD: React.ComponentType<any> = AdminJudgeDetails;
 wrappedPD = withParams(wrappedPD);
 const mapStateToProps = (state: {user: {user: unknown}}) => {
   return {user: state.user.user};

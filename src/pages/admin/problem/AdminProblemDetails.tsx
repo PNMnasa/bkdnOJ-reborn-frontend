@@ -63,7 +63,7 @@ class RejudgeButton extends React.Component<RejudgeButtonProps, RejudgeButtonSta
       prevState.confirmRejudge === false &&
       this.state.confirmRejudge === true
     ) {
-      const data = {shortname: this.props.shortname};
+      const data = {shortname: this.props.shortname, data: {}};
       problemAPI
         .rejudgeProblem(data)
 
@@ -294,7 +294,7 @@ class AdminProblemDetails extends React.Component<AdminProblemDetailsProps, Admi
   }
 }
 
-let wrappedPD = AdminProblemDetails;
+let wrappedPD: React.ComponentType<any> = AdminProblemDetails;
 wrappedPD = withParams(wrappedPD);
 const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};

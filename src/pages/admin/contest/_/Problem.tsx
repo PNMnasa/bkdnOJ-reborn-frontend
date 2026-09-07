@@ -73,7 +73,7 @@ class RejudgeButton extends React.Component<RejudgeButtonProps, RejudgeButtonSta
       prevState.confirmRejudge === false &&
       this.state.confirmRejudge === true
     ) {
-      const data = {key: this.props.ckey, shortname: this.props.prob.shortname as string};
+      const data = {key: this.props.ckey, shortname: this.props.prob.shortname as string, data: {}};
       contestAPI
         .rejudgeContestProblem(data)
         .then(() => toast.success(`OK Rejudging ${this.props.prob.shortname}.`))
@@ -245,7 +245,7 @@ class Problem extends React.Component<ProblemProps, ProblemState> {
         }
       });
       if (!valid) return;
-      prob = {...prob, shortname: e.shortname, title: e.title};
+      prob = {...prob, shortname: e.shortname!, title: e.title!};
     } else if (!isCheckbox) {
       if (e.target.id === "order") prob[e.target.id] = parseInt(e.target.value);
       else prob[e.target.id] = e.target.value;
@@ -406,8 +406,8 @@ class Problem extends React.Component<ProblemProps, ProblemState> {
                       <td>
                         <ProblemSelect
                           prob={{...prob}}
-                          onChange={(val: {shortname: string; title: string}) =>
-                            this.problemChangeHandler(ridx, val as unknown as React.ChangeEvent<HTMLInputElement>, {
+                          onChange={(val: any) =>
+                            this.problemChangeHandler(ridx, val as React.ChangeEvent<HTMLInputElement>, {
                               rawObject: true,
                             })
                           }

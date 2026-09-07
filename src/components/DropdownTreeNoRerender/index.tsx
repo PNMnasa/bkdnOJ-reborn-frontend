@@ -7,7 +7,7 @@ interface DropdownTreeNoRerenderProps {
   [key: string]: unknown;
 }
 
-export default class DropdownTreeNoRerender extends Component<DropdownTreeNoRerenderProps> {
+export default class DropdownTreeNoRerender extends Component<DropdownTreeNoRerenderProps, { data: unknown }> {
   constructor(props: DropdownTreeNoRerenderProps) {
     super(props);
     this.state = { data: props.data };
@@ -26,6 +26,6 @@ export default class DropdownTreeNoRerender extends Component<DropdownTreeNoRere
   render() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, ...rest } = this.props;
-    return <DropdownTreeSelect data={this.state.data} {...rest} />;
+    return <DropdownTreeSelect data={this.state.data as never} {...rest} />;
   }
 }

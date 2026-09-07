@@ -52,7 +52,7 @@ class SubmitModalResult extends React.Component<SubmitModalResultProps, SubmitMo
       return;
     }
     submissionApi
-      .getSubmissionResult({ id: this.state.subId })
+      .getSubmissionResult({ id: this.state.subId as number | string })
       .then((res) => {
         this.setState({ data: res.data });
       })
@@ -215,8 +215,8 @@ export default class SubmitModal extends React.Component<SubmitModalProps, Submi
             lang={this.props.lang}
             contest={this.props.contest}
             submitting={this.state.submitting}
-            setSubId={(subId) => this.setSubId(subId)}
-            setSubErrors={(err) => this.setErrors(err)}
+            setSubId={(subId: number | string) => this.setSubId(subId)}
+            setSubErrors={(err: string) => this.setErrors(err)}
           />
         </Modal.Body>
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 
 import { Navigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
@@ -66,7 +67,7 @@ class SignIn extends React.Component<SignInProps, SignInState> {
           },
         },
         success: {
-          render({ data }: { data: { data: { access: string; refresh: string; user: unknown } } }) {
+          render({ data }: any) {
             __ls_set_access_token(data.data.access);
             __ls_set_refresh_token(data.data.refresh);
             __ls_set_auth_user(data.data.user);
@@ -74,7 +75,7 @@ class SignIn extends React.Component<SignInProps, SignInState> {
           },
         },
         error: {
-          render({ data: _data }: { data: { response: { data: unknown } } }) {
+          render({ data: _data }: any) {
             return "Sign-in Failed!";
           },
         },
@@ -142,11 +143,12 @@ const mapStateToProps = (state: { user: { user: unknown } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
-    updateUser: (user: unknown) => dispatch(updateUser({ user })),
+    updateUser: (user: unknown) =>
+      dispatch(updateUser({ user: user as Record<string, unknown> | null })),
     clearUser: () => dispatch(clearUser()),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn) as React.ComponentType<any>;

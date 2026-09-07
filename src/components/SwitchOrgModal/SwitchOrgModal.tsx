@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 
 import { updateMyOrg, updateSelectedOrg } from "redux/MyOrg/actions";
 
@@ -11,7 +12,7 @@ import DropdownTreeSelect from "components/DropdownTreeNoRerender";
 import "react-dropdown-tree-select/dist/styles.css";
 
 interface OrgNode {
-  slug?: string | null;
+  slug: string | null;
   short_name?: string;
   name?: string;
   sub_orgs?: OrgNode[];
@@ -54,7 +55,7 @@ class SwitchOrgModal extends React.Component<SwitchOrgModalProps, SwitchOrgModal
     super(props);
     this.state = {
       loaded: false,
-      selectedOrg: {},
+      selectedOrg: { slug: null },
       data: [],
     };
   }
@@ -106,7 +107,7 @@ class SwitchOrgModal extends React.Component<SwitchOrgModalProps, SwitchOrgModal
       };
       this.setState({ selectedOrg: org });
     } else {
-      this.setState({ selectedOrg: {} });
+      this.setState({ selectedOrg: { slug: null } });
     }
   }
 
@@ -124,7 +125,7 @@ class SwitchOrgModal extends React.Component<SwitchOrgModalProps, SwitchOrgModal
           <DropdownTreeSelect
             data={this.state.data}
             mode="radioSelect"
-            onChange={(a, b) => this.onChangeHandler(a, b)}
+            onChange={(a: unknown, b: OrgNode[]) => this.onChangeHandler(a, b)}
           />
 
           <em>
@@ -150,7 +151,7 @@ const mapStateToProps = (state: {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     updateSelectedOrg: (org: OrgNode) => dispatch(updateSelectedOrg({ selectedOrg: org })),
     updateMyOrg: ({ memberOf, adminOf, selectedOrg }: { memberOf: OrgNode[]; adminOf: OrgNode[]; selectedOrg?: OrgNode }) =>
@@ -158,4 +159,4 @@ const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SwitchOrgModal);
+export default connect(mapStateToProps, mapDispatchToProps)(SwitchOrgModal) as React.ComponentType<any>;

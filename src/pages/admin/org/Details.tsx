@@ -8,7 +8,9 @@ import {SpinLoader, ErrorBox} from "components";
 import {withNavigation, withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 
-import UserMultiSelect from "components/SelectMulti/User";
+import UserMultiSelectRaw from "components/SelectMulti/User";
+
+const UserMultiSelect = UserMultiSelectRaw as React.ComponentType<any>;
 import OrgSingleSelect from "components/SelectSingle/Org";
 
 import orgAPI from "api/organization";
@@ -16,6 +18,13 @@ import orgAPI from "api/organization";
 import Members from "./_/Members";
 
 import "./Details.scss";
+
+interface Org {
+  slug: string;
+  short_name?: string;
+  is_unlisted?: boolean;
+  [key: string]: unknown;
+}
 
 interface OrgData {
   slug: string;
@@ -149,7 +158,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
       });
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data!;
@@ -568,11 +577,10 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
                                 Clear
                               </Button>
                               <OrgSingleSelect
-                                id="parent_org"
-                                value={this.state.data?.new_parent_org as string}
-                                onChange={(val: string) =>
+                                value={(this.state.data?.new_parent_org as string) as unknown as Org}
+                                onChange={(org: Org) =>
                                   this.setState({
-                                    data: {...data!, new_parent_org: val},
+                                    data: {...data!, new_parent_org: org.slug},
                                   })
                                 }
                               />
@@ -659,7 +667,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
   }
 }
 
-let wrapped = OrgDetail;
+let wrapped: React.ComponentType<any> = OrgDetail;
 wrapped = withParams(wrapped);
 wrapped = withNavigation(wrapped);
 export default wrapped;

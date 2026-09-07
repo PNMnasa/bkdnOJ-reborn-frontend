@@ -51,6 +51,8 @@ interface OrgItemProps {
   org: OrgShape;
   pushToPath?: (org: OrgShape) => void;
   onClick?: (e: React.MouseEvent) => void;
+  ridx?: number;
+  [key: string]: unknown;
 }
 
 class OrgItem extends React.Component<OrgItemProps> {
@@ -170,7 +172,7 @@ class OrgList extends React.Component<OrgListProps, OrgListState> {
       this.state.path.length === 0 ? null : this.state.path[this.state.path.length - 1].slug;
 
     orgAPI
-      .getOrgs({ slug, params: { page: params.page + 1 } })
+      .getOrgs({ slug: slug as string | undefined, params: { page: params.page + 1 } })
       .then((res) => {
         this.setState({
           loaded: true,
@@ -215,7 +217,7 @@ class OrgList extends React.Component<OrgListProps, OrgListState> {
             <tbody className="w-100">
               {!loaded ? (
                 <tr style={{ height: "200px" }}>
-                  <td colSpan="99">
+                  <td colSpan={99}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>
@@ -347,7 +349,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
       if (!conf) return;
 
       orgAPI
-        .joinOrg({ slug })
+        .joinOrg({ slug } as never)
         .then(() => {
           toast.success(`Welcome to ${slug}.`);
           this.fetch();
@@ -414,7 +416,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
             <SpinLoader margin="0" size={50} />
           </div>
         )}
-        {loaded && errors && (
+        {loaded && !!errors && (
           <>
             <ErrorBox errors={errors} />
           </>
@@ -571,11 +573,11 @@ class OrgMain extends React.Component<OrgMainProps, OrgMainState> {
           <Col md={3} className="flex-center-col">
             <h4 className="pl-2 pr-2 m-0">Organization</h4>
           </Col>
-          <Col className="org-path" style={{ width: "100%", heigth: "100%", overflow: "hidden" }}>
+          <Col className="org-path" style={{ width: "100%", height: "100%", overflow: "hidden" }}>
             <div
               style={{
                 width: "100%",
-                heigth: "100%",
+                height: "100%",
                 overflowX: "auto",
                 boxSizing: "content-box",
               }}
@@ -623,7 +625,7 @@ class OrgMain extends React.Component<OrgMainProps, OrgMainState> {
           </Col>
         </Row>
 
-        {errors && (
+        {!!errors && (
           <div className="error-box-wrapper m-2">
             <ErrorBox errors={errors} />
           </div>
@@ -645,7 +647,7 @@ class OrgMain extends React.Component<OrgMainProps, OrgMainState> {
           {selectedOrg && (
             <Col className="org-detail-wrapper-col mr-1 mb-1">
               <OrgDetail
-                user={this.props.user}
+                user={this.props.user as OrgDetailProps["user"]}
                 slug={selectedOrg}
                 deselectOrg={() => this.deselectOrg()}
               />
@@ -657,10 +659,10 @@ class OrgMain extends React.Component<OrgMainProps, OrgMainState> {
   }
 }
 
-let WrappedPD = OrgMain as React.ComponentType<OrgMainProps>;
+let WrappedPD = OrgMain as React.ComponentType<any>;
 WrappedPD = withParams(WrappedPD as never) as never;
 const mapStateToProps = (state: { user: { user: unknown } }) => {
   return { user: state.user.user };
 };
-WrappedPD = connect(mapStateToProps, null)(WrappedPD) as React.ComponentType<OrgMainProps>;
+WrappedPD = connect(mapStateToProps, null)(WrappedPD) as unknown as React.ComponentType<any>;
 export default WrappedPD;

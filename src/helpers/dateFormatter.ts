@@ -9,7 +9,7 @@ function getMonthShort(dateobj: Date): string {
   return dateobj.toLocaleDateString("en-US", { month: "short" });
 }
 function getDaySuffix(num: number): string {
-  if (9 < num < 19) return "th";
+  if (num > 9 && num < 19) return "th";
   if (num % 10 === 1) return "st";
   if (num % 10 === 2) return "nd";
   if (num % 10 === 3) return "rd";

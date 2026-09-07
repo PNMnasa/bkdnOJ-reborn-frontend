@@ -40,7 +40,7 @@ class AdminJudgeNew extends React.Component<AdminJudgeNewProps, AdminJudgeNewSta
     setTitle(`Admin | New Judge`);
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: null as boolean | null}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: null as boolean | null}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -315,7 +315,7 @@ class AdminJudgeNew extends React.Component<AdminJudgeNewProps, AdminJudgeNewSta
   }
 }
 
-let wrappedPD: React.ComponentClass<AdminJudgeNewProps> = AdminJudgeNew;
+let wrappedPD: React.ComponentType<any> = AdminJudgeNew;
 const mapStateToProps = (state: {user: {user: unknown}}) => {
   return {user: state.user.user};
 };

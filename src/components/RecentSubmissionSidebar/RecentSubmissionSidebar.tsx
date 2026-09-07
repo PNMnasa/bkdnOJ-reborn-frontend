@@ -1,6 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 import ReactPaginate from "react-paginate";
 import { stopPolling } from "redux/RecentSubmission/actions";
 
@@ -46,7 +47,7 @@ class RSubItem extends React.Component<RSubItemProps> {
 
   render() {
     const { id, ckey, problem, language, points, status, result, date } = this.props;
-    const verdict = status === "D" ? result : status;
+    const verdict = status === "D" ? (result ?? "") : status;
 
     return (
       <tr>
@@ -199,7 +200,7 @@ class RecentSubmissionSidebar extends React.Component<
 
   componentDidMount() {
     this.setState({
-      contest: (this.context && this.context.contest) || null,
+      contest: (this.context.contest as { key: string } | undefined) || null,
       user: (this.props && this.props.user) || null,
     });
   }
@@ -211,14 +212,13 @@ class RecentSubmissionSidebar extends React.Component<
     const { user } = this.props;
     const { contest } = this.context;
     if (!user || !contest) return;
-
     if (
       !prevState.contest ||
       !prevState.user ||
-      prevState.contest.key !== contest.key ||
+      (prevState.contest as { key: string }).key !== (contest as { key: string }).key ||
       prevState.user.username !== user.username
     ) {
-      this.setState({ user, contest }, () => {
+      this.setState({ user, contest: contest as { key: string } }, () => {
         this.refetch();
       });
     }
@@ -268,7 +268,7 @@ class RecentSubmissionSidebar extends React.Component<
                   <>
                     {this.state.count === 0 ? (
                       <tr>
-                        <td colSpan="4">
+                        <td colSpan={4}>
                           <em>No Submissions Yet.</em>
                         </td>
                       </tr>
@@ -276,9 +276,8 @@ class RecentSubmissionSidebar extends React.Component<
                       subs.map((sub, idx) => (
                         <RSubItem
                           key={`recent-sub-${sub.id}`}
-                          rowid={idx}
+                          {...(sub as unknown as RSubItemProps)}
                           ckey={this.state.contest ? this.state.contest.key : ""}
-                          {...sub}
                         />
                       ))
                     )}
@@ -324,10 +323,10 @@ const mapStateToProps = (state: {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     stopPolling: () => dispatch(stopPolling()),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecentSubmissionSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(RecentSubmissionSidebar) as React.ComponentType<any>;

@@ -194,8 +194,9 @@ class AdminUserList extends React.Component<Record<string, never>, AdminUserList
         parent.refetch(); 
         return "Success."; 
       }, },
-      error: { render({data}: {data: { response?: { data: unknown } }}) { 
-          parent.setState({ errors: data.response?.data, }); 
+      error: { render(data: any) { 
+          const response = (data?.data as { response?: { data: unknown } })?.response;
+          parent.setState({ errors: response?.data, }); 
           return "Update Failed."; 
         }, 
       },

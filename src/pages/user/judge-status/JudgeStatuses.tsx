@@ -13,11 +13,13 @@ import "styles/ClassicPagination.scss";
 interface JudgeStatusProps {
   id: string;
   name: string;
-  is_blocked: boolean;
-  online: boolean;
-  ping: unknown;
-  load: unknown;
-  startTime: unknown;
+  is_blocked?: boolean;
+  online?: boolean;
+  ping?: unknown;
+  load?: unknown;
+  startTime?: unknown;
+  rowid?: number;
+  [key: string]: unknown;
 }
 
 interface JudgeStatusState {
@@ -109,6 +111,7 @@ interface JudgeStatusesState {
   judges: Judge[];
   currPage: number;
   pageCount: number;
+  count: number;
   loaded: boolean;
   errors: unknown;
 }
@@ -120,6 +123,7 @@ class JudgeStatuses extends React.Component<JudgeStatusesProps, JudgeStatusesSta
       judges: [],
       currPage: 0,
       pageCount: 1,
+      count: 0,
       loaded: false,
       errors: null,
     };
@@ -183,7 +187,7 @@ class JudgeStatuses extends React.Component<JudgeStatusesProps, JudgeStatusesSta
             <tbody>
               {this.state.loaded === false ? (
                 <tr>
-                  <td colSpan="7">
+                  <td colSpan={7}>
                     <SpinLoader margin="10px" />
                   </td>
                 </tr>

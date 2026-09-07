@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 import {
   increaseCounter,
   decreaseCounter,
@@ -73,7 +74,7 @@ const mapStateToProps = (state: { counter: { count: number } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     increaseCounter: () => dispatch(increaseCounter()),
     decreaseCounter: () => dispatch(decreaseCounter()),
@@ -81,4 +82,4 @@ const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Content);
+export default connect(mapStateToProps, mapDispatchToProps)(Content) as React.ComponentType<any>;

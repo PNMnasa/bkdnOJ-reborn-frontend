@@ -3,7 +3,7 @@ import React from "react";
 import loader from "assets/common/loading.gif";
 
 interface SpinLoaderProps {
-  size?: string;
+  size?: number | string;
   margin?: string;
   className?: string;
 }
@@ -19,11 +19,11 @@ export default class SpinLoader extends React.Component<SpinLoaderProps> {
   }
 
   render() {
-    const { size, margin, className } = this.state as { size: string; margin: string; className?: string };
+    const { size, margin, className } = this.state as { size: number | string; margin: string; className?: string };
     return (
       <img
         src={loader}
-        style={{ width: size, height: size, margin }}
+        style={{ width: String(size), height: String(size), margin }}
         className={className}
         alt="..."
       />

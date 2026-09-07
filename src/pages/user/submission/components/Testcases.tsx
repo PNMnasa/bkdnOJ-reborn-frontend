@@ -16,7 +16,7 @@ interface TestCaseData {
 
 interface SubmissionTestCaseProps {
   data: TestCaseData;
-  maxTime: number;
+  maxTime?: number;
   problemId: number | string;
   allowViewTestData: boolean;
 }
@@ -75,7 +75,7 @@ const SubmissionTestCase = memo(
           </td>
           <td className="pl-1 pr-1">
             <span className="time">
-              {data.status === "tle" ? `>${parseTime(maxTime)}` : parseTime(data.time)}
+              {data.status === "tle" ? `>${parseTime(maxTime ?? data.time)}` : parseTime(data.time)}
             </span>
           </td>
           <td className="pl-1 pr-1">
@@ -84,7 +84,7 @@ const SubmissionTestCase = memo(
         </tr>
         {toggle && (
           <tr>
-            <td colSpan="99">
+            <td colSpan={99}>
               <div className="d-block">
                 {!testcaseDetail && !testcaseErr && (
                   <div className="d-flex m-3">

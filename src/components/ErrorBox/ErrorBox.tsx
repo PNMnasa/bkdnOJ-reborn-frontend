@@ -61,7 +61,7 @@ class ErrorList extends React.Component<ErrorListProps> {
 }
 
 interface ErrorBoxProps {
-  errors: ErrorsData;
+  errors: unknown;
 }
 
 export default class ErrorBox extends React.Component<ErrorBoxProps> {

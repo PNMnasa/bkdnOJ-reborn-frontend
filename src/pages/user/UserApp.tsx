@@ -2,7 +2,10 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 
-import { Header, Navbar, SubHeader, Footer, ScrollToTopBtn } from "components";
+import { Header, Navbar, Footer, ScrollToTopBtn } from "components";
+import SubHeaderRaw from "components/SubHeader/SubHeader";
+
+const SubHeader = SubHeaderRaw as React.ComponentType<any>;
 
 import "./UserApp.scss";
 

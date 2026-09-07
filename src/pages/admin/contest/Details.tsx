@@ -66,7 +66,7 @@ class RateButton extends React.Component<RateButtonProps, RateButtonState> {
     if (prevState.confirmRate === false && this.state.confirmRate === true) {
       const data = {key: this.props.ckey};
       contestAPI
-        .rateContest(data)
+        .rateContest({key: this.props.ckey, data: {}} as any)
         .then(() => toast.success(`OK Rated contest ${this.props.ckey}.`))
         .catch(() => toast.error("Cannot rate at the moment."));
     }
@@ -426,6 +426,6 @@ class AdminContestDetails extends React.Component<AdminContestDetailsProps, Admi
   }
 }
 
-let wrappedPD: React.ComponentClass<AdminContestDetailsProps> = AdminContestDetails;
+let wrappedPD: React.ComponentType<any> = AdminContestDetails;
 wrappedPD = withParams(wrappedPD);
 export default wrappedPD;

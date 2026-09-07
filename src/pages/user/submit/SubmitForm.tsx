@@ -1,6 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 import { startPolling } from "redux/RecentSubmission/actions";
 
 import { toast } from "react-toastify";
@@ -119,7 +120,7 @@ class SubmitForm extends React.Component<SubmitFormProps, SubmitFormState> {
 
   componentDidMount() {
     const data = __ls_get_code_editor();
-    this.setState({ ...data });
+    this.setState({ ...(data as unknown as SubmitFormState) });
   }
 
   onCodeEditorChange() {
@@ -171,10 +172,10 @@ class SubmitForm extends React.Component<SubmitFormProps, SubmitFormState> {
   }
 }
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     startPolling: () => dispatch(startPolling()),
   };
 };
 
-export default connect(null, mapDispatchToProps)(SubmitForm);
+export default connect(null, mapDispatchToProps)(SubmitForm) as React.ComponentType<any>;

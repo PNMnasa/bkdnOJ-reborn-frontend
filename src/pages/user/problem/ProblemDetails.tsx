@@ -128,7 +128,10 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
       callback = (res) => {
         this.setState(
           {
-            data: { ...res.data.problem_data, ...res.data } as ProblemData,
+            data: {
+              ...(res.data.problem_data as Record<string, unknown>),
+              ...(res.data as Record<string, unknown>),
+            } as ProblemData,
             loaded: true,
           },
           () => this.updateContType(this.state.data as ProblemData)
@@ -163,7 +166,7 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
   }
 
   componentDidMount() {
-    const contest = this.context.contest;
+    const contest = this.context.contest as Record<string, unknown> | undefined;
     if (contest) {
       this.setState({ contest }, () => this.callApi());
     } else this.callApi();
@@ -217,7 +220,7 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
               <SpinLoader /> Loading...
             </span>
           )}
-          {loaded && errors && (
+          {loaded && !!errors && (
             <>
               <div className="flex-center-col" style={{ height: "100px" }}>
                 <VscError size={30} color="red" />
@@ -366,10 +369,10 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
   }
 }
 
-let WrappedPD = ProblemDetails as React.ComponentType<ProblemDetailsProps>;
+let WrappedPD = ProblemDetails as React.ComponentType<any>;
 WrappedPD = withParams(WrappedPD);
 const mapStateToProps = (state: { user: { user: { is_staff?: boolean } | null } }) => {
   return { user: state.user.user };
 };
-WrappedPD = connect(mapStateToProps, null)(WrappedPD) as React.ComponentType<ProblemDetailsProps>;
+WrappedPD = connect(mapStateToProps, null)(WrappedPD) as React.ComponentType<any>;
 export default WrappedPD;

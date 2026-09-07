@@ -65,7 +65,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
   }
 }
 
-let wrappedPD = AdminJudgeDetails;
+let wrappedPD: React.ComponentType<any> = AdminJudgeDetails;
 wrappedPD = withParams(wrappedPD);
 const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};

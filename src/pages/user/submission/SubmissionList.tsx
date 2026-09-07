@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 import { setPublicParams, setContestParams } from "redux/SubFilter/actions";
 
 import { Button, Table } from "react-bootstrap";
@@ -339,9 +340,9 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
   }
 
   componentDidMount() {
-    const contest = this.context.contest;
+    const contest = this.context.contest as Record<string, unknown> | undefined;
     if (contest) {
-      setTitle(`${String(contest.name)} | Submissions`);
+      setTitle(`${String((contest as { name?: string }).name)} | Submissions`);
       this.setState({ contest }, () => this.callApi({ page: this.state.currPage }));
     } else this.callApi({ page: this.state.currPage });
   }
@@ -410,7 +411,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
   }
 
   setFilterParams(key: string, value: string) {
-    const contest = this.context.contest;
+    const contest = this.context.contest as { key: string } | undefined;
     const oldParams =
       this.props.subFilter[contest ? contest.key : NO_CONTEST_KEY];
     const newParams = { ...oldParams, [key]: value };
@@ -481,7 +482,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
           <tbody>
             {!loaded ? (
               <tr>
-                <td colSpan="7">
+                <td colSpan={7}>
                   <SpinLoader margin="10px" />
                 </td>
               </tr>
@@ -548,7 +549,7 @@ const mapStateToProps = (state: {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     setContestParams: (key: string, params: Record<string, unknown>) =>
       dispatch(setContestParams({ key, params })),
@@ -556,4 +557,4 @@ const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmissionList);
+export default connect(mapStateToProps, mapDispatchToProps)(SubmissionList) as React.ComponentType<any>;

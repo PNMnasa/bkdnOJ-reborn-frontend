@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import {Button, Dropdown} from "react-bootstrap";
 
 import "./ContestStanding.scss";

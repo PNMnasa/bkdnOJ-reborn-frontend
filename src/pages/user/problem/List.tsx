@@ -42,6 +42,8 @@ interface ProblemListItemProps {
   is_organization_private?: boolean;
   contest?: boolean;
   label?: string;
+  rowid?: number;
+  [key: string]: unknown;
 }
 
 class ProblemListItem extends React.Component<ProblemListItemProps> {
@@ -224,9 +226,9 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
   }
 
   componentDidMount() {
-    const contest = this.context.contest;
+    const contest = this.context.contest as Record<string, unknown> | undefined;
     if (contest) {
-      setTitle(`${String(contest.name)} | Problems`);
+      setTitle(`${String((contest as { name?: string }).name)} | Problems`);
       this.setState({ contest }, () => this.callApi({ page: this.state.currPage }));
     } else this.callApi({ page: this.state.currPage });
   }
@@ -265,7 +267,7 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
           <tbody>
             {!loaded && (
               <tr>
-                <td colSpan="6">
+                <td colSpan={6}>
                   <SpinLoader margin="10px" />
                 </td>
               </tr>
@@ -287,7 +289,7 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
                 {this.state.count === 0 && (
                   <>
                     <tr>
-                      <td colSpan="6">
+                      <td colSpan={6}>
                         <em>No problem is available yet.</em>
                       </td>
                     </tr>
@@ -322,7 +324,7 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
   }
 }
 
-let Wrapped = ProblemList as React.ComponentType<ProblemListProps>;
+let Wrapped = ProblemList as React.ComponentType<any>;
 Wrapped = withParams(Wrapped);
 const mapStateToProps = (state: { user: { user: unknown }; myOrg: { selectedOrg: { slug?: string | null } } }) => {
   return {
@@ -330,5 +332,5 @@ const mapStateToProps = (state: { user: { user: unknown }; myOrg: { selectedOrg:
     selectedOrg: state.myOrg.selectedOrg,
   };
 };
-Wrapped = connect(mapStateToProps, null)(Wrapped) as React.ComponentType<ProblemListProps>;
+Wrapped = connect(mapStateToProps, null)(Wrapped) as React.ComponentType<any>;
 export default Wrapped;

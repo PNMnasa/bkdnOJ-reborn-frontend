@@ -1,7 +1,7 @@
 import React from "react";
 import {Form, Row, Col} from "react-bootstrap";
 
-interface SubmissionData {
+export interface SubmissionData {
   id: number | string;
   problem: {
     shortname: string;
@@ -217,9 +217,7 @@ export default class GeneralDetails extends React.Component<GeneralDetailsProps,
           </Form.Label>
           <Col>
             <Form.Control
-              lg={12}
               as="textarea"
-              size="md"
               id="source"
               defaultValue={data.source}
               disabled

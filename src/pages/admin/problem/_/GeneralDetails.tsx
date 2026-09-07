@@ -10,9 +10,12 @@ import commonAPI from "api/common";
 import {withNavigation} from "helpers/react-router";
 import {SpinLoader, FileUploader, RichTextEditor} from "components";
 
-import UserMultiSelect from "components/SelectMulti/User";
-import OrgMultiSelect from "components/SelectMulti/Org";
+import UserMultiSelectRaw from "components/SelectMulti/User";
+import OrgMultiSelectRaw from "components/SelectMulti/Org";
 import {qmClarify} from "helpers/components";
+
+const UserMultiSelect = UserMultiSelectRaw as React.ComponentType<any>;
+const OrgMultiSelect = OrgMultiSelectRaw as React.ComponentType<any>;
 
 interface GeneralDetailsProps {
   shortname: string;
@@ -48,7 +51,7 @@ class GeneralDetails extends React.Component<GeneralDetailsProps, GeneralDetails
     this.setState({selectedPdf: file});
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;
@@ -226,7 +229,7 @@ class GeneralDetails extends React.Component<GeneralDetailsProps, GeneralDetails
                 <Col className="pb-2">
                   <RichTextEditor
                     value={(data.content as string) || ""}
-                    onChange={(v: string) => this.setContent(v)}
+                    onChange={(v?: string) => this.setContent(v ?? "")}
                     enableEdit={true}
                   />
                 </Col>
@@ -550,7 +553,7 @@ class GeneralDetails extends React.Component<GeneralDetailsProps, GeneralDetails
               <FaRegSave /> Save
             </Button>
             {this.state.submitting && (
-              <SpinLoader size={20} margin="auto 0 auto 15px" />
+              <SpinLoader size="20" margin="auto 0 auto 15px" />
             )}
           </Col>
         </Row>
@@ -558,6 +561,6 @@ class GeneralDetails extends React.Component<GeneralDetailsProps, GeneralDetails
     );
   }
 }
-let wrapped = GeneralDetails;
+let wrapped: React.ComponentType<any> = GeneralDetails;
 wrapped = withNavigation(wrapped);
 export default wrapped;

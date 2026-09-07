@@ -1003,7 +1003,7 @@ class ContestStanding extends React.Component<ContestStandingProps, ContestStand
   }
 }
 
-let wrapped: React.ComponentType<ContestStandingProps> = ContestStanding as React.ComponentType<ContestStandingProps>;
+let wrapped: React.ComponentType<any> = ContestStanding as React.ComponentType<any>;
 const mapStateToProps = (state: {
   user: { user: StandingUserShape | null };
   standingFilter: { standingFilter: Record<string, StandingFilterEntryShape> };
@@ -1014,5 +1014,5 @@ const mapStateToProps = (state: {
     // profile: state.profile.profile,
   };
 };
-wrapped = connect(mapStateToProps, null)(wrapped) as React.ComponentType<ContestStandingProps>;
+wrapped = connect(mapStateToProps, null)(wrapped) as React.ComponentType<any>;
 export default wrapped;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import type { ReactNode, MouseEvent } from "react";
+import type { ReactNode } from "react";
 
 /**
  * https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
@@ -30,17 +30,17 @@ export default class OutsideAlerter extends Component<OutsideAlerterProps> {
   }
 
   componentDidMount() {
-    document.addEventListener("mousedown", this.handleClickOutside as EventListener);
+    document.addEventListener("mousedown", this.handleClickOutside);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside as EventListener);
+    document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
   /**
    * Alert if clicked on outside of element
    */
-  handleClickOutside(event: MouseEvent) {
+  handleClickOutside(event: Event) {
     if (!this.props.isDetecting) return;
     if (this.wrapperRef && !this.wrapperRef.current?.contains(event.target as Node)) {
       if (this.outsideClickHandler) this.outsideClickHandler();

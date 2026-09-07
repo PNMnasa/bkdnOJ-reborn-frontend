@@ -7,7 +7,13 @@ interface ClassicPaginationProps {
   count: number;
 }
 
-export default class ClassicPagination extends React.Component<ClassicPaginationProps> {
+interface ClassicPaginationState {
+  pageCount: number;
+  currPage: number;
+  count: number;
+}
+
+export default class ClassicPagination extends React.Component<ClassicPaginationProps, ClassicPaginationState> {
   constructor(props: ClassicPaginationProps) {
     super(props);
     this.state = {
@@ -18,11 +24,7 @@ export default class ClassicPagination extends React.Component<ClassicPagination
   }
 
   render() {
-    let { pageCount, currPage, count } = this.state as {
-      pageCount: number;
-      currPage: number;
-      count: number;
-    };
+    let { pageCount, currPage, count } = this.state;
     pageCount = this.props.pageCount && pageCount;
     currPage = this.props.currPage && currPage;
     count = this.props.count && count;

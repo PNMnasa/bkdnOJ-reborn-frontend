@@ -20,7 +20,8 @@ export default class Filter extends React.Component<FilterProps, FilterState> {
   constructor(props: FilterProps) {
     super(props);
     this.state = {
-      ...INITIAL_FILTER,
+      search: INITIAL_FILTER.search as string,
+      ordering: INITIAL_FILTER.ordering as string,
     };
   }
 

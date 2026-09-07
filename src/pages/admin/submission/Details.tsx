@@ -11,14 +11,9 @@ import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 
-import GeneralDetails from "./_/GeneralDetails";
+import GeneralDetails, {SubmissionData} from "./_/GeneralDetails";
 import TestcaseDetails from "./_/TestcaseDetails";
 import "./Details.scss";
-
-interface SubmissionData {
-  id: number | string;
-  [key: string]: unknown;
-}
 
 interface AdminSubmissionDetailsProps {
   params: Record<string, string | undefined>;
@@ -155,7 +150,7 @@ class AdminSubmissionDetails extends React.Component<AdminSubmissionDetailsProps
   }
 }
 
-let wrappedPD = AdminSubmissionDetails;
+let wrappedPD: React.ComponentType<any> = AdminSubmissionDetails;
 wrappedPD = withParams(wrappedPD);
 const mapStateToProps = (state: { user: { user: unknown } }) => {
   return {user: state.user.user};

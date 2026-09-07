@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 import { toast } from "react-toastify";
 
 import { Nav, NavDropdown } from "react-bootstrap";
@@ -50,16 +51,16 @@ const mapStateToProps = (state: RootStateShape) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
-    updateUser: (user: unknown) => dispatch(updateUser({ user })),
+    updateUser: (user: Record<string, unknown> | null) => dispatch(updateUser({ user })),
     clearUser: () => dispatch(clearUser()),
 
-    updateProfile: (profile: unknown) => dispatch(updateProfile({ profile })),
+    updateProfile: (profile: Record<string, unknown> | null) => dispatch(updateProfile({ profile })),
     clearProfile: () => dispatch(clearProfile()),
     clearMyOrg: () => dispatch(clearMyOrg()),
 
-    updateContest: (contest: unknown) => dispatch(updateContest({ contest })),
+    updateContest: (contest: Record<string, unknown> | null) => dispatch(updateContest({ contest })),
     clearContest: () => dispatch(clearContest()),
   };
 };
@@ -67,9 +68,9 @@ const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
 interface AuthorizedMenuProps {
   user: AuthUser;
   setRedirectUrl: (url: string) => void;
-  updateUser: (user: unknown) => void;
-  updateProfile: (profile: unknown) => void;
-  updateContest: (contest: unknown) => void;
+  updateUser: (user: Record<string, unknown> | null) => void;
+  updateProfile: (profile: Record<string, unknown> | null) => void;
+  updateContest: (contest: Record<string, unknown> | null) => void;
   clearUser: () => void;
   clearProfile: () => void;
   clearMyOrg: () => void;
@@ -111,10 +112,7 @@ class AuthorizedMenu extends React.Component<AuthorizedMenuProps> {
     const user = this.props.user;
     return (
       <>
-        <div className="nav-link" id="fake">
-          {`Hello, ${user.username}!`}
-        </div>
-        <NavDropdown id="nav-dropdown-userauth">
+        <NavDropdown id="nav-dropdown-userauth" title={`Hello, ${user.username}!`}>
           {user.is_staff && (
             <NavDropdown.Item as={Link} to="/admin">
               <GrUserAdmin className="react-icons" size={10} />
@@ -140,11 +138,11 @@ class AuthorizedMenu extends React.Component<AuthorizedMenuProps> {
   }
 }
 
-const ReduxAuthorizedMenu = connect(mapStateToProps, mapDispatchToProps)(AuthorizedMenu);
+const ReduxAuthorizedMenu = connect(mapStateToProps, mapDispatchToProps)(AuthorizedMenu as React.ComponentType<any>) as React.ComponentType<any>;
 
 interface UserAuthSectionProps {
   user: AuthUser | null;
-  updateUser: (user: unknown) => void;
+  updateUser: (user: Record<string, unknown> | null) => void;
 }
 
 class UserAuthSection extends React.Component<UserAuthSectionProps> {
@@ -189,10 +187,10 @@ class UserAuthSection extends React.Component<UserAuthSectionProps> {
     return (
       <ReduxAuthorizedMenu
         user={user}
-        setRedirectUrl={(url) => this.setState({ redirectUrl: url })}
+        setRedirectUrl={(url: string) => this.setState({ redirectUrl: url })}
       />
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserAuthSection);
+export default connect(mapStateToProps, mapDispatchToProps)(UserAuthSection) as React.ComponentType<any>;

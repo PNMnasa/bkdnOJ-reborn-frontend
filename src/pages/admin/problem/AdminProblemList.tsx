@@ -498,7 +498,7 @@ class NewProblemModal extends React.Component<NewProblemModalProps, NewProblemMo
     );
   }
 }
-const NaviNewProb = withNavigation(NewProblemModal);
+const NaviNewProb = withNavigation(NewProblemModal as React.ComponentType<any>) as React.ComponentType<any>;
 
 interface HelpModalProps {
   show: boolean;

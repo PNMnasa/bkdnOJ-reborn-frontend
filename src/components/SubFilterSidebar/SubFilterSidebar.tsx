@@ -1,6 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 import {
   setContestParams,
   clearContestParams,
@@ -152,7 +153,7 @@ class ContestSubFilterSidebar extends React.Component<
     const { contest } = this.context;
     const { user } = this.props;
 
-    const problems = (contest && (contest as ContestShape).problems) || [];
+    const problems = ((contest as ContestShape | null)?.problems) || [];
 
     const isLoggedIn = !!user;
     const isStaff = isLoggedIn && !!user!.is_staff;
@@ -365,7 +366,7 @@ class ContestSubFilterSidebar extends React.Component<
                       type="checkbox"
                       id="only-me"
                       className="ml-1 mr-1"
-                      checked={this.state.queryParams.me || false}
+                      checked={!!this.state.queryParams.me}
                       onChange={() =>
                         this.setParams("me", !this.state.queryParams.me)
                       }
@@ -380,7 +381,7 @@ class ContestSubFilterSidebar extends React.Component<
                         type="checkbox"
                         id="only-participant"
                         className="ml-1 mr-1"
-                        checked={this.state.queryParams.participants || false}
+                        checked={!!this.state.queryParams.participants}
                         onChange={() =>
                           this.setParams("participants", !this.state.queryParams.participants)
                         }
@@ -394,7 +395,7 @@ class ContestSubFilterSidebar extends React.Component<
                         type="checkbox"
                         id="only-participant"
                         className="ml-1 mr-1"
-                        checked={this.state.queryParams.spectators || false}
+                        checked={!!this.state.queryParams.spectators}
                         onChange={() =>
                           this.setParams("spectators", !this.state.queryParams.spectators)
                         }
@@ -447,7 +448,7 @@ const mapStateToProps = (state: {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
     setContestParams: (key: string, params: Record<string, unknown>) =>
       dispatch(setContestParams({ key, params })),
@@ -457,4 +458,4 @@ const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContestSubFilterSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(ContestSubFilterSidebar) as React.ComponentType<any>;

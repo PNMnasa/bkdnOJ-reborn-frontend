@@ -12,7 +12,9 @@ import {qmClarify} from "helpers/components";
 
 import {SpinLoader, ErrorBox} from "components";
 import OrgSingleSelect from "components/SelectSingle/Org";
-import OrgMultiSelect from "components/SelectMulti/Org";
+import OrgMultiSelectRaw from "components/SelectMulti/Org";
+
+const OrgMultiSelect = OrgMultiSelectRaw as React.ComponentType<any>;
 import contestAPI from "api/contest";
 import "./Participation.scss";
 import "styles/ClassicPagination.scss";
@@ -253,7 +255,7 @@ class Participation extends React.Component<ParticipationProps, ParticipationSta
     super(props);
     this.ckey = this.props.ckey;
     this.state = {
-      ...(INITIAL_STATE as ParticipationState),
+      ...(INITIAL_STATE as unknown as ParticipationState),
       filters: {},
       addParticipationModalShow: false,
       setOrganizationModalShow: false,
@@ -273,7 +275,7 @@ class Participation extends React.Component<ParticipationProps, ParticipationSta
   }
 
   resetFetch() {
-    this.setState({...INITIAL_STATE} as ParticipationState, () => this.refetch());
+    this.setState({...INITIAL_STATE} as unknown as ParticipationState, () => this.refetch());
   }
 
   refetch(params = {page: 0}) {
@@ -382,8 +384,8 @@ class Participation extends React.Component<ParticipationProps, ParticipationSta
         render() { parent.refetch(); return "Success."; },
       },
       error: {
-        render({data}) {
-          parent.setErrors(data.response?.data);
+        render(data: any) {
+          parent.setErrors(data.data?.response?.data);
           return "Update Failed.";
         },
       },
@@ -491,7 +493,7 @@ class Participation extends React.Component<ParticipationProps, ParticipationSta
                     </em></span></td></tr>
                   }
                   {participations.map((part, ridx) => {
-                    let name = `${part.user.first_name} ${part.user.last_name}`
+                    let name: string | null = `${part.user.first_name} ${part.user.last_name}`
                     if (name.length === 1) name = null;
 
                     return (

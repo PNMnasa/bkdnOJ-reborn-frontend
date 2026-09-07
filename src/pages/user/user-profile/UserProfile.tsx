@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 
 import { updateUser, clearUser } from "redux/User/actions";
 import { updateProfile } from "redux/Profile/actions";
@@ -123,7 +124,7 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
                 <SettingTab profile={profile} />
               </Tab>
               <Tab eventKey="about" title="About">
-                <AboutTab profile={profile} />
+                <AboutTab profile={profile as React.ComponentProps<typeof AboutTab>["profile"]} />
               </Tab>
             </Tabs>
           </Col>
@@ -132,6 +133,8 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
     );
   }
 }
+
+type MyOrg = { name?: string; short_name?: string; slug: string | null };
 
 const mapStateToProps = (state: {
   user: { user: unknown };
@@ -146,21 +149,25 @@ const mapStateToProps = (state: {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: unknown) => void) => {
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
   return {
-    updateUser: (user: unknown) => dispatch(updateUser({ user })),
-    updateProfile: (profile: unknown) => dispatch(updateProfile({ profile })),
+    updateUser: (user: unknown) =>
+      dispatch(updateUser({ user: user as Record<string, unknown> | null })),
+    updateProfile: (profile: unknown) =>
+      dispatch(updateProfile({ profile: profile as Record<string, unknown> | null })),
     clearUser: () => dispatch(clearUser()),
     updateMyOrg: ({
       memberOf,
       adminOf,
       selectedOrg,
     }: {
-      memberOf: unknown[];
-      adminOf: unknown[];
-      selectedOrg: unknown;
+      memberOf: MyOrg[];
+      adminOf: MyOrg[];
+      selectedOrg?: MyOrg;
     }) => dispatch(updateMyOrg({ memberOf, adminOf, selectedOrg })),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  UserProfile as React.ComponentType<any>
+) as React.ComponentType<any>;

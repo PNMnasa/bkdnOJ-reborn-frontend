@@ -71,7 +71,7 @@ class AdminContestNew extends React.Component<Record<string, unknown>, AdminCont
       })
       .catch((err: {response?: {data: unknown; status?: number}}) => {
         toast.error(`Cannot create. (${err.response?.status})`);
-        const data = err.response?.data;
+        const data = err.response?.data as Record<string, unknown> | undefined;
         let errors = {...data};
         this.setState({errors});
       });

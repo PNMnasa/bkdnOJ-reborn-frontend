@@ -75,6 +75,7 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
       loaded: false,
       errors: null,
       data: {
+        id: id || "",
         status: ".",
       },
     };
@@ -143,6 +144,7 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
             loaded: false,
             errors: null,
             data: {
+              id: this.state.id,
               status: ".",
             },
           },
@@ -219,7 +221,7 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
               <SpinLoader /> Loading...
             </span>
           )}
-          {loaded && errors && (
+          {loaded && !!errors && (
             <>
               <div className="flex-center-col" style={{ height: "100px" }}>
                 <VscError size={30} color="red" />
@@ -390,10 +392,10 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
   }
 }
 
-let Wrapped = SubmissionDetails as React.ComponentType<SubmissionDetailsProps>;
+let Wrapped = SubmissionDetails as React.ComponentType<any>;
 Wrapped = withParams(Wrapped);
 const mapStateToProps = (state: { user: { user: { is_staff?: boolean } | null } }) => {
   return { user: state.user.user };
 };
-Wrapped = connect(mapStateToProps, null)(Wrapped) as React.ComponentType<SubmissionDetailsProps>;
+Wrapped = connect(mapStateToProps, null)(Wrapped) as React.ComponentType<any>;
 export default Wrapped;

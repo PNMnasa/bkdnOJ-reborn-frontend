@@ -7,8 +7,11 @@ import contestAPI from "api/contest";
 import {ErrorBox, RichTextEditor} from "components";
 import {withNavigation} from "helpers/react-router";
 
-import UserMultiSelect from "components/SelectMulti/User";
-import OrgMultiSelect from "components/SelectMulti/Org";
+import UserMultiSelectRaw from "components/SelectMulti/User";
+import OrgMultiSelectRaw from "components/SelectMulti/Org";
+
+const UserMultiSelect = UserMultiSelectRaw as React.ComponentType<any>;
+const OrgMultiSelect = OrgMultiSelectRaw as React.ComponentType<any>;
 
 interface GeneralProps {
   ckey: string;
@@ -290,7 +293,6 @@ class General extends React.Component<GeneralProps, GeneralState> {
                     {" "}
                     <Form.Control
                       size="sm"
-                      xl={12}
                       as="textarea"
                       placeholder="JSON - Describe custom contest rules"
                       id="format_config"
@@ -309,10 +311,10 @@ class General extends React.Component<GeneralProps, GeneralState> {
                     <RichTextEditor
                       value={(data.description as string) || ""}
                       enableEdit={true}
-                      onChange={(v: string) => {
+                      onChange={(v?: string) => {
                         let newData = this.state.data;
                         let key = "description";
-                        newData[key] = v;
+                        newData[key] = v ?? "";
                         this.setState({data: newData});
                       }}
                     />
@@ -684,6 +686,6 @@ class General extends React.Component<GeneralProps, GeneralState> {
   }
 }
 
-let wrapped: React.ComponentClass<GeneralProps> = General;
+let wrapped: React.ComponentType<any> = General;
 wrapped = withNavigation(wrapped);
 export default wrapped;

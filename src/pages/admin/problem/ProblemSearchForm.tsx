@@ -25,7 +25,12 @@ export default class ProblemSearchForm extends React.Component<ProblemSearchForm
   constructor(props: ProblemSearchFormProps) {
     super(props);
     this.state = {
-      ...PROBLEM_INITIAL_FILTER,
+      search: PROBLEM_INITIAL_FILTER.search as string,
+      ordering: PROBLEM_INITIAL_FILTER.ordering as string,
+      is_public: PROBLEM_INITIAL_FILTER.is_public as string,
+      is_organization_private: PROBLEM_INITIAL_FILTER.is_organization_private as string,
+      partial: PROBLEM_INITIAL_FILTER.partial as string,
+      short_circuit: PROBLEM_INITIAL_FILTER.short_circuit as string,
     };
   }
 

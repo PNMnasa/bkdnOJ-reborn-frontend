@@ -9,11 +9,11 @@ interface OneColumnProps {
 
 export default class OneColumn extends React.Component<OneColumnProps> {
   render() {
-    let mainContent = this.props.mainContent;
-    if (!mainContent) {
-      mainContent = [];
-    }
-    if (!(mainContent instanceof Array)) mainContent = [mainContent];
+    let mainContent: ReactNode[] = Array.isArray(this.props.mainContent)
+      ? this.props.mainContent
+      : this.props.mainContent
+        ? [this.props.mainContent]
+        : [];
 
     return (
       <div className="one-column-wrapper">

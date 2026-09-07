@@ -67,20 +67,21 @@ class ContestSidebar extends React.Component<{}, ContestSidebarState> {
   }
 
   componentDidUpdate(prevProps: {}, prevState: ContestSidebarState) {
-    const { contest } = this.context;
+    const contest = this.context.contest as ContestShape | null;
     if (prevState.contest !== contest) {
       this.setState({ contest });
 
-      let start_time = new Date(contest.start_time ?? "").getTime();
-      let end_time = new Date(contest.end_time ?? "").getTime();
-      if (!contest.end_time) {
-        const hms = this.time_limit;
-        const a = hms.split(":");
-        const seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
-        end_time = start_time + seconds * 1000;
+      if (contest) {
+        let start_time = new Date(contest.start_time ?? "").getTime();
+        let end_time = new Date(contest.end_time ?? "").getTime();
+        if (!contest.end_time) {
+          const hms = this.time_limit;
+          const a = hms.split(":");
+          const seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
+          end_time = start_time + seconds * 1000;
+        }
+        this.setState({ time_left: Math.floor((end_time - new Date().getTime()) / 1000) });
       }
-
-      this.setState({ time_left: Math.floor((end_time - new Date().getTime()) / 1000) });
 
       if (this.timer) clearInterval(this.timer);
       this.timer = setInterval(() => {
@@ -92,7 +93,7 @@ class ContestSidebar extends React.Component<{}, ContestSidebarState> {
   }
 
   componentDidMount() {
-    this.setState({ contest: this.context.contest });
+    this.setState({ contest: this.context.contest as ContestShape | null });
   }
   componentWillUnmount() {
     if (this.timer) clearInterval(this.timer);

@@ -69,7 +69,7 @@ class App extends React.Component<AppProps> {
 
   render() {
     return (
-      <HistoryRouter history={history}>
+      <HistoryRouter history={history as any}>
         <Routes>
           {this.isAdmin() && (
             <>
@@ -307,4 +307,4 @@ const mapStateToProps = (state: { user: { user: AppProps["user"] } }) => {
   };
 };
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, null)(App) as React.ComponentType<any>;

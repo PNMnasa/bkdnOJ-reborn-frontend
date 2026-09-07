@@ -88,7 +88,7 @@ export default class TestDataDetails extends React.Component<TestDataDetailsProp
     this.setState({selectedCustomChecker: file});
   }
 
-  inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>, params = {isCheckbox: false}) {
+  inputChangeHandler(event: React.ChangeEvent<any>, params = {isCheckbox: false}) {
     const isCheckbox = params.isCheckbox || false;
 
     let newData = this.state.data;

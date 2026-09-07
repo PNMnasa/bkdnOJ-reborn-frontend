@@ -23,6 +23,8 @@ interface ProblemListItemProps {
   points: number;
   contest?: boolean;
   label?: string;
+  rowid?: number;
+  [key: string]: unknown;
 }
 
 class ProblemListItem extends React.Component<ProblemListItemProps> {
@@ -135,9 +137,9 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
   }
 
   componentDidMount() {
-    const contest = this.context.contest;
+    const contest = this.context.contest as Record<string, unknown> | undefined;
     if (contest) {
-      setTitle(`${String(contest.name)} | Problems`);
+      setTitle(`${String((contest as { name?: string }).name)} | Problems`);
       this.setState({ contest }, () => this.callApi({ page: this.state.currPage }));
     } else this.callApi({ page: this.state.currPage });
   }
@@ -167,7 +169,7 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
           <tbody>
             {!loaded && (
               <tr>
-                <td colSpan="6">
+                <td colSpan={6}>
                   <SpinLoader margin="10px" />
                 </td>
               </tr>
@@ -189,7 +191,7 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
                 {this.state.count === 0 && (
                   <>
                     <tr>
-                      <td colSpan="6">
+                      <td colSpan={6}>
                         <em>No problem is available yet.</em>
                       </td>
                     </tr>
@@ -223,7 +225,7 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
 }
 ProblemList.contextType = ContestContext;
 
-let Wrapped = ProblemList as React.ComponentType<ProblemListProps>;
+let Wrapped = ProblemList as React.ComponentType<any>;
 Wrapped = withParams(Wrapped);
 
 export default Wrapped;
