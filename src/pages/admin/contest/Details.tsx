@@ -64,7 +64,6 @@ class RateButton extends React.Component<RateButtonProps, RateButtonState> {
 
   componentDidUpdate(prevProps: RateButtonProps, prevState: RateButtonState) {
     if (prevState.confirmRate === false && this.state.confirmRate === true) {
-      const data = {key: this.props.ckey};
       contestAPI
         .rateContest({key: this.props.ckey, data: {}} as any)
         .then(() => toast.success(`OK Rated contest ${this.props.ckey}.`))
