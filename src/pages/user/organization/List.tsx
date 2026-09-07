@@ -309,8 +309,8 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
       .then((res) => {
         this.setState({ loaded: true, org: res.data });
       })
-      .catch((err: { response: { data: unknown } }) => {
-        this.setState({ loaded: true, errors: err.response.data });
+.catch((err: { response?: { data?: unknown } }) => {
+        this.setState({ loaded: true, errors: err.response?.data });
       });
   }
 
@@ -340,9 +340,9 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
           toast.success(`Welcome to ${slug}.`);
           this.fetch();
         })
-        .catch((err: { response: { data: { error?: string }; status?: number } }) => {
-          if (err.response.data.error) toast.error(`${err.response.data.error}`);
-          else toast.error(`Cannot join. (${err.response.status})`);
+.catch((err: { response?: { data?: { error?: string }; status?: number } }) => {
+          if (err.response?.data?.error) toast.error(`${err.response.data.error}`);
+          else toast.error(`Cannot join. (${err.response?.status})`);
         });
     } else {
       const conf = window.confirm(`Gia nhập tổ chức ${slug}?`);
@@ -354,9 +354,9 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
           toast.success(`Welcome to ${slug}.`);
           this.fetch();
         })
-        .catch((err: { response: { data: { error?: string }; status?: number } }) => {
-          if (err.response.data.error) toast.error(`${err.response.data.error}`);
-          else toast.error(`Cannot join. (${err.response.status})`);
+.catch((err: { response?: { data?: { error?: string }; status?: number } }) => {
+          if (err.response?.data?.error) toast.error(`${err.response.data.error}`);
+          else toast.error(`Cannot join. (${err.response?.status})`);
         });
     }
   }

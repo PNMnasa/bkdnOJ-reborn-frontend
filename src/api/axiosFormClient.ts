@@ -58,16 +58,18 @@ axiosFormClient.interceptors.response.use(
     }
 
     const res = error.response;
+    if (!res) {
+      return Promise.reject(error);
+    }
+
     switch (res.status) {
       case 401:
         break;
       case 403:
-        if (res.data) {
-          if (res.data.code === "token_not_valid") {
-            __ls_remove_credentials();
-            localStorage.removeItem("persist:root");
-            window.location.href = "/sign-in";
-          }
+        if (res.data && res.data.code === "token_not_valid") {
+          __ls_remove_credentials();
+          localStorage.removeItem("persist:root");
+          window.location.href = "/sign-in";
         }
         break;
       default:

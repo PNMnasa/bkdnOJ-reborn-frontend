@@ -144,10 +144,10 @@ class JudgeStatuses extends React.Component<JudgeStatusesProps, JudgeStatusesSta
           loaded: true,
         });
       })
-      .catch((err: { response: { data: unknown } }) => {
+      .catch((err: { response?: { data?: unknown } }) => {
         this.setState({
           loaded: true,
-          errors: err.response.data || "Cannot fetch judges. Please retry again.",
+          errors: err.response?.data || "Cannot fetch judges. Please retry again.",
         });
       });
   }

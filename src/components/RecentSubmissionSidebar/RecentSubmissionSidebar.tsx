@@ -172,11 +172,11 @@ class RecentSubmissionSidebar extends React.Component<
           pageCount: res.data.total_pages,
         });
       })
-      .catch((err) => {
+      .catch((err: { response?: { data?: unknown } }) => {
         this.setState({
           isPolling: false,
           loaded: true,
-          errors: err.response.data,
+          errors: (err.response?.data as Record<string, unknown>) || null,
           count: 0,
         });
       });
