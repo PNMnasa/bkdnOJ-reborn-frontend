@@ -107,7 +107,7 @@ export default class TestDataDetails extends React.Component<TestDataDetailsProp
     }
 
     let {
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       zipfile,
       ...sendData
     } = this.state.data;

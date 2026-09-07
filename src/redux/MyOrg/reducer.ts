@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 import { UPDATE, UPDATE_SELECT, CLEAR } from "./types";
 
 const INITIAL_SELECTED_ORG = {

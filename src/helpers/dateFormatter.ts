@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 function getWeekDayShort(dateobj: Date): string {
   return dateobj.toLocaleDateString("en-US", { weekday: "short" });
 }

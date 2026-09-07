@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 import {
   SET_CONTEST_PARAMS,
   SET_PUBLIC_PARAMS,

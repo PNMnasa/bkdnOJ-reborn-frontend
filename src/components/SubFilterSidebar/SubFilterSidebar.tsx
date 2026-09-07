@@ -156,7 +156,6 @@ class ContestSubFilterSidebar extends React.Component<
 
     const isLoggedIn = !!user;
     const isStaff = isLoggedIn && !!user!.is_staff;
-    const isSuperuser = isStaff && !!user!.is_superuser;
     const isInContest = !!contest;
 
     return (

@@ -24,6 +24,7 @@ export default class DropdownTreeNoRerender extends Component<DropdownTreeNoRere
   };
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, ...rest } = this.props;
     return <DropdownTreeSelect data={this.state.data} {...rest} />;
   }

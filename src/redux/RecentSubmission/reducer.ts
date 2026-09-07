@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 import { START_POLLING, STOP_POLLING } from "./types";
 
 const INITIAL_STATE = {

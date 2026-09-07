@@ -17,7 +17,9 @@ axiosClient.interceptors.request.use(
   (config) => {
     const access_token = __ls_get_access_token();
     if (access_token) {
-      config.headers["Authorization"] = "Bearer " + access_token;
+      if (config.headers) {
+        config.headers["Authorization"] = "Bearer " + access_token;
+      }
     }
     return config;
   },

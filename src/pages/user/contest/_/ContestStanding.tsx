@@ -351,7 +351,7 @@ interface ContestStandingState {
 
 class ContestStanding extends React.Component<ContestStandingProps, ContestStandingState> {
   static contextType = ContestContext;
-  declare context: Record<string, unknown>;
+  context: Record<string, unknown> = {};
 
   private timer?: ReturnType<typeof setInterval>;
   private bestSolutions: Record<string, unknown> = {};

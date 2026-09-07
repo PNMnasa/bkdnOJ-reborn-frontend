@@ -63,7 +63,7 @@ interface SubmissionDetailsState {
 
 class SubmissionDetails extends React.Component<SubmissionDetailsProps, SubmissionDetailsState> {
   static contextType = ContestContext;
-  declare context: Record<string, unknown>;
+  context: Record<string, unknown> = {};
   private timer?: ReturnType<typeof setInterval>;
   private user: { is_staff?: boolean } | null;
 

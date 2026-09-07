@@ -190,7 +190,7 @@ class RecentSubmissionSidebar extends React.Component<
       if (this.timer) clearInterval(this.timer);
       return;
     }
-    if (!!this.state.errors) {
+    if (this.state.errors) {
       if (this.timer) clearInterval(this.timer);
       return;
     }

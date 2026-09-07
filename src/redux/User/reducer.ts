@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 import { UPDATE, CLEAR } from "./types";
 import { __ls_remove_credentials } from "helpers/localStorageHelpers";
 

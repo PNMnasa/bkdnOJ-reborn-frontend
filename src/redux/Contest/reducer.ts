@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 import { UPDATE, CLEAR } from "./types";
 
 const INITIAL_STATE = {

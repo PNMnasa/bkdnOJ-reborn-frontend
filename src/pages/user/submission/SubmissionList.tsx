@@ -258,7 +258,7 @@ interface SubmissionListState {
 
 class SubmissionList extends React.Component<SubmissionListProps, SubmissionListState> {
   static contextType = ContestContext;
-  declare context: Record<string, unknown>;
+  context: Record<string, unknown> = {};
 
   constructor(props: SubmissionListProps) {
     super(props);

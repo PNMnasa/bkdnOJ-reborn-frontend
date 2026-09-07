@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect } from "react";
 import { parseTime, parseMem } from "helpers/textFormatter";
 import { Link } from "react-router-dom";
 import { Row, Col, Table } from "react-bootstrap";

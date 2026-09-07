@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 import {
   ADD_CONTEST,
   ADD_FAVORITE_TEAM,

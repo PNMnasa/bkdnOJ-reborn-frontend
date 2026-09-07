@@ -58,7 +58,7 @@ interface ProblemDetailsState {
 
 class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetailsState> {
   static contextType = ContestContext;
-  declare context: Record<string, unknown>;
+  context: Record<string, unknown> = {};
   private user: { is_staff?: boolean } | null;
   private shortname: string;
 
@@ -120,7 +120,7 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
 
     let endpoint: (args: Record<string, unknown>) => Promise<{ data: ProblemData }>;
     let data: Record<string, unknown>;
-    let callback = (res: { data: ProblemData }) => {};
+    let callback = (_res: { data: ProblemData }) => {};
     const prms = null;
     if (this.state.contest) {
       endpoint = contestAPI.getContestProblem as never;

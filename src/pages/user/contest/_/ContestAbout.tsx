@@ -21,7 +21,7 @@ interface ContestAboutProps {
 
 class ContestAbout extends React.Component<ContestAboutProps> {
   static contextType = ContestContext;
-  declare context: Record<string, unknown>;
+  context: Record<string, unknown> = {};
 
   constructor(props: ContestAboutProps) {
     super(props);

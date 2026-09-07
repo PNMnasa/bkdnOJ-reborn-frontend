@@ -1,6 +1,5 @@
 import React from "react";
 import {Button, Dropdown} from "react-bootstrap";
-import type { ChangeEvent } from "react";
 
 import "./ContestStanding.scss";
 import "styles/Ratings.scss";

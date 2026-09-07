@@ -170,7 +170,7 @@ interface ProblemListState {
 
 class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
   static contextType = ContestContext;
-  declare context: Record<string, unknown>;
+  context: Record<string, unknown> = {};
 
   constructor(props: ProblemListProps) {
     super(props);
