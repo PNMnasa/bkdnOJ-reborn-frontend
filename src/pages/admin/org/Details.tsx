@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import {Link, Navigate} from "react-router-dom";
+import {Link, Navigate} from "react-router";
 import {Form, Row, Col, Button, Tabs, Tab} from "react-bootstrap";
 import {FaRedo, FaRegTrashAlt} from "react-icons/fa";
 
@@ -40,7 +40,6 @@ interface OrgData {
   member_count?: number;
   real_member_count?: number;
   suborg_count?: number;
-  becomeRoot?: boolean;
   become_root?: boolean;
   new_parent_org?: string | null;
   parent_org?: {
@@ -129,9 +128,10 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
       .catch((err: { response?: { status: number; data: unknown } }) => {
         toast.error(`Cannot update (${err.response?.status})`);
         this.setState({
-          errors: {errors: err.response?.data} || [
-            "Cannot update organization information.",
-          ],
+          errors:
+            err.response?.data != null
+              ? {errors: err.response.data}
+              : ["Cannot update organization information."],
         });
       });
   }
@@ -151,9 +151,10 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
       .catch((err: { response?: { status: number; data: unknown } }) => {
         toast.error(`Cannot delete. (${err.response?.status})`);
         this.setState({
-          errors: {errors: err.response?.data} || [
-            "Cannot delete this organization.",
-          ],
+          errors:
+            err.response?.data != null
+              ? {errors: err.response.data}
+              : ["Cannot delete this organization."],
         });
       });
   }
@@ -546,9 +547,9 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
                               </Form.Label>
                               <input
                                 type="checkbox"
-                                id="become_oot"
+                                id="become_root"
                                 className="w-100"
-                                value={this.state.data?.becomeRoot as unknown as string}
+                                value={this.state.data?.become_root as unknown as string}
                                 onChange={e =>
                                   this.setState({
                                     data: {

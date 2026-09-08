@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { Modal, Button } from "react-bootstrap";
 
 import { BsExclamationCircle, BsFillLightningChargeFill } from "react-icons/bs";

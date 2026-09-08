@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import {toast} from "react-toastify";
 import {Form, Row, Col, Button, Accordion} from "react-bootstrap";
 
 import contestAPI from "api/contest";
-import {ErrorBox, RichTextEditor} from "components";
+import {ErrorBox} from "components";
+import RichTextEditor from "components/RichTextEditor/RichTextEditor";
 import {withNavigation} from "helpers/react-router";
 
 import UserMultiSelectRaw from "components/SelectMulti/User";

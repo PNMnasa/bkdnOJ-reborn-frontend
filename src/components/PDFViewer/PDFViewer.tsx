@@ -4,6 +4,8 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.js?url";
+
 import { __ls_get_access_token } from "helpers/localStorageHelpers";
 import "./PDFViewer.scss";
 
@@ -24,7 +26,7 @@ function PDFViewer({ pdf }: PDFViewerProps) {
   return (
     <div className="problem-detail-pdf-container">
       {pdf ? (
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
+        <Worker workerUrl={pdfjsWorkerUrl}>
           <Viewer
             fileUrl={pdfUrl!}
             defaultScale={SpecialZoomLevel.PageWidth}

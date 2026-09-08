@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import ReactPaginate from "react-paginate";
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Table, Button } from "react-bootstrap";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";

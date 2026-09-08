@@ -2,7 +2,7 @@ import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import {Button, Table} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 
 import {SpinLoader, ErrorBox, UserCard} from "components";
 import SubListModal from "./SubListModal";
@@ -354,7 +354,6 @@ class ContestStanding extends React.Component<ContestStandingProps, ContestStand
   context: Record<string, unknown> = {};
 
   private timer?: ReturnType<typeof setInterval>;
-  private bestSolutions: Record<string, unknown> = {};
 
   constructor(props: ContestStandingProps) {
     super(props);
@@ -618,8 +617,8 @@ class ContestStanding extends React.Component<ContestStandingProps, ContestStand
     this.setHighlightUser(username);
   }
 
-  setBestSolutions(_bestSolutions: unknown): void {
-    // no-op
+  setBestSolutions(newBest: unknown): void {
+    this.setState({bestSolutions: newBest as Record<string, BestSolutionShape>});
   }
 
   componentDidMount() {
@@ -982,7 +981,7 @@ class ContestStanding extends React.Component<ContestStandingProps, ContestStand
                       setSubListData={d => this.setSubListData(d)}
 
                       contest={this.context.contest as { format_name?: string; [key: string]: unknown }}
-                      bestSolutions={this.bestSolutions}
+                      bestSolutions={this.state.bestSolutions}
                       setBestSolutions={newBest => this.setBestSolutions(newBest)}
                     />
                   )

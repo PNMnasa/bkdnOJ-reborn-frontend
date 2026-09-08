@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 
 import {
@@ -16,7 +16,8 @@ import PDFViewer from "components/PDFViewer/PDFViewer";
 
 import contestAPI from "api/contest";
 import problemAPI from "api/problem";
-import { SpinLoader, RichTextEditor } from "components";
+import { SpinLoader } from "components";
+import RichTextEditor from "components/RichTextEditor/RichTextEditor";
 import { withParams } from "helpers/react-router";
 import { setTitle } from "helpers/setTitle";
 

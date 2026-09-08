@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import ReactPaginate from "react-paginate";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {Button, Table, Form, Modal} from "react-bootstrap";
 
 import {FaRegFileArchive, FaQuestionCircle} from "react-icons/fa";

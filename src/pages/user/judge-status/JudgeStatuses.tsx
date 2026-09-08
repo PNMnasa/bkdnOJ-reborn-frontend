@@ -88,7 +88,7 @@ class JudgeStatus extends React.Component<JudgeStatusProps, JudgeStatusState> {
           </td>
           <td style={{ minWidth: "100px" }}>{this.state.upTime}</td>
           <td>{!isNaN(Number(load)) ? Number(load).toFixed(2) : "N/A"}</td>
-          <td>{!isNaN(Number(ping)) ? `${(Number(load) * 1000).toFixed(2)} ms` : "N/A"}</td>
+          <td>{!isNaN(Number(ping)) ? `${(Number(ping) * 1000).toFixed(2)} ms` : "N/A"}</td>
         </tr>
       </>
     );

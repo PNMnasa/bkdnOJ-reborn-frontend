@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import {Navigate} from "react-router-dom";
+import {Navigate} from "react-router";
 import {Button, Tabs, Tab} from "react-bootstrap";
 import {
   FaGlobe,
@@ -149,8 +149,9 @@ class AdminContestDetails extends React.Component<AdminContestDetailsProps, Admi
         this.setState({
           loaded: true,
           errors:
-            {errors: err.response?.data} ||
-            `Cannot load contest. (${err.response?.status})`,
+            err.response?.data != null
+              ? err.response.data
+              : `Cannot load contest. (${err.response?.status})`,
         });
       });
   }
@@ -171,7 +172,7 @@ class AdminContestDetails extends React.Component<AdminContestDetailsProps, Admi
         .deleteContest({key: this.key})
         .then(() => {
           toast.success("OK Deleted.");
-          this.setState({redirectUrl: "/admin/contest/"});
+          this.setState({redirectUrl: "/admin/contests"});
         })
         .catch((err: {response?: {data: unknown; status?: number}}) => {
           toast.error(`Cannot delete. (${err})`);

@@ -4,7 +4,7 @@ import type { AnyAction } from "redux";
 import { toast } from "react-toastify";
 
 import { Nav, NavDropdown } from "react-bootstrap";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router";
 
 import {
   AiOutlineForm,
@@ -112,8 +112,11 @@ class AuthorizedMenu extends React.Component<AuthorizedMenuProps> {
     const user = this.props.user;
     return (
       <>
-        <NavDropdown id="nav-dropdown-userauth" title={`Hello, ${user.username}!`}>
-          {user.is_staff && (
+        <div className="nav-link" id="fake">
+          {`Hello, ${user.username}!`}
+        </div>
+        <NavDropdown id="nav-dropdown-userauth" title="">
+          {(user.is_staff || user.is_superuser) && (
             <NavDropdown.Item as={Link} to="/admin">
               <GrUserAdmin className="react-icons" size={10} />
               Admin

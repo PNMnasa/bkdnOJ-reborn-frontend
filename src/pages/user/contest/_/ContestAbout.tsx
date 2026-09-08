@@ -3,7 +3,7 @@ import {VscInfo} from "react-icons/vsc";
 import {Badge, Button} from "react-bootstrap";
 import {toast} from "react-toastify";
 
-import {RichTextEditor} from "components";
+import RichTextEditor from "components/RichTextEditor/RichTextEditor";
 import contestAPI from "api/contest";
 import {setTitle} from "helpers/setTitle";
 import {secondsToHHMMSS} from "helpers/durationFormatter";

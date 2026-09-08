@@ -1,7 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import { __ls_get_access_token, __ls_remove_credentials } from "helpers/localStorageHelpers";
+import {
+  __ls_get_access_token,
+  __ls_remove_credentials,
+} from "helpers/localStorageHelpers";
+import { LS_PERSIST_ROOT } from "constants/localStorageKeys";
 
 import { getConnectionUrl } from "./urls";
 
@@ -73,7 +77,7 @@ axiosClient.interceptors.response.use(
       case 403:
         if (res.data && res.data.code === "token_not_valid") {
           __ls_remove_credentials();
-          localStorage.removeItem("persist:root");
+          localStorage.removeItem(LS_PERSIST_ROOT);
           window.location.href = "/sign-in";
         }
         break;

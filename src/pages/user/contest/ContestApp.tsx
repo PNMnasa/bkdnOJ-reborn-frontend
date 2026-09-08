@@ -3,7 +3,7 @@ import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router";
 import {VscError} from "react-icons/vsc";
 
 import {OneColumn} from "layout";

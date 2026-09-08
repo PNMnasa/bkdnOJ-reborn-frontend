@@ -51,6 +51,109 @@ function resolveAliases() {
   return aliases;
 }
 
+function manualChunks(id: string): string | undefined {
+  if (!id.includes("node_modules")) {
+    return undefined;
+  }
+  const parts = id.split("node_modules");
+  const last = parts[parts.length - 1].replace(/^[\\/]+/, "");
+  const [first, second] = last.split("/");
+  const pkgName = last.startsWith("@") && second ? `${first}/${second}` : first;
+
+  const is = (...names: string[]) => names.some((n) => pkgName === n);
+  const starts = (...prefixes: string[]) =>
+    prefixes.some((p) => pkgName.startsWith(p));
+
+  if (
+    ["@react-pdf-viewer", "pdfjs-dist"].some((n) => pkgName.startsWith(n))
+  ) {
+    return "chunk-pdf";
+  }
+  if (is("react-ace") || pkgName.startsWith("ace-builds")) {
+    return "chunk-editor";
+  }
+  if (
+    is("@uiw/react-md-editor", "react-markdown", "katex") ||
+    starts(
+      "remark",
+      "rehype",
+      "unified",
+      "micromark",
+      "mdast",
+      "hast",
+      "unist",
+      "vfile",
+      "character-entities",
+      "comma-separated-tokens",
+      "decode-named-character-reference",
+      "html-void-elements",
+      "css-selector-parser",
+      "style-to-object",
+      "inline-style-parser",
+      "property-information",
+      "space-separated-tokens",
+      "stringify-entities",
+      "web-namespaces",
+      "zwitch",
+      "bail",
+      "trough",
+      "devlop",
+      "extend"
+    )
+  ) {
+    return "chunk-markdown";
+  }
+  if (
+    starts("@floating-ui") ||
+    is("react-select", "react-dropdown-tree-select", "memoize-one", "use-memo-one")
+  ) {
+    return "chunk-select";
+  }
+  if (
+    is(
+      "react",
+      "react-dom",
+      "react-router",
+      "react-router-dom",
+      "react-redux",
+      "redux",
+      "redux-persist",
+      "scheduler",
+      "use-sync-external-store",
+      "react-is",
+      "hoist-non-react-statics"
+    )
+  ) {
+    return "chunk-react";
+  }
+  if (
+    starts("@popperjs") ||
+    is(
+      "react-bootstrap",
+      "bootstrap",
+      "react-toastify",
+      "react-icons",
+      "react-paginate",
+      "react-transition-group",
+      "classnames",
+      "prop-types",
+      "invariant",
+      "overlayscrollbars"
+    )
+  ) {
+    return "chunk-ui";
+  }
+  return undefined;
+}
+
+const stripTrailingSlash = (url: string): string => url.replace(/\/+$/, "");
+
+function backendTarget(env: Record<string, string>): string {
+  const host = stripTrailingSlash(env.REACT_APP_DEV_BACKEND_URL || "http://localhost");
+  const port = env.REACT_APP_DEV_BACKEND_PORT;
+  return port && !/:\d+$/.test(host) ? `${host}:${port}` : host;
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const define = {
@@ -70,6 +173,12 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: true,
+      proxy: {
+        "/api": {
+          target: backendTarget(env),
+          changeOrigin: true,
+        },
+      },
     },
     css: {
       preprocessorOptions: {
@@ -87,7 +196,14 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: "dist",
+      chunkSizeWarningLimit: 1200,
+      rollupOptions: {
+        output: {
+          manualChunks,
+        },
+      },
     },
+    base: "./",
     define,
   };
 });

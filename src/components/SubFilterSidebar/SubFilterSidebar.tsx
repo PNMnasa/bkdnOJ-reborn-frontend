@@ -162,9 +162,7 @@ class ContestSubFilterSidebar extends React.Component<
     return (
       <div className="wrapper-vanilla" id="sub-filter">
         <h4>Submissions Filter</h4>
-        {true && (
-          <>
-            <div className="flex-center-col text-left filter-panel">
+        <div className="flex-center-col text-left filter-panel">
               <Row className="m-0 w-100">
                 <Col>
                   <label
@@ -429,9 +427,7 @@ class ContestSubFilterSidebar extends React.Component<
                 <FaFilter /> Filter
               </Button>
             </div>
-          </>
-        )}
-      </div>
+          </div>
     );
   }
 }

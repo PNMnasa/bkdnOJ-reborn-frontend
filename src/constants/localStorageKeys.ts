@@ -3,3 +3,4 @@ export const LS_REFRESH_TOKEN = "LS_REFRESH_TOKEN";
 export const LS_AUTH_USER = "LS_AUTH_USER";
 export const LS_CODE_EDITOR = "LS_CODE_EDITOR";
 export const LS_GEN_USER_CSV_LOG = "LS_GEN_USER_CSV_LOG";
+export const LS_PERSIST_ROOT = "persist:root";

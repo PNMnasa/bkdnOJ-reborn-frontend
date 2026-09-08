@@ -1,11 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import type { AnyAction } from "redux";
-import {
-  increaseCounter,
-  decreaseCounter,
-  multiplyCounter,
-} from "redux/Counter/actions";
 import { setTitle } from "helpers/setTitle";
 
 import { Row, Col } from "react-bootstrap";
@@ -14,19 +7,9 @@ import UniIcon from "assets/images/bkdn-uni-icon-white.png";
 
 import "./Content.scss";
 
-interface ContentProps {
-  count: number;
-  increaseCounter: () => void;
-  decreaseCounter: () => void;
-  multiplyCounter: (num: number) => void;
-}
-
-class Content extends React.Component<ContentProps> {
-  constructor(props: ContentProps) {
+export default class Content extends React.Component {
+  constructor(props: {}) {
     super(props);
-    this.state = {
-      num: 0,
-    };
     setTitle();
   }
 
@@ -67,19 +50,3 @@ class Content extends React.Component<ContentProps> {
     );
   }
 }
-
-const mapStateToProps = (state: { counter: { count: number } }) => {
-  return {
-    count: state.counter.count,
-  };
-};
-
-const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
-  return {
-    increaseCounter: () => dispatch(increaseCounter()),
-    decreaseCounter: () => dispatch(decreaseCounter()),
-    multiplyCounter: (num: number) => dispatch(multiplyCounter({ multiplier: num })),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Content) as React.ComponentType<any>;

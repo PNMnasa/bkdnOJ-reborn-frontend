@@ -6,7 +6,7 @@ import {FaWrench} from "react-icons/fa";
 
 import {addClass, removeClass} from "helpers/dom_functions";
 import {withNavigation} from "helpers/react-router";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 
 interface ContestControllerProps {
   showNav: boolean;

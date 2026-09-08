@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import { __ls_get_access_token, __ls_remove_credentials } from "helpers/localStorageHelpers";
+import { LS_PERSIST_ROOT } from "constants/localStorageKeys";
 import { log } from "helpers/logger";
 
 import { getConnectionUrl } from "./urls";
@@ -48,10 +49,12 @@ axiosFormClient.interceptors.response.use(
       return Promise.reject({
         response: {
           data: {
-            network_error:
-              "Could not connect to backend server. " +
-              "Please check your internet connection " +
-              "and try again.",
+            errors: {
+              network_error:
+                "Could not connect to backend server. " +
+                "Please check your internet connection " +
+                "and try again.",
+            },
           },
         },
       });
@@ -68,7 +71,7 @@ axiosFormClient.interceptors.response.use(
       case 403:
         if (res.data && res.data.code === "token_not_valid") {
           __ls_remove_credentials();
-          localStorage.removeItem("persist:root");
+          localStorage.removeItem(LS_PERSIST_ROOT);
           window.location.href = "/sign-in";
         }
         break;

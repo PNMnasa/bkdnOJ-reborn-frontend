@@ -1,30 +1,49 @@
 import React from "react";
+import { connect } from "react-redux";
+import type { AnyAction } from "redux";
 
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { Form } from "react-bootstrap";
 
 import SpinLoader from "components/SpinLoader/SpinLoader";
 
+import authClient from "api/auth";
+import { clearUser } from "redux/User/actions";
+
 import "./SignOut.scss";
 
+interface SignOutProps {
+  clearUser: () => void;
+}
+
 interface SignOutState {
-  submitted: boolean;
-  errors: unknown;
   redirect: boolean;
 }
 
-export default class SignOut extends React.Component<{}, SignOutState> {
-  constructor(props: {}) {
+class SignOut extends React.Component<SignOutProps, SignOutState> {
+  constructor(props: SignOutProps) {
     super(props);
     this.state = {
-      submitted: false,
-      errors: null,
       redirect: false,
     };
   }
 
+  componentDidMount() {
+    authClient
+      .signOut()
+      .then(() => {
+        this.props.clearUser();
+      })
+      .catch(() => {
+        this.props.clearUser();
+      })
+      .finally(() => {
+        this.setState({redirect: true});
+      });
+  }
+
   render() {
-    const { redirect } = this.state;
+    const {redirect} = this.state;
     if (redirect) return <Navigate to="/" />;
 
     return (
@@ -36,3 +55,11 @@ export default class SignOut extends React.Component<{}, SignOutState> {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: (action: AnyAction) => void) => {
+  return {
+    clearUser: () => dispatch(clearUser()),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(SignOut) as React.ComponentType<any>;

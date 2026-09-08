@@ -29,7 +29,17 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps>
           {...this.props}
           previewOptions={{
             components: {
-              code: ({ inline, children = [], className, ...props }) => {
+              code: (props: {
+                inline?: unknown;
+                children?: unknown;
+                className?: string;
+                node?: unknown;
+              }) => {
+                const inline = !!props.inline;
+                const className = props.className;
+                const children = Array.isArray(props.children)
+                  ? (props.children as unknown[])
+                  : [props.children];
                 const txt = children[0] || "";
                 if (inline) {
                   if (typeof txt === "string" && /^\$\$(.*)\$\$/.test(txt)) {
@@ -41,12 +51,16 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps>
                     );
                     return <code dangerouslySetInnerHTML={{ __html: html }} />;
                   }
-                  return <code>{txt}</code>;
+                  return <code>{txt as React.ReactNode}</code>;
                 }
-                const code =
-                  props.node && props.node.children
-                    ? getCodeString(props.node.children)
-                    : txt;
+                const nodeChildren = (
+                  props.node as { children?: unknown } | undefined
+                )?.children;
+                const code = nodeChildren
+                  ? getCodeString(
+                      nodeChildren as Parameters<typeof getCodeString>[0]
+                    )
+                  : txt;
                 if (
                   typeof code === "string" &&
                   typeof className === "string" &&
@@ -59,7 +73,7 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps>
                     <code style={{ fontSize: "150%" }} dangerouslySetInnerHTML={{ __html: html }} />
                   );
                 }
-                return <code className={String(className)}>{txt}</code>;
+                return <code className={String(className)}>{txt as React.ReactNode}</code>;
               },
             },
           }}

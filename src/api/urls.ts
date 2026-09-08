@@ -13,8 +13,11 @@ const TEST_CONNECTION_URL = joinApiUrl(process.env.REACT_APP_DEV_BACKEND_URL, pr
 const PROD_CONNECTION_URL = joinApiUrl(process.env.REACT_APP_BACKEND_URL, process.env.REACT_APP_BACKEND_PORT);
 
 export const getConnectionUrl = (): string => {
-  const test_env = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-  if (test_env) return TEST_CONNECTION_URL;
+  const dev_env = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+  // In dev Vite proxies /api -> REACT_APP_DEV_BACKEND_URL:PORT, so the
+  // browser only talks to the dev server (same-origin). Avoids
+  // net::ERR_CONNECTION_REFUSED / CORS when the backend host differs.
+  if (dev_env) return "/api/";
   return PROD_CONNECTION_URL;
 };
 export const getAdminPageUrl = (): string => {

@@ -7,33 +7,14 @@ interface ClassicPaginationProps {
   count: number;
 }
 
-interface ClassicPaginationState {
-  pageCount: number;
-  currPage: number;
-  count: number;
-}
-
-export default class ClassicPagination extends React.Component<ClassicPaginationProps, ClassicPaginationState> {
-  constructor(props: ClassicPaginationProps) {
-    super(props);
-    this.state = {
-      pageCount: this.props.pageCount && 0,
-      currPage: this.props.currPage && 1,
-      count: this.props.count && 0,
-    };
-  }
-
+export default class ClassicPagination extends React.Component<ClassicPaginationProps> {
   render() {
-    let { pageCount, currPage, count } = this.state;
-    pageCount = this.props.pageCount && pageCount;
-    currPage = this.props.currPage && currPage;
-    count = this.props.count && count;
-    this.setState({ pageCount, currPage, count });
+    const {pageCount, currPage, count} = this.props;
 
     let pages: React.ReactNode[] = [];
-    for (let i = 1; i <= this.state.pageCount; i++) {
+    for (let i = 1; i <= pageCount; i++) {
       pages.push(
-        i === this.state.currPage ? <a className="active">{`[${i}]`}</a> : <a>{`[${i}]`}</a>
+        i === currPage ? <a className="active">{`[${i}]`}</a> : <a>{`[${i}]`}</a>
       );
     }
 
@@ -41,7 +22,7 @@ export default class ClassicPagination extends React.Component<ClassicPagination
       <span className="classic-pagination">
         {" "}
         Page:
-        {[...pages]}({this.state.count} item(s).)
+        {[...pages]}({count} item(s).)
       </span>
     );
   }

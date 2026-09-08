@@ -1,6 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
+import "assets/vendor/bootstrap-4.1.0.min.css";
+import "assets/vendor/google-fonts.css";
+
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "redux/store";

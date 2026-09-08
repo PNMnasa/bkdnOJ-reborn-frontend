@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {Form, Row, Col, Table, Button, Modal} from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 
@@ -238,7 +238,6 @@ class Members extends React.Component<MembersProps, MembersState> {
                 </tr>
               </thead>
               <tbody>
-                {" "}
                 {members.map((user, idx) => (
                   <tr key={`org-member-${user.username}`}>
                     <td>{user.username}</td>
@@ -334,7 +333,7 @@ class AddMemberModal extends React.Component<AddMemberModalProps, AddMemberModal
     e.preventDefault();
 
     let {users} = this.state;
-    users.trim();
+    users = users.trim();
     if (users.length === 0) {
       alert("Hãy thêm ít nhất 1 người dùng.");
       return;

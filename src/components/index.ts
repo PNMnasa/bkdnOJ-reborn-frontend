@@ -9,8 +9,6 @@ import FileUploader from "./FileUploader/FileUploader";
 import CSRFToken from "./CSRFToken/CSRFToken";
 
 import UserCard from "./UserCard";
-import RichTextEditor from "./RichTextEditor/RichTextEditor";
-import DropdownTreeNoRerender from "./DropdownTreeNoRerender";
 
 import SwitchOrgModal from "./SwitchOrgModal";
 
@@ -31,8 +29,6 @@ export {
   CSRFToken,
 
   UserCard,
-  RichTextEditor,
-  DropdownTreeNoRerender,
 
   SwitchOrgModal,
 

@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import {Navigate} from "react-router-dom";
+import {Navigate} from "react-router";
 import {Button, Tabs, Tab} from "react-bootstrap";
 
 import {FaRegTrashAlt, FaGlobe} from "react-icons/fa";
@@ -68,7 +68,7 @@ class AdminSubmissionDetails extends React.Component<AdminSubmissionDetailsProps
         .adminDeleteSubmission({id: this.id})
         .then(() => {
           toast.success("OK Deleted.");
-          this.setState({redirectUrl: "/admin/submission/"});
+          this.setState({redirectUrl: "/admin/submissions"});
         })
         .catch(() => {
           toast.error(`Cannot delete.`);

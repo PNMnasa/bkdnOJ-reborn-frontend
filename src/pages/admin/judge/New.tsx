@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import {Navigate} from "react-router-dom";
+import {Navigate} from "react-router";
 import {Form, Row, Col, Button} from "react-bootstrap";
 
 import judgeAPI from "api/judge";

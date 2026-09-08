@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Navigate} from "react-router-dom";
+import {Navigate} from "react-router";
 import {Tabs, Tab} from "react-bootstrap";
 
 import {withParams} from "helpers/react-router";

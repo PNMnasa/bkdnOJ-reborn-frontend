@@ -8,7 +8,8 @@ import {toast} from "react-toastify";
 import problemAPI from "api/problem";
 import commonAPI from "api/common";
 import {withNavigation} from "helpers/react-router";
-import {SpinLoader, FileUploader, RichTextEditor} from "components";
+import {SpinLoader, FileUploader} from "components";
+import RichTextEditor from "components/RichTextEditor/RichTextEditor";
 
 import UserMultiSelectRaw from "components/SelectMulti/User";
 import OrgMultiSelectRaw from "components/SelectMulti/Org";

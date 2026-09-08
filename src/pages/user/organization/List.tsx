@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import ReactPaginate from "react-paginate";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router";
 import { Table, Row, Col, Button } from "react-bootstrap";
 
 import { SpinLoader, ErrorBox } from "components";

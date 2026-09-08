@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import {Navigate} from "react-router-dom";
+import {Navigate} from "react-router";
 import {Form, Row, Col, Button} from "react-bootstrap";
 import {FaRegTrashAlt} from "react-icons/fa";
 
@@ -139,7 +139,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
         .adminDeleteJudge({id: this.id})
         .then(() => {
           toast.success("OK Deleted.");
-          this.setState({redirectUrl: "/admin/judge/"});
+          this.setState({redirectUrl: "/admin/judges"});
         })
         .catch((err: {response?: {data: unknown; status?: number}}) => {
           toast.error(`Cannot delete. (${err})`);

@@ -1,7 +1,7 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 
 import { FaWrench, FaSyncAlt } from "react-icons/fa";

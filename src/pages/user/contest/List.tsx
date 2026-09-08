@@ -3,7 +3,7 @@ import {toast} from "react-toastify";
 import {connect} from "react-redux";
 
 import ReactPaginate from "react-paginate";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {Table} from "react-bootstrap";
 import {VscPerson} from "react-icons/vsc";
 
@@ -568,7 +568,7 @@ class ContestList extends React.Component<ContestListProps, ContestListState> {
                         user={this.props.user}
                         type="past"
                       />
-                    ))}{" "}
+                    ))}
                     {count === 0 && (
                       <tr>
                         <td colSpan={99}>

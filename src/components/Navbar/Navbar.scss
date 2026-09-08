@@ -64,7 +64,9 @@
 
                 .dropdown-menu {
                     position: absolute;
-                    left: -450%;
+                    left: auto;
+                    right: 0;
+                    margin-top: 2px;
                 }
             }
             button#switch-org-btn {

@@ -1,6 +1,6 @@
 import React from "react";
 import {Button} from "react-bootstrap";
-import {Navigate, Outlet} from "react-router-dom";
+import {Navigate, Outlet} from "react-router";
 
 import {VscThreeBars} from "react-icons/vsc";
 
@@ -42,8 +42,10 @@ class AdminApp extends React.Component<Record<string, never>, AdminAppState> {
       .whoAmI()
       .then(res => {
         const user = res.data && res.data.user;
-        if (user.is_staff || user.is_superuser)
-          this.setState({authorized: true, loaded: true});
+        this.setState({
+          loaded: true,
+          authorized: !!(user.is_staff || user.is_superuser),
+        });
       })
       .catch(() => {
         this.setState({loaded: true});

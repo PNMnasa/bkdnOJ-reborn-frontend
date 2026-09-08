@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {Form, Row, Col, Table, Button, Modal} from "react-bootstrap";
 
 import contestAPI from "api/contest";
@@ -292,7 +292,7 @@ class Problem extends React.Component<ProblemProps, ProblemState> {
                   probs.sort((p1, p2) => {
                     const v1 = isNaN(p1.order as number) ? 9999 : (p1.order as number);
                     const v2 = isNaN(p2.order as number) ? 9999 : (p2.order as number);
-                    return v1 < v2 ? -1 : 0;
+                    return v1 - v2;
                   });
                   this.setState({problems: probs});
                 }}

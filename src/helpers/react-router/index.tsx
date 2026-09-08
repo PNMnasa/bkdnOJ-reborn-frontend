@@ -1,5 +1,5 @@
 import ScrollToTop from "./ScrollToTop";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router";
 import type { ComponentType } from "react";
 
 function withNavigation<P extends object>(Component: ComponentType<P & { navigate: ReturnType<typeof useNavigate> }>) {

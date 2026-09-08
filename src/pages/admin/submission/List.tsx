@@ -1,6 +1,6 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {Table} from "react-bootstrap";
 
 import {SpinLoader, ErrorBox} from "components";

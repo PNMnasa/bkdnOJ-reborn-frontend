@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import {Navigate} from "react-router-dom";
+import {Navigate} from "react-router";
 import {Button, Tabs, Tab} from "react-bootstrap";
 
 import {FaRegTrashAlt, FaGlobe, FaSyncAlt} from "react-icons/fa";
@@ -182,7 +182,7 @@ class AdminProblemDetails extends React.Component<AdminProblemDetailsProps, Admi
         .adminDeleteProblem({shortname: this.shortname})
         .then(() => {
           toast.success("OK Deleted.");
-          this.setState({redirectUrl: "/admin/problem/"});
+          this.setState({redirectUrl: "/admin/problems"});
         })
         .catch((err: unknown) => {
           toast.error(`Cannot delete. (${err})`);

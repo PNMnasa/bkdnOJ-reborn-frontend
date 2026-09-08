@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import {Link, Navigate} from "react-router-dom";
+import {Link, Navigate} from "react-router";
 import {Button, Modal, Form} from "react-bootstrap";
 
 import {AiOutlinePlusCircle} from "react-icons/ai";
@@ -308,7 +308,7 @@ class NewModal extends React.Component<NewModalProps, NewModalState> {
       .then(() => {
         toast.success("OK Created.");
         this.setState({
-          redirectUrl: `/admin/org/${this.state.slug.toUpperCase()}`,
+          redirectUrl: `/admin/org/${this.state.slug}`,
         });
       })
       .catch((err: { response?: { status: number; data: unknown } }) => {

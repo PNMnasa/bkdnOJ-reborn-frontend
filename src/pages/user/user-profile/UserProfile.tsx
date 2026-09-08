@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";

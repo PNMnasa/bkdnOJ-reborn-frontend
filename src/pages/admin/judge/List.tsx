@@ -1,6 +1,6 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
-import {Navigate, Link} from "react-router-dom";
+import {Navigate, Link} from "react-router";
 import {Button, Table} from "react-bootstrap";
 
 /* icons */

@@ -36,13 +36,6 @@ export default class ContestBanner extends React.Component<ContestBannerProps, C
       if (contest.is_registered && contest.spectate_allow) return true;
     return false;
   }
-  isViewer() {
-    const {contest} = this.state;
-    if (contest)
-      if (contest.is_registered && contest.spectate_allow) return true;
-    return false;
-  }
-
   updateTimeLeftLabel() {
     const contest = this.state.contest;
     let start_time = new Date(String(contest && contest.start_time));

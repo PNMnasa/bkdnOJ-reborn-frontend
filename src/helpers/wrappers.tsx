@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import type { ComponentType } from "react";
 
 export const wrapNavigate = <P extends object>(Component: ComponentType<P & { navigate: ReturnType<typeof useNavigate> }>) => {

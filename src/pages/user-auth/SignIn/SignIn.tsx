@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { toast } from "react-toastify";
 
