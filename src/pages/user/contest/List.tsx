@@ -12,8 +12,8 @@ import contestAPI from "api/contest";
 import {setTitle} from "helpers/setTitle";
 import {getDuration} from "helpers/durationFormatter";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "./List.css";
+import "styles/ClassicPagination.css";
 
 interface ContestShape {
   key: string;

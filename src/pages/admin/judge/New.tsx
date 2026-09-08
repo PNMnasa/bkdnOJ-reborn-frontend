@@ -8,7 +8,7 @@ import judgeAPI from "api/judge";
 import {setTitle} from "helpers/setTitle";
 import {ErrorBox} from "components";
 
-import "./Details.scss";
+import "./Details.css";
 
 const JUDGE_PROPS = ["name", "auth_key", "description", "is_blocked"];
 const DEFAULT_JUDGE: Record<string, unknown> = {

@@ -31,8 +31,8 @@ import { isEmpty } from "helpers/checkObject";
 
 import ContestContext from "context/ContestContext";
 
-import "./SubmissionList.scss";
-import "styles/ClassicPagination.scss";
+import "./SubmissionList.css";
+import "styles/ClassicPagination.css";
 import { NO_CONTEST_KEY } from "redux/SubFilter/types";
 
 import { messages, values } from "./constants";

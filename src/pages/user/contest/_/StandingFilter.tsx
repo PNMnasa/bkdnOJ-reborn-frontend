@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from "react";
 import {Button, Dropdown} from "react-bootstrap";
 
-import "./ContestStanding.scss";
-import "styles/Ratings.scss";
-import "./StandingFilter.scss";
+import "./ContestStanding.css";
+import "styles/Ratings.css";
+import "./StandingFilter.css";
 import {FaFilter} from "react-icons/fa";
 import {BiTrash} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";

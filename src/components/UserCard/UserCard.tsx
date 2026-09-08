@@ -7,7 +7,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
 import defaultOrgImg from "assets/images/default-org.png";
 
-import "./UserCard.scss";
+import "./UserCard.css";
 import { toggleTeamFavorite } from "../../redux/StandingFilter/action";
 
 interface UserShape {

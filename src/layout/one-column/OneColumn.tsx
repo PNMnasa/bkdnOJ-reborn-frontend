@@ -1,7 +1,7 @@
 import React from "react";
 import type { ReactNode } from "react";
 
-import "./OneColumn.scss";
+import "./OneColumn.css";
 
 interface OneColumnProps {
   mainContent?: ReactNode | ReactNode[];

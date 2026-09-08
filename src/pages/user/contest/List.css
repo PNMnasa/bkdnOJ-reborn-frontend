@@ -1,0 +1,57 @@
+.contest-table a {
+  color: darkblue;
+}
+.contest-table a:hover {
+  color: #1c2237;
+}
+.contest-table h4 {
+  margin: unset;
+  padding: 4px;
+  font-size: medium;
+  font-family: "verdana", "arial", "sans-serif";
+  background-color: #d6d6d6;
+}
+.contest-table th, .contest-table td {
+  font-size: 14px;
+  font-family: "verdana", "arial", "sans-serif";
+  vertical-align: middle;
+}
+.contest-table td.participate-options {
+  min-width: 180px;
+}
+.contest-table td.participate-options a {
+  color: darkblue;
+}
+.contest-table td.participate-options a:hover {
+  color: darkmagenta;
+}
+.contest-table td.participate-options a {
+  text-decoration: underline;
+  font-size: 12px;
+}
+.contest-table td.participate-options {
+  min-width: 180px;
+}
+.contest-table table {
+  margin: unset;
+}
+.contest-table table tbody tr {
+  height: 4rem;
+}
+.contest-table span.contest-status-lbl {
+  font-size: 12px;
+}
+.contest-table span.active-continue-label {
+  background-color: #FAE1E2;
+  padding: 0 5px;
+}
+.contest-table .contest-table-footer {
+  margin: 10px;
+}
+.contest-table .contest-table-footer hr {
+  margin: unset;
+}
+.contest-table .contest-table-footer {
+  height: 16px;
+  text-align: right;
+}

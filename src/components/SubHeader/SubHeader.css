@@ -1,0 +1,38 @@
+.subheader {
+  background-color: #d6d6d6;
+  font-family: apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  height: 24px;
+  text-align: left;
+  font-size: 14px;
+  color: #505050;
+}
+.subheader .float-left {
+  display: inline-flex;
+}
+.subheader .float-left .left-padder {
+  width: 115px;
+  text-align: center;
+  font-weight: bold;
+}
+.subheader .float-left span, .subheader .float-left div {
+  margin: auto;
+  margin-right: 10px;
+}
+.subheader .float-right {
+  display: inline-flex;
+}
+.subheader .float-right span, .subheader .float-right div {
+  margin: auto;
+}
+.subheader .org-display {
+  margin: auto;
+  display: flex;
+  width: min-content;
+  align-items: center;
+  padding-bottom: 1px;
+  height: 24px;
+}
+.subheader {
+  border-bottom: solid 1px #c5c5c5;
+}

@@ -10,7 +10,7 @@ import SpinLoader from "components/SpinLoader/SpinLoader";
 import authClient from "api/auth";
 import { clearUser } from "redux/User/actions";
 
-import "./SignOut.scss";
+import "./SignOut.css";
 
 interface SignOutProps {
   clearUser: () => void;

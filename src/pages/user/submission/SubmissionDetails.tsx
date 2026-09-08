@@ -22,7 +22,7 @@ import { isStaff } from "helpers/auth";
 
 import { shouldStopPolling } from "constants/statusFilter";
 
-import "./SubmissionDetails.scss";
+import "./SubmissionDetails.css";
 
 const __SUBMISSION_DETAIL_POLL_DELAY = 5000;
 const __SUBMISSION_MAX_POLL_DURATION = 30000;

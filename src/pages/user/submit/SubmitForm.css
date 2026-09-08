@@ -1,0 +1,14 @@
+.submit-form label {
+  margin: unset;
+}
+.submit-form div.select-div {
+  display: inline-flex;
+  column-gap: 15px;
+}
+.submit-form div.select-div select {
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: "verdana", "arial", "sans-serif";
+}

@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 
 import {SpinLoader, ErrorBox} from "components";
 import orgAPI from "api/organization";
-import "styles/ClassicPagination.scss";
+import "styles/ClassicPagination.css";
 import {toast} from "react-toastify";
 
 interface MembersSearchData {

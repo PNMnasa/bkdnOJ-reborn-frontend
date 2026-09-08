@@ -33,8 +33,7 @@
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "rehype-rewrite": "^3.0.6",
-    "rehype-sanitize": "^5.0.1",
-    "sass": "^1.104.0"
+    "rehype-sanitize": "^5.0.1"
   },
   "scripts": {
     "start": "vite",

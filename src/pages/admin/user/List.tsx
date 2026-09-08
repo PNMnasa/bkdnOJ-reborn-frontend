@@ -13,8 +13,7 @@ import {SpinLoader, ErrorBox} from "components";
 import userAPI from "api/user";
 import {setTitle} from "helpers/setTitle";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "styles/ClassicPagination.css";
 import {qmClarify} from "helpers/components";
 import { toast } from "react-toastify";
 import { FaFilter, FaTimes } from "react-icons/fa";

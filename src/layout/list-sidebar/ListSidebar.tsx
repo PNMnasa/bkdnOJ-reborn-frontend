@@ -3,7 +3,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import { BiArrowFromRight, BiArrowFromLeft } from "react-icons/bi";
 import type { ReactNode } from "react";
 
-import "./ListSidebar.scss";
+import "./ListSidebar.css";
 import OutsideAlerter from "helpers/OutsiderAlerter";
 
 interface OffcanvasProps {

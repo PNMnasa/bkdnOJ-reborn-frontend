@@ -15,7 +15,7 @@ import GeneralDetails from "./_/GeneralDetails";
 import TestDataDetails from "./_/TestDataDetails";
 import TestcaseDetails from "./_/TestcaseDetails";
 
-import "./AdminProblemDetails.scss";
+import "./AdminProblemDetails.css";
 
 interface RejudgeButtonProps {
   shortname: string;

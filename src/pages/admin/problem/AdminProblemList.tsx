@@ -20,8 +20,8 @@ import {qmClarify} from "helpers/components";
 import {withNavigation} from "helpers/react-router";
 import {getYearMonthDate, getHourMinuteSecond} from "helpers/dateFormatter";
 
-import "./AdminProblemList.scss";
-import "styles/ClassicPagination.scss";
+import "./AdminProblemList.css";
+import "styles/ClassicPagination.css";
 
 interface ProblemListItemData {
   shortname: string;

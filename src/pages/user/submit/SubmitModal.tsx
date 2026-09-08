@@ -9,7 +9,7 @@ import { shouldStopPolling, isNoTestcaseStatus } from "constants/statusFilter";
 
 import submissionApi from "api/submission";
 import SubmitForm from "./SubmitForm";
-import "./SubmitModal.scss";
+import "./SubmitModal.css";
 
 const __SUBMIT_MODAL_POLL_DELAY = 3000;
 const __SUBMIT_MODAL_MAX_POLL_DURATION = 30 * 1000;

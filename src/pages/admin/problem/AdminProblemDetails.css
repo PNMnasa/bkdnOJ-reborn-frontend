@@ -1,0 +1,20 @@
+div.admin.problem-panel h1, div.admin.problem-panel h2, div.admin.problem-panel h3, div.admin.problem-panel h4, div.admin.problem-panel h5, div.admin.problem-panel hr {
+  margin: unset;
+}
+div.admin.problem-panel h3, div.admin.problem-panel h4, div.admin.problem-panel h5 {
+  margin: 4px;
+}
+div.admin.problem-panel .panel-header {
+  display: inline-flex;
+  width: 100%;
+}
+div.admin.problem-panel .panel-header span.title-text {
+  flex-grow: 1;
+}
+div.admin.problem-panel .panel-header {
+  column-gap: 10px;
+  align-items: center;
+}
+div.admin.problem-panel .col {
+  text-align: left;
+}

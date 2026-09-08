@@ -1,0 +1,19 @@
+.contest-participation-wrapper .contest-participation-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: baseline;
+  align-items: center;
+  column-gap: 5px;
+}
+.contest-participation-wrapper .contest-participation-table {
+  position: relative;
+}
+.contest-participation-wrapper .contest-participation-table .contest-participation-lbl {
+  height: 30px;
+}
+.contest-participation-wrapper .contest-participation-table div.part-add-btn {
+  height: 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}

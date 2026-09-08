@@ -1,0 +1,114 @@
+.submit-modal .modal-dialog {
+  height: 80vh;
+}
+.submit-modal .modal-dialog .modal-content {
+  border: solid 2px #1c2237;
+}
+.submit-modal .modal-dialog .modal-content .modal-header {
+  padding: 5px;
+  padding-left: 15px;
+}
+.submit-modal .modal-dialog .modal-content .modal-header .modal-title {
+  color: #1c2237;
+}
+.submit-modal .modal-dialog .modal-content .modal-header .btn-close {
+  height: 10px;
+  width: 10px;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict {
+  font-weight: 600;
+  font-family: "verdana", "arial", "sans-serif";
+  cursor: help;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict.ac {
+  color: green !important;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict.wa, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.tle, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.mle, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.ole {
+  color: rgba(255, 0, 0, 0.856) !important;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict.ir, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.rte {
+  color: orange !important;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict.qu, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.g, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.p, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.sc {
+  color: darkgray !important;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict.ie, .submit-modal .modal-dialog .modal-content .modal-footer .verdict.ce {
+  color: black !important;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict.fr {
+  color: darkblue !important;
+  background-color: rgba(190, 239, 245, 0.8);
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .verdict span.points {
+  margin-left: 2px;
+}
+@media (min-width: 768px) {
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper span.text {
+    display: none;
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.ac::after {
+    content: "Accepted";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.wa::after {
+    content: "Wrong Answer";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.tle::after {
+    content: "Time Limit Exceeded";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.mle::after {
+    content: "Memory Limit Exceeded";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.ole::after {
+    content: "Output Limit Exceeded";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.ir::after {
+    content: "Invalid Return";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.rte::after {
+    content: "Runtime Error";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.qu::after {
+    content: "Waiting..";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.p::after {
+    content: "Processing..";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.g::after {
+    content: "Judging..";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.sc::after {
+    content: "Skipped";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.ie::after {
+    content: "Internal Error";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.ce::after {
+    content: "Compile Error";
+  }
+  .submit-modal .modal-dialog .modal-content .modal-footer .verdict .verdict-wrapper.fr::after {
+    content: "Frozen";
+  }
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .note {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .note span.warning {
+  font-size: 10px;
+  flex: 1;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .note span {
+  font-size: 14px;
+  flex: 1;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer .note {
+  text-align: left;
+  font-family: "Roboto Mono", monospace;
+  color: rgb(185, 62, 62);
+  width: 100%;
+}
+.submit-modal .modal-dialog .modal-content .modal-footer {
+  padding: 5px;
+  padding-left: 15px;
+}

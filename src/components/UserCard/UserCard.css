@@ -1,0 +1,49 @@
+div.participant-container {
+  column-gap: 10px;
+  row-gap: 10px;
+}
+div.participant-container div.avatar-container {
+  height: 50px;
+  width: auto;
+  max-width: 50px;
+  display: flex;
+  align-items: center;
+}
+div.participant-container div.avatar-container .avatar-img {
+  display: block;
+  max-width: 50px;
+  max-height: 50px;
+  width: auto;
+  height: auto;
+}
+div.participant-container div.user-container {
+  align-items: baseline;
+  width: calc(100% - 50px);
+}
+div.participant-container div.user-container div.acc-username {
+  font-family: "verdana", "arial", "sans-serif";
+  font-size: 14px;
+  max-width: 140px;
+  width: 100%;
+  text-align: left;
+  cursor: help;
+}
+div.participant-container div.user-container div.acc-realname {
+  width: 100%;
+  font-size: 12px;
+  text-align: left;
+}
+div.participant-container div.user-container div.acc-org {
+  width: 100%;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+  cursor: help;
+}
+div.participant-container div.participant-name-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+div.participant-container svg.favorite-icon {
+  cursor: pointer;
+}

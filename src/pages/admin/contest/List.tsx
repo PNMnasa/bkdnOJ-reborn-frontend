@@ -17,8 +17,7 @@ import contestAPI from "api/contest";
 import {setTitle} from "helpers/setTitle";
 import {getYearMonthDate, getHourMinuteSecond} from "helpers/dateFormatter";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "styles/ClassicPagination.css";
 import {qmClarify} from "helpers/components";
 
 const CLASSNAME = "Contest";

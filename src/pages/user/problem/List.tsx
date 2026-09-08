@@ -24,8 +24,8 @@ import { BsPersonFill } from "react-icons/bs";
 
 import { parseTime, parseMem } from "helpers/textFormatter";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "./List.css";
+import "styles/ClassicPagination.css";
 
 interface ProblemListItemProps {
   solved?: boolean;

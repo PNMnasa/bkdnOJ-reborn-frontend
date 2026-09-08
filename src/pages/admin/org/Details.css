@@ -1,0 +1,57 @@
+@charset "UTF-8";
+div.admin.org-panel h1, div.admin.org-panel h2, div.admin.org-panel h3, div.admin.org-panel h4, div.admin.org-panel h5, div.admin.org-panel hr {
+  margin: unset;
+}
+div.admin.org-panel h3, div.admin.org-panel h4, div.admin.org-panel h5 {
+  margin: 4px;
+}
+div.admin.org-panel th, div.admin.org-panel td {
+  vertical-align: middle;
+}
+div.admin.org-panel .panel-header {
+  display: inline-flex;
+  width: 100%;
+}
+div.admin.org-panel .panel-header span.title-text {
+  flex-grow: 1;
+}
+div.admin.org-panel .panel-header button {
+  display: inline-flex;
+  align-items: center;
+}
+div.admin.org-panel .panel-header {
+  column-gap: 10px;
+  align-items: center;
+}
+div.admin.org-panel .col {
+  text-align: left;
+}
+div.admin.org-panel .accordion-item {
+  border: solid 1px #d6d6d6;
+  margin: 2px 0;
+}
+div.admin.org-panel .accordion-item h2 {
+  color: #1c2237 !important;
+  font-size: 14px;
+}
+div.admin.org-panel .accordion-item button {
+  width: 100%;
+  text-align: left;
+  border: unset;
+  background-color: #d6d6d6;
+}
+div.admin.org-panel .accordion-button {
+  color: #1c2237;
+}
+div.admin.org-panel .accordion-button::before {
+  content: "•";
+  padding-right: 1rem;
+}
+div.admin.org-panel .accordion-button::after {
+  content: "+";
+  float: right;
+}
+div.admin.org-panel .accordion-button:not(.collapsed)::after {
+  content: "x";
+  float: right;
+}

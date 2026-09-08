@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./ErrorBox.scss";
+import "./ErrorBox.css";
 
 type ErrorsData = string | string[] | Record<string, unknown> | null;
 

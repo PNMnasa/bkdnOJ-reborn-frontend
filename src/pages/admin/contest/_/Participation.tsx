@@ -16,8 +16,8 @@ import OrgMultiSelectRaw from "components/SelectMulti/Org";
 
 const OrgMultiSelect = OrgMultiSelectRaw as React.ComponentType<any>;
 import contestAPI from "api/contest";
-import "./Participation.scss";
-import "styles/ClassicPagination.scss";
+import "./Participation.css";
+import "styles/ClassicPagination.css";
 
 interface FiltersProps {
   value?: Record<string, unknown>;

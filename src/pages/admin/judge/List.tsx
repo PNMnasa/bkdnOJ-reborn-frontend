@@ -15,8 +15,7 @@ import {SpinLoader, ErrorBox} from "components";
 import judgeApi from "api/judge";
 import {setTitle} from "helpers/setTitle";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "styles/ClassicPagination.css";
 
 interface JudgeListItemProps {
   id: number;

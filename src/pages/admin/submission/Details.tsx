@@ -13,7 +13,7 @@ import {setTitle} from "helpers/setTitle";
 
 import GeneralDetails, {SubmissionData} from "./_/GeneralDetails";
 import TestcaseDetails from "./_/TestcaseDetails";
-import "./Details.scss";
+import "./Details.css";
 
 interface AdminSubmissionDetailsProps {
   params: Record<string, string | undefined>;

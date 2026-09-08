@@ -7,8 +7,7 @@ import {SpinLoader, ErrorBox} from "components";
 import submissionApi from "api/submission";
 import {setTitle} from "helpers/setTitle";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "styles/ClassicPagination.css";
 
 interface SubmissionListItemProps {
   id: number | string;

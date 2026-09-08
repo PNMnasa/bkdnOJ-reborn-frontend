@@ -1,0 +1,56 @@
+div.problem-detail-pdf-container * {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+div.problem-detail-pdf-container *::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+div.problem-detail-pdf-container {
+  height: 40rem;
+}
+@media (max-width: 567px) {
+  div.problem-detail-pdf-container {
+    height: 25rem;
+  }
+}
+div.problem-detail-pdf-container .rpv-core__viewer {
+  overflow: scroll;
+}
+div.problem-detail-pdf-container .rpv-toolbar__label {
+  display: inline;
+  white-space: pre;
+}
+div.problem-detail-pdf-container .rpv-toolbar__left {
+  display: hidden;
+}
+div.problem-detail-pdf-container .rpv-default-layout__toolbar {
+  overflow-x: scroll;
+}
+div.problem-detail-pdf-container div.rpv-core__display--hidden {
+  display: inline-flex;
+}
+@media (max-width: 767px) {
+  div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-page-navigation-previous],
+  div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-page-navigation-next],
+  div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-theme-switch] {
+    display: none;
+  }
+}
+div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-default-layout-sidebar-tab-1],
+div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-default-layout-sidebar-tab-2],
+div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-search-popover],
+div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-print],
+div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-open],
+div.problem-detail-pdf-container div[aria-describedby=rpv-core__tooltip-body-toolbar-more-actions] {
+  display: none;
+}
+div.problem-detail-pdf-container .rpv-thumbnail__list {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-flow: column wrap;
+  height: 100%;
+  justify-content: center;
+  overflow: auto;
+}

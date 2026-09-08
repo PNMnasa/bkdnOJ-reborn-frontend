@@ -5,7 +5,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { getCodeString } from "rehype-rewrite";
 import katex from "katex";
 import "katex/dist/katex.css";
-import "./RichTextEditor.scss";
+import "./RichTextEditor.css";
 
 interface RichTextEditorProps {
   value?: string;

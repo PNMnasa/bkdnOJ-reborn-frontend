@@ -25,7 +25,7 @@ import { SubmitModal } from "pages/user/submit";
 
 import ContestContext from "context/ContestContext";
 
-import "./ProblemDetails.scss";
+import "./ProblemDetails.css";
 
 interface ProblemData {
   title?: string;

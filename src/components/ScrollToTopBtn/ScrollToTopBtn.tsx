@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { BiArrowToTop } from "react-icons/bi";
-import "./ScrollToTopBtn.scss";
+import "./ScrollToTopBtn.css";
 
 export default class ScrollToTopBtn extends React.Component {
   render() {

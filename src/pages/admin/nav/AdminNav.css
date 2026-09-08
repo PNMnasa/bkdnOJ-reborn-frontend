@@ -1,0 +1,107 @@
+ul.admin-nav {
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  overflow-anchor: none;
+  background-color: #1c2237 !important;
+}
+ul.admin-nav .brand {
+  padding: 1rem 0.5rem;
+  text-align: center;
+  letter-spacing: 0.05rem;
+  text-decoration: none;
+  z-index: 1;
+  color: rgb(245, 245, 245) !important;
+  position: relative;
+}
+ul.admin-nav .brand img.site-icon {
+  width: 6rem;
+  height: 6rem;
+  max-width: 100%;
+}
+ul.admin-nav .brand p.site-icon-text {
+  background-color: rgba(0, 0, 0, 0.8392156863);
+  color: rgb(245, 245, 245);
+  display: inline-block;
+  font-weight: bold;
+  margin: unset;
+  padding: unset;
+  font-family: "Roboto Mono", monospace;
+  font-size: 1.3rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  -webkit-transform: translate(-50%, -40%);
+}
+ul.admin-nav hr.sidebar-divider {
+  border-top: 1px solid rgb(245, 245, 245);
+  margin: 0 1rem;
+}
+ul.admin-nav .nav-item {
+  width: 100%;
+  margin: 5px 0;
+}
+ul.admin-nav .nav-item .nav-link {
+  color: rgb(245, 245, 245) !important;
+  text-align: center;
+  padding: 0.75rem 0 0.75rem 1rem;
+  text-decoration: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+ul.admin-nav .nav-item .nav-link .icon {
+  font-size: 1.3rem;
+}
+ul.admin-nav .nav-item .nav-link:hover {
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  ul.admin-nav .nav-item .nav-link {
+    text-align: left;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    column-gap: 3px;
+  }
+  ul.admin-nav .nav-item .nav-link .icon {
+    font-size: 1.6rem;
+  }
+  ul.admin-nav .nav-item .nav-link {
+    font-size: 0.8rem;
+  }
+}
+ul.admin-nav .nav-header-item .nav-link {
+  color: rgb(245, 245, 245) !important;
+  padding-left: 1rem;
+  text-transform: capitalize;
+  text-align: left;
+  text-decoration: none;
+  background-color: transparent;
+}
+ul.admin-nav .nav-header-item .nav-link::before {
+  content: "<<";
+  padding-right: 0.2rem;
+}
+ul.admin-nav .nav-header-item .nav-link:hover {
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  ul.admin-nav {
+    min-width: 6rem !important;
+  }
+}
+@media (min-width: 769px) {
+  ul.admin-nav {
+    min-width: 160px !important;
+  }
+}

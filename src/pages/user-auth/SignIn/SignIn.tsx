@@ -12,7 +12,7 @@ import authClient from "api/auth";
 import SpinLoader from "components/SpinLoader/SpinLoader";
 import ErrorBox from "components/ErrorBox/ErrorBox";
 
-import "./SignIn.scss";
+import "./SignIn.css";
 
 import {
   __ls_set_access_token,

@@ -7,7 +7,7 @@ import { VscAccount, VscOrganization, VscListOrdered, VscFileCode, VscServer
 import { GiTrophyCup } from 'react-icons/gi';
 
 import logo from 'assets/images/bkdnoj-favicon-ring.png';
-import './AdminNav.scss';
+import './AdminNav.css';
 
 interface AdminNavProps {
   className?: string;

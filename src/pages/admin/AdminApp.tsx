@@ -9,7 +9,7 @@ import {addClass, removeClass} from "helpers/dom_functions";
 import {setTitle} from "helpers/setTitle";
 
 import AdminNav from "./nav/AdminNav";
-import "./AdminApp.scss";
+import "./AdminApp.css";
 
 interface AdminAppState {
   authorized: boolean;

@@ -7,8 +7,8 @@ import { SpinLoader, ErrorBox } from "components";
 import judgeAPI from "api/judge";
 import { setTitle } from "helpers/setTitle";
 
-import "./JudgeStatuses.scss";
-import "styles/ClassicPagination.scss";
+import "./JudgeStatuses.css";
+import "styles/ClassicPagination.css";
 
 interface JudgeStatusProps {
   id: string;

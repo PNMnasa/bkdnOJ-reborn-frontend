@@ -17,7 +17,7 @@ import ContestContext from "context/ContestContext";
 
 import { FaTimes, FaFilter } from "react-icons/fa";
 
-import "./SubFilterSidebar.scss";
+import "./SubFilterSidebar.css";
 
 const LANGUAGES = [
   { value: "C", name: "C" },

@@ -1,0 +1,20 @@
+div#sub-filter div.filter-panel label {
+  font-size: 14px;
+  font-family: "verdana", "arial", "sans-serif";
+  color: #1c2237;
+}
+div#sub-filter div.filter-panel span {
+  color: #1c2237;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+div#sub-filter div.filter-panel div.checkbox-panel {
+  padding: 0 5px;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+div#sub-filter div.filter-panel .staff-only {
+  color: rgb(185, 62, 62);
+}

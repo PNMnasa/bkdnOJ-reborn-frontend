@@ -10,7 +10,7 @@ import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 
-import "./Details.scss";
+import "./Details.css";
 import {qmClarify} from "helpers/components";
 
 const JUDGE_PROPS = ["name", "auth_key", "description", "is_blocked"];

@@ -5,7 +5,7 @@ import { Modal, Button, Container } from "react-bootstrap";
 import { VscBug } from "react-icons/vsc";
 
 import flag from "assets/images/bkdnoj-dropflag.png";
-import "./Header.scss";
+import "./Header.css";
 
 interface HeaderState {
   show: boolean;

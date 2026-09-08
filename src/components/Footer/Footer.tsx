@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import "./Footer.scss";
+import "./Footer.css";
 import uniFlag from "assets/images/bkdn-uni-banner-gray-transparent.png";
 
 export default class Footer extends React.Component {

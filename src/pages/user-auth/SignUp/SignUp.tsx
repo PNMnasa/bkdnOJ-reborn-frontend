@@ -7,7 +7,7 @@ import authClient from "api/auth";
 import SpinLoader from "components/SpinLoader/SpinLoader";
 import ErrorBox from "components/ErrorBox/ErrorBox";
 
-import "./SignUp.scss";
+import "./SignUp.css";
 
 import { setTitle } from "helpers/setTitle";
 import { log } from "helpers/logger";

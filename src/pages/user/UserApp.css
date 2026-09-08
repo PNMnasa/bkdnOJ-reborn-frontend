@@ -1,0 +1,28 @@
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  min-height: 55vh;
+  background: linear-gradient(to bottom, #d6d6d6 0%, #d6d6d6 10%, rgb(245, 245, 245) 60%, rgb(245, 245, 245) 100%);
+  text-align: center;
+  background-repeat: space;
+}
+.content-wrapper .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-width: 1400px;
+}
+@media (max-width: 1500px) {
+  .content-wrapper .container {
+    max-width: 1400px;
+    width: 98%;
+  }
+}
+
+.react-icons {
+  margin-right: 5px;
+}

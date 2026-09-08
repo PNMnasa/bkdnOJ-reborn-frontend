@@ -1,0 +1,166 @@
+@charset "UTF-8";
+.admin-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background-color: #d6d6d6 !important;
+}
+.admin-page #admin-content-wrapper {
+  width: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-content: start;
+}
+.admin-page #admin-content-wrapper #admin-topbar {
+  background-color: rgb(245, 245, 245) !important;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  column-gap: 15px;
+  border-bottom: solid 2px #c5c5c5;
+  z-index: 1050;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.admin-page #admin-content-wrapper #admin-topbar #sidebar-toggle-btn {
+  border-radius: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
+  line-height: 1.75rem;
+}
+.admin-page #admin-content-wrapper #admin-panel-container {
+  min-height: 90vh;
+  padding: 20px;
+  overflow: auto;
+}
+.admin-page form {
+  text-align: left;
+  margin: 4px;
+}
+.admin-page form .row {
+  border: solid 1px #d6d6d6;
+  margin: 2px;
+  padding: 2px 0;
+}
+.admin-page form .col, .admin-page form .col-1, .admin-page form .col-10, .admin-page form .col-11, .admin-page form .col-12, .admin-page form .col-2, .admin-page form .col-3, .admin-page form .col-4, .admin-page form .col-5, .admin-page form .col-6, .admin-page form .col-7, .admin-page form .col-8, .admin-page form .col-9, .admin-page form .col-auto, .admin-page form .col-lg, .admin-page form .col-lg-1, .admin-page form .col-lg-10, .admin-page form .col-lg-11, .admin-page form .col-lg-12, .admin-page form .col-lg-2, .admin-page form .col-lg-3, .admin-page form .col-lg-4, .admin-page form .col-lg-5, .admin-page form .col-lg-6, .admin-page form .col-lg-7, .admin-page form .col-lg-8, .admin-page form .col-lg-9, .admin-page form .col-lg-auto, .admin-page form .col-md, .admin-page form .col-md-1, .admin-page form .col-md-10, .admin-page form .col-md-11, .admin-page form .col-md-12, .admin-page form .col-md-2, .admin-page form .col-md-3, .admin-page form .col-md-4, .admin-page form .col-md-5, .admin-page form .col-md-6, .admin-page form .col-md-7, .admin-page form .col-md-8, .admin-page form .col-md-9, .admin-page form .col-md-auto, .admin-page form .col-sm, .admin-page form .col-sm-1, .admin-page form .col-sm-10, .admin-page form .col-sm-11, .admin-page form .col-sm-12, .admin-page form .col-sm-2, .admin-page form .col-sm-3, .admin-page form .col-sm-4, .admin-page form .col-sm-5, .admin-page form .col-sm-6, .admin-page form .col-sm-7, .admin-page form .col-sm-8, .admin-page form .col-sm-9, .admin-page form .col-sm-auto, .admin-page form .col-xl, .admin-page form .col-xl-1, .admin-page form .col-xl-10, .admin-page form .col-xl-11, .admin-page form .col-xl-12, .admin-page form .col-xl-2, .admin-page form .col-xl-3, .admin-page form .col-xl-4, .admin-page form .col-xl-5, .admin-page form .col-xl-6, .admin-page form .col-xl-7, .admin-page form .col-xl-8, .admin-page form .col-xl-9, .admin-page form .col-xl-auto {
+  display: flex;
+  align-self: center;
+}
+.admin-page form .col sub, .admin-page form .col-1 sub, .admin-page form .col-10 sub, .admin-page form .col-11 sub, .admin-page form .col-12 sub, .admin-page form .col-2 sub, .admin-page form .col-3 sub, .admin-page form .col-4 sub, .admin-page form .col-5 sub, .admin-page form .col-6 sub, .admin-page form .col-7 sub, .admin-page form .col-8 sub, .admin-page form .col-9 sub, .admin-page form .col-auto sub, .admin-page form .col-lg sub, .admin-page form .col-lg-1 sub, .admin-page form .col-lg-10 sub, .admin-page form .col-lg-11 sub, .admin-page form .col-lg-12 sub, .admin-page form .col-lg-2 sub, .admin-page form .col-lg-3 sub, .admin-page form .col-lg-4 sub, .admin-page form .col-lg-5 sub, .admin-page form .col-lg-6 sub, .admin-page form .col-lg-7 sub, .admin-page form .col-lg-8 sub, .admin-page form .col-lg-9 sub, .admin-page form .col-lg-auto sub, .admin-page form .col-md sub, .admin-page form .col-md-1 sub, .admin-page form .col-md-10 sub, .admin-page form .col-md-11 sub, .admin-page form .col-md-12 sub, .admin-page form .col-md-2 sub, .admin-page form .col-md-3 sub, .admin-page form .col-md-4 sub, .admin-page form .col-md-5 sub, .admin-page form .col-md-6 sub, .admin-page form .col-md-7 sub, .admin-page form .col-md-8 sub, .admin-page form .col-md-9 sub, .admin-page form .col-md-auto sub, .admin-page form .col-sm sub, .admin-page form .col-sm-1 sub, .admin-page form .col-sm-10 sub, .admin-page form .col-sm-11 sub, .admin-page form .col-sm-12 sub, .admin-page form .col-sm-2 sub, .admin-page form .col-sm-3 sub, .admin-page form .col-sm-4 sub, .admin-page form .col-sm-5 sub, .admin-page form .col-sm-6 sub, .admin-page form .col-sm-7 sub, .admin-page form .col-sm-8 sub, .admin-page form .col-sm-9 sub, .admin-page form .col-sm-auto sub, .admin-page form .col-xl sub, .admin-page form .col-xl-1 sub, .admin-page form .col-xl-10 sub, .admin-page form .col-xl-11 sub, .admin-page form .col-xl-12 sub, .admin-page form .col-xl-2 sub, .admin-page form .col-xl-3 sub, .admin-page form .col-xl-4 sub, .admin-page form .col-xl-5 sub, .admin-page form .col-xl-6 sub, .admin-page form .col-xl-7 sub, .admin-page form .col-xl-8 sub, .admin-page form .col-xl-9 sub, .admin-page form .col-xl-auto sub {
+  padding-top: 5px;
+  font-style: italic;
+  bottom: unset;
+  line-height: 1;
+}
+.admin-page form input::placeholder {
+  font-style: italic;
+  color: #c5c5c5;
+}
+.admin-page form label.col, .admin-page form label.col-1, .admin-page form label.col-10, .admin-page form label.col-11, .admin-page form label.col-12, .admin-page form label.col-2, .admin-page form label.col-3, .admin-page form label.col-4, .admin-page form label.col-5, .admin-page form label.col-6, .admin-page form label.col-7, .admin-page form label.col-8, .admin-page form label.col-9, .admin-page form label.col-auto, .admin-page form label.col-lg, .admin-page form label.col-lg-1, .admin-page form label.col-lg-10, .admin-page form label.col-lg-11, .admin-page form label.col-lg-12, .admin-page form label.col-lg-2, .admin-page form label.col-lg-3, .admin-page form label.col-lg-4, .admin-page form label.col-lg-5, .admin-page form label.col-lg-6, .admin-page form label.col-lg-7, .admin-page form label.col-lg-8, .admin-page form label.col-lg-9, .admin-page form label.col-lg-auto, .admin-page form label.col-md, .admin-page form label.col-md-1, .admin-page form label.col-md-10, .admin-page form label.col-md-11, .admin-page form label.col-md-12, .admin-page form label.col-md-2, .admin-page form label.col-md-3, .admin-page form label.col-md-4, .admin-page form label.col-md-5, .admin-page form label.col-md-6, .admin-page form label.col-md-7, .admin-page form label.col-md-8, .admin-page form label.col-md-9, .admin-page form label.col-md-auto, .admin-page form label.col-sm, .admin-page form label.col-sm-1, .admin-page form label.col-sm-10, .admin-page form label.col-sm-11, .admin-page form label.col-sm-12, .admin-page form label.col-sm-2, .admin-page form label.col-sm-3, .admin-page form label.col-sm-4, .admin-page form label.col-sm-5, .admin-page form label.col-sm-6, .admin-page form label.col-sm-7, .admin-page form label.col-sm-8, .admin-page form label.col-sm-9, .admin-page form label.col-sm-auto, .admin-page form label.col-xl, .admin-page form label.col-xl-1, .admin-page form label.col-xl-10, .admin-page form label.col-xl-11, .admin-page form label.col-xl-12, .admin-page form label.col-xl-2, .admin-page form label.col-xl-3, .admin-page form label.col-xl-4, .admin-page form label.col-xl-5, .admin-page form label.col-xl-6, .admin-page form label.col-xl-7, .admin-page form label.col-xl-8, .admin-page form label.col-xl-9, .admin-page form label.col-xl-auto {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.admin-page form label.col:last-child, .admin-page form label.col-1:last-child, .admin-page form label.col-10:last-child, .admin-page form label.col-11:last-child, .admin-page form label.col-12:last-child, .admin-page form label.col-2:last-child, .admin-page form label.col-3:last-child, .admin-page form label.col-4:last-child, .admin-page form label.col-5:last-child, .admin-page form label.col-6:last-child, .admin-page form label.col-7:last-child, .admin-page form label.col-8:last-child, .admin-page form label.col-9:last-child, .admin-page form label.col-auto:last-child, .admin-page form label.col-lg:last-child, .admin-page form label.col-lg-1:last-child, .admin-page form label.col-lg-10:last-child, .admin-page form label.col-lg-11:last-child, .admin-page form label.col-lg-12:last-child, .admin-page form label.col-lg-2:last-child, .admin-page form label.col-lg-3:last-child, .admin-page form label.col-lg-4:last-child, .admin-page form label.col-lg-5:last-child, .admin-page form label.col-lg-6:last-child, .admin-page form label.col-lg-7:last-child, .admin-page form label.col-lg-8:last-child, .admin-page form label.col-lg-9:last-child, .admin-page form label.col-lg-auto:last-child, .admin-page form label.col-md:last-child, .admin-page form label.col-md-1:last-child, .admin-page form label.col-md-10:last-child, .admin-page form label.col-md-11:last-child, .admin-page form label.col-md-12:last-child, .admin-page form label.col-md-2:last-child, .admin-page form label.col-md-3:last-child, .admin-page form label.col-md-4:last-child, .admin-page form label.col-md-5:last-child, .admin-page form label.col-md-6:last-child, .admin-page form label.col-md-7:last-child, .admin-page form label.col-md-8:last-child, .admin-page form label.col-md-9:last-child, .admin-page form label.col-md-auto:last-child, .admin-page form label.col-sm:last-child, .admin-page form label.col-sm-1:last-child, .admin-page form label.col-sm-10:last-child, .admin-page form label.col-sm-11:last-child, .admin-page form label.col-sm-12:last-child, .admin-page form label.col-sm-2:last-child, .admin-page form label.col-sm-3:last-child, .admin-page form label.col-sm-4:last-child, .admin-page form label.col-sm-5:last-child, .admin-page form label.col-sm-6:last-child, .admin-page form label.col-sm-7:last-child, .admin-page form label.col-sm-8:last-child, .admin-page form label.col-sm-9:last-child, .admin-page form label.col-sm-auto:last-child, .admin-page form label.col-xl:last-child, .admin-page form label.col-xl-1:last-child, .admin-page form label.col-xl-10:last-child, .admin-page form label.col-xl-11:last-child, .admin-page form label.col-xl-12:last-child, .admin-page form label.col-xl-2:last-child, .admin-page form label.col-xl-3:last-child, .admin-page form label.col-xl-4:last-child, .admin-page form label.col-xl-5:last-child, .admin-page form label.col-xl-6:last-child, .admin-page form label.col-xl-7:last-child, .admin-page form label.col-xl-8:last-child, .admin-page form label.col-xl-9:last-child, .admin-page form label.col-xl-auto:last-child {
+  padding-right: 0;
+}
+.admin-page a.text-truncate {
+  font-size: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  direction: rtl;
+  width: 100%;
+}
+.admin-page div.admin-options {
+  margin: 5px;
+  display: flex;
+  flex-direction: row-reverse;
+  column-gap: 5px;
+  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  overflow: auto;
+}
+.admin-page div.admin-table {
+  text-align: center;
+}
+.admin-page div.admin-table a {
+  color: darkblue;
+}
+.admin-page div.admin-table a:hover {
+  color: #1c2237;
+}
+.admin-page div.admin-table h4 {
+  margin: unset;
+  padding: 4px;
+  font-size: medium;
+  font-family: "verdana", "arial", "sans-serif";
+  background-color: #d6d6d6;
+}
+.admin-page div.admin-table th, .admin-page div.admin-table td {
+  font-size: 14px;
+  font-family: "verdana", "arial", "sans-serif";
+  vertical-align: middle;
+}
+.admin-page div.admin-table table {
+  margin: unset;
+}
+.admin-page div.admin-table div.table-footer {
+  margin: 10px;
+}
+.admin-page div.admin-table div.table-footer hr {
+  margin: unset;
+}
+.admin-page div.admin-table div.table-footer {
+  height: 16px;
+  text-align: right;
+}
+.admin-page .accordion {
+  width: 100%;
+}
+.admin-page .accordion .accordion-item {
+  border: solid 1px #d6d6d6;
+  margin: 2px 0;
+}
+.admin-page .accordion .accordion-item .accordion-header {
+  margin: unset;
+  color: #1c2237 !important;
+  font-size: 14px;
+}
+.admin-page .accordion .accordion-item button {
+  width: 100%;
+  text-align: left;
+  border: unset;
+  background-color: #d6d6d6;
+}
+.admin-page .accordion .accordion-item p, .admin-page .accordion .accordion-item ul {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.admin-page .accordion .accordion-button {
+  width: 100%;
+  color: #1c2237;
+}
+.admin-page .accordion .accordion-button::before {
+  content: "•";
+  padding-right: 1rem;
+}
+.admin-page .accordion .accordion-button::after {
+  content: "+";
+  float: right;
+}
+.admin-page .accordion .accordion-button:not(.collapsed)::after {
+  content: "x";
+  float: right;
+}
+.admin-page a.qm-clarify {
+  font-weight: bold;
+  color: #1c2237 !important;
+  display: inline-flex;
+  align-items: center;
+}

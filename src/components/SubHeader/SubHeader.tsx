@@ -7,7 +7,7 @@ import { FaUniversity, FaGlobe } from "react-icons/fa";
 
 import { SwitchOrgModal } from "components";
 
-import "./SubHeader.scss";
+import "./SubHeader.css";
 
 interface AuthUser {
   [key: string]: unknown;

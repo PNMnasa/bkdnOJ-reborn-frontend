@@ -1,0 +1,14 @@
+.main-component {
+  padding: unset;
+}
+
+.one-column-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+.one-column-wrapper .main-component {
+  background-color: rgb(245, 245, 245);
+  border: solid 2px #1c2237;
+}

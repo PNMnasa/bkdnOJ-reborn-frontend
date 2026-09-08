@@ -10,8 +10,8 @@ import contestAPI from "api/contest";
 import {FaExternalLinkAlt} from "react-icons/fa";
 
 // Styles
-import "styles/SubmissionVerdict.scss";
-import "styles/ClassicPagination.scss";
+import "styles/SubmissionVerdict.css";
+import "styles/ClassicPagination.css";
 
 interface SubShape {
   id: number | string;

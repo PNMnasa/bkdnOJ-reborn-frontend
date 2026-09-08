@@ -21,7 +21,7 @@ import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 
-import "./Details.scss";
+import "./Details.css";
 
 interface RateButtonProps {
   ckey: string;

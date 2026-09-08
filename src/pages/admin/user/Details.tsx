@@ -14,7 +14,7 @@ import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 import {randomString} from "helpers/random";
 
-import "./Details.scss";
+import "./Details.css";
 import { qmClarify } from "helpers/components";
 
 interface UserData {

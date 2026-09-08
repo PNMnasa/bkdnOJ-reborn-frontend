@@ -7,7 +7,7 @@ import contestAPI from "api/contest";
 import {setTitle} from "helpers/setTitle";
 import {ErrorBox} from "components";
 
-import "./Details.scss";
+import "./Details.css";
 
 const CONTEST_PROPS = ["key", "name", "start_time", "end_time", "time_limit"];
 

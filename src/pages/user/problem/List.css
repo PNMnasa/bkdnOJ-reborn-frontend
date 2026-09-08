@@ -1,0 +1,102 @@
+.problem-table {
+  position: relative;
+}
+.problem-table a {
+  color: darkblue;
+}
+.problem-table a:hover {
+  color: #1c2237;
+}
+.problem-table h4, .problem-table h5 {
+  margin: unset;
+  padding: 4px;
+  height: 36px;
+  font-size: medium;
+  font-weight: bold;
+  font-family: "verdana", "arial", "sans-serif";
+  background-color: #d6d6d6;
+}
+.problem-table th, .problem-table td {
+  font-size: 14px;
+  font-family: "verdana", "arial", "sans-serif";
+  vertical-align: middle;
+}
+.problem-table th.problem-code, .problem-table td.problem-code {
+  min-width: fit-content;
+  max-width: 50px;
+}
+.problem-table th.problem-title, .problem-table td.problem-title {
+  min-width: fit-content;
+  max-width: 100px;
+}
+.problem-table table {
+  margin: unset;
+}
+.problem-table .problem-table-footer {
+  margin: 10px;
+}
+.problem-table .problem-table-footer hr {
+  margin: unset;
+}
+.problem-table .problem-table-footer {
+  height: 16px;
+  text-align: right;
+}
+.problem-table div.title-section {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+}
+.problem-table div.title-section div.problem-code {
+  font-family: "verdana", "arial", "sans-serif";
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  column-gap: 3px;
+}
+.problem-table div.title-section div.problem-code span.visibility-tag {
+  border: solid 1px #c5c5c5;
+  border-radius: 10px;
+  padding: 1px 4px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  margin: 0 5px;
+}
+.problem-table div.title-section div.problem-title {
+  font-size: 14px;
+}
+.problem-table div.solve-section {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+.problem-table div.solve-section .ac-count {
+  font-size: 14px;
+  white-space: nowrap;
+  display: inline-flex;
+  justify-content: flex-end;
+  color: green;
+  font-family: "verdana", "arial", "sans-serif";
+  font-weight: bold;
+}
+.problem-table div.solve-section .ac-rate {
+  white-space: nowrap;
+  display: inline-flex;
+  justify-content: flex-end;
+  font-family: "verdana", "arial", "sans-serif";
+  font-weight: bold;
+}
+.problem-table .problem-count-text {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.problem-table .problem-count-text .count-text {
+  font-size: 14px;
+}
+.problem-table .problem-count-text .count-text .number {
+  font-family: "Roboto Mono", monospace;
+  font-weight: bold;
+}

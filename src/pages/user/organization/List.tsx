@@ -10,8 +10,8 @@ import { setTitle } from "helpers/setTitle";
 import { withParams } from "helpers/react-router";
 import { toast } from "react-toastify";
 
-import "styles/ClassicPagination.scss";
-import "./List.scss";
+import "styles/ClassicPagination.css";
+import "./List.css";
 import {
   FaUniversity,
   FaGreaterThan,

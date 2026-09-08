@@ -1,0 +1,35 @@
+.error-box {
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 2px 8px;
+  border: solid 1px rgb(187, 0, 0);
+  background-color: #FAE1E2;
+  text-align: left;
+}
+.error-box * {
+  margin: 0;
+  font-size: 12px;
+  color: rgb(185, 62, 62);
+}
+.error-box {
+  font-family: "Courier New", Courier, monospace;
+}
+.error-box div.errors-general-text {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px 0;
+  padding: 3px;
+}
+.error-box p {
+  font-weight: 100;
+}
+.error-box .error-sub-title {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  color: rgb(185, 62, 62);
+  background-color: unset;
+}

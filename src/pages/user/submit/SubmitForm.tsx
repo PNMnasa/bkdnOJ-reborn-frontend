@@ -16,7 +16,7 @@ import { DEFAULT_LANG_SHORTNAME } from "constants/aceEditorMode";
 import { __ls_get_code_editor, __ls_set_code_editor } from "helpers/localStorageHelpers";
 
 import "helpers/importAllAceMode";
-import "./SubmitForm.scss";
+import "./SubmitForm.css";
 
 const SOURCE_CODE_LIMIT = 5 * 1024 * 1024;
 

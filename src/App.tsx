@@ -14,7 +14,7 @@ import {
 import UserApp from "pages/user/UserApp";
 import AdminApp from "pages/admin/AdminApp";
 
-import "App.scss";
+import "App.css";
 
 const SignIn = lazy(() => import("pages/user-auth/SignIn/SignIn"));
 const SignUp = lazy(() => import("pages/user-auth/SignUp/SignUp"));

@@ -1,0 +1,57 @@
+@charset "UTF-8";
+div.admin.judge-panel h1, div.admin.judge-panel h2, div.admin.judge-panel h3, div.admin.judge-panel h4, div.admin.judge-panel h5, div.admin.judge-panel hr {
+  margin: unset;
+}
+div.admin.judge-panel h3, div.admin.judge-panel h4, div.admin.judge-panel h5 {
+  margin: 4px;
+}
+div.admin.judge-panel .panel-header {
+  display: inline-flex;
+  width: 100%;
+}
+div.admin.judge-panel .panel-header span.title-text {
+  flex-grow: 1;
+}
+div.admin.judge-panel .panel-header button {
+  display: inline-flex;
+  align-items: center;
+}
+div.admin.judge-panel .panel-header {
+  column-gap: 10px;
+  align-items: center;
+}
+div.admin.judge-panel .col {
+  text-align: left;
+}
+div.admin.judge-panel input[type=checkbox] {
+  min-width: 20px;
+}
+div.admin.judge-panel .accordion-item {
+  border: solid 1px #d6d6d6;
+  margin: 2px 0;
+}
+div.admin.judge-panel .accordion-item h2 {
+  color: #1c2237 !important;
+  font-size: 14px;
+}
+div.admin.judge-panel .accordion-item button {
+  width: 100%;
+  text-align: left;
+  border: unset;
+  background-color: #d6d6d6;
+}
+div.admin.judge-panel .accordion-button {
+  color: #1c2237;
+}
+div.admin.judge-panel .accordion-button::before {
+  content: "•";
+  padding-right: 1rem;
+}
+div.admin.judge-panel .accordion-button::after {
+  content: "+";
+  float: right;
+}
+div.admin.judge-panel .accordion-button:not(.collapsed)::after {
+  content: "x";
+  float: right;
+}

@@ -1,0 +1,126 @@
+div.submission-info .verdict {
+  font-weight: 600;
+  font-family: "verdana", "arial", "sans-serif";
+  cursor: help;
+}
+div.submission-info .verdict.ac {
+  color: green !important;
+}
+div.submission-info .verdict.wa, div.submission-info .verdict.tle, div.submission-info .verdict.mle, div.submission-info .verdict.ole {
+  color: rgba(255, 0, 0, 0.856) !important;
+}
+div.submission-info .verdict.ir, div.submission-info .verdict.rte {
+  color: orange !important;
+}
+div.submission-info .verdict.qu, div.submission-info .verdict.g, div.submission-info .verdict.p, div.submission-info .verdict.sc {
+  color: darkgray !important;
+}
+div.submission-info .verdict.ie, div.submission-info .verdict.ce {
+  color: black !important;
+}
+div.submission-info .verdict.fr {
+  color: darkblue !important;
+  background-color: rgba(190, 239, 245, 0.8);
+}
+div.submission-info .verdict span.points {
+  margin-left: 2px;
+}
+@media (min-width: 768px) {
+  div.submission-info .verdict .verdict-wrapper span.text {
+    display: none;
+  }
+  div.submission-info .verdict .verdict-wrapper.ac::after {
+    content: "Accepted";
+  }
+  div.submission-info .verdict .verdict-wrapper.wa::after {
+    content: "Wrong Answer";
+  }
+  div.submission-info .verdict .verdict-wrapper.tle::after {
+    content: "Time Limit Exceeded";
+  }
+  div.submission-info .verdict .verdict-wrapper.mle::after {
+    content: "Memory Limit Exceeded";
+  }
+  div.submission-info .verdict .verdict-wrapper.ole::after {
+    content: "Output Limit Exceeded";
+  }
+  div.submission-info .verdict .verdict-wrapper.ir::after {
+    content: "Invalid Return";
+  }
+  div.submission-info .verdict .verdict-wrapper.rte::after {
+    content: "Runtime Error";
+  }
+  div.submission-info .verdict .verdict-wrapper.qu::after {
+    content: "Waiting..";
+  }
+  div.submission-info .verdict .verdict-wrapper.p::after {
+    content: "Processing..";
+  }
+  div.submission-info .verdict .verdict-wrapper.g::after {
+    content: "Judging..";
+  }
+  div.submission-info .verdict .verdict-wrapper.sc::after {
+    content: "Skipped";
+  }
+  div.submission-info .verdict .verdict-wrapper.ie::after {
+    content: "Internal Error";
+  }
+  div.submission-info .verdict .verdict-wrapper.ce::after {
+    content: "Compile Error";
+  }
+  div.submission-info .verdict .verdict-wrapper.fr::after {
+    content: "Frozen";
+  }
+}
+div.submission-info a {
+  color: darkblue;
+}
+div.submission-info h4 {
+  margin: 5px 0;
+}
+div.submission-info hr {
+  margin: unset;
+  padding: unset;
+}
+div.submission-info div.row {
+  margin: unset;
+  display: block;
+}
+div.submission-info div.submission-details {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+div.submission-info div.submission-details h5 {
+  display: inline;
+}
+div.submission-info div.submission-details div.general .row {
+  display: flex;
+  white-space: pre;
+}
+div.submission-info div.submission-details div.general .row span {
+  width: fit-content;
+  white-space: pre;
+}
+div.submission-info div.submission-details div.general .row span strong {
+  padding-right: 10px;
+}
+div.submission-info div.submission-details div.source .ace_editor {
+  margin: 5px 0;
+  border: solid 1px #1c2237;
+}
+div.submission-info div.submission-details div.info-subsection {
+  margin: 5px 0;
+  padding: 5px 10px;
+  border-bottom: solid 1px #d6d6d6;
+}
+div.submission-info div.submission-details div.info-subsection:last-child {
+  border-bottom: unset;
+}
+div.submission-info table {
+  width: 100%;
+  margin-top: 5px;
+}
+div.submission-info table td {
+  border-top: unset;
+  padding: unset;
+}

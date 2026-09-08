@@ -16,7 +16,7 @@ import ContestContext from "context/ContestContext";
 import { getHourMinuteSecond, getYearMonthDate } from "helpers/dateFormatter";
 import { shouldStopPolling } from "constants/statusFilter";
 
-import "./RecentSubmissionSidebar.scss";
+import "./RecentSubmissionSidebar.css";
 
 const __RECENT_SUBMISSION_POLL_DELAY = 3000; // ms
 const __RECENT_SUBMISSION_MAX_POLL_DURATION = 30 * 1000; // ms

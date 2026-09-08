@@ -14,7 +14,7 @@ import profileClient from "api/profile";
 
 import { SpinLoader } from "components";
 
-import "./UserProfile.scss";
+import "./UserProfile.css";
 
 import { setTitle } from "helpers/setTitle";
 

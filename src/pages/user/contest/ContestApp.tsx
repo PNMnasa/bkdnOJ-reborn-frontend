@@ -13,8 +13,8 @@ import {SpinLoader} from "components";
 import contestAPI from "api/contest";
 import {withParams, withNavigation} from "helpers/react-router";
 
-import "styles/ClassicPagination.scss";
-import "./ContestApp.scss";
+import "styles/ClassicPagination.css";
+import "./ContestApp.css";
 
 // Context Components
 import {ContestNav, ContestBanner, ContestController} from "./_";

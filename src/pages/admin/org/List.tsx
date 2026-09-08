@@ -11,8 +11,8 @@ import orgAPI from "api/organization";
 import {setTitle} from "helpers/setTitle";
 import {FaTimes, FaPlus} from "react-icons/fa";
 
-import "./List.scss";
-import "styles/ClassicPagination.scss";
+import "./List.css";
+import "styles/ClassicPagination.css";
 
 export const INITIAL_FILTER: Record<string, unknown> = {
   search: "",

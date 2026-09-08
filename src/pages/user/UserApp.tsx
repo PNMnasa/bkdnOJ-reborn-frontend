@@ -7,7 +7,7 @@ import SubHeaderRaw from "components/SubHeader/SubHeader";
 
 const SubHeader = SubHeaderRaw as React.ComponentType<any>;
 
-import "./UserApp.scss";
+import "./UserApp.css";
 
 interface UserAppProps {
   [key: string]: unknown;

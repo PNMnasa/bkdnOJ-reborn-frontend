@@ -1,7 +1,7 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
-import "./Submit.scss";
+import "./Submit.css";
 
 interface SubmitProps {
   [key: string]: unknown;

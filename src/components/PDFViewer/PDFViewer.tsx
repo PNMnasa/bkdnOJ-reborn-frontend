@@ -7,7 +7,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.js?url";
 
 import { __ls_get_access_token } from "helpers/localStorageHelpers";
-import "./PDFViewer.scss";
+import "./PDFViewer.css";
 
 interface PDFViewerProps {
   pdf?: string | null;

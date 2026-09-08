@@ -1,0 +1,32 @@
+span.classic-pagination {
+  font-family: "verdana", "arial", "sans-serif";
+  font-size: 14px;
+}
+span.classic-pagination ul {
+  display: inline;
+  list-style-type: none;
+  text-align: right;
+  margin: unset;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: unset;
+}
+span.classic-pagination ul li {
+  display: inline;
+}
+span.classic-pagination ul li.next, span.classic-pagination ul li.previous {
+  display: none;
+}
+span.classic-pagination ul li.selected {
+  color: #1c2237;
+  font-weight: bold;
+}
+span.classic-pagination ul li.selected.selected:hover a {
+  text-decoration: none;
+  cursor: default;
+}
+span.classic-pagination ul li {
+  margin-left: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+}

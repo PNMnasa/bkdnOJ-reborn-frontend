@@ -1,0 +1,72 @@
+div#org-main div#org-title-div {
+  min-height: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 3px 0;
+  row-gap: 5px;
+}
+div#org-main div#org-title-div div.org-path {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  column-gap: 10px;
+  align-items: center;
+}
+div#org-main div#org-title-div div.org-path div.org-path-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: solid 2px rgba(0, 0, 0, 0.1);
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+div#org-main div#org-title-div div.org-path div.org-path-item img.org-path-item-img {
+  width: auto;
+  margin-right: 10px;
+}
+div#org-main div#org-title-div div.org-path div.org-path-item span.org-path-item-slug {
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+}
+div#org-main div.org-table div.org-name-wrapper {
+  text-align: left;
+}
+div#org-main div.org-table div.org-name-wrapper h6 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+  margin: 0;
+}
+div#org-main div.org-detail-wrapper-col div.org-detail-wrapper {
+  height: 100%;
+  display: flex;
+  align-self: baseline;
+  flex-direction: column;
+  margin-right: 4px;
+  padding-right: 4px;
+  overflow-y: auto;
+}
+div#org-main div.org-detail-wrapper-col div.org-detail-wrapper h5.org-detail-title {
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+  font-size: x-large;
+}
+div#org-main div.org-detail-wrapper-col div.org-detail-wrapper div.org-detail-item {
+  word-break: break-word;
+  margin: 6px;
+  padding: 4px;
+  text-align: left;
+}
+div#org-main div.org-detail-wrapper-col div.org-detail-wrapper div.org-detail-item:first-child {
+  margin-top: 0;
+}
+div#org-main div.org-detail-wrapper-col div.org-detail-wrapper div.org-detail-item:last-child {
+  margin-bottom: 0;
+}
+div#org-main div.org-table-wrapper-col div.org-table-wrapper {
+  max-height: 60vh;
+  display: block;
+  overflow: auto;
+}

@@ -17,7 +17,7 @@ import orgAPI from "api/organization";
 
 import Members from "./_/Members";
 
-import "./Details.scss";
+import "./Details.css";
 
 interface Org {
   slug: string;

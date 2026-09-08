@@ -1,0 +1,18 @@
+.sign-up-form {
+  border: solid 2px;
+  background-color: rgb(245, 245, 245);
+  max-width: 600px;
+}
+.sign-up-form .row {
+  text-align: left;
+}
+.sign-up-form .submit-btn {
+  background-color: rgb(245, 245, 245);
+  color: #1c2237;
+}
+.sign-up-form {
+  width: 80%;
+  margin: auto;
+  margin: 20px;
+  padding: 20px;
+}

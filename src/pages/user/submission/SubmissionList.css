@@ -1,0 +1,220 @@
+.submission-table {
+  position: relative;
+}
+.submission-table .submission-table-control {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+}
+.submission-table .submission-table-control button {
+  margin: 3px 4px 2px 0;
+  height: 26px;
+  min-width: 26px;
+}
+.submission-table a {
+  color: darkblue;
+}
+.submission-table a:hover {
+  color: #1c2237;
+}
+.submission-table h4, .submission-table h5 {
+  height: 36px;
+  margin: unset;
+  padding: 7px;
+  font-size: medium;
+  font-weight: bold;
+  font-family: "verdana", "arial", "sans-serif";
+  background-color: #d6d6d6;
+}
+.submission-table th, .submission-table td {
+  font-size: 14px;
+  font-family: "verdana", "arial", "sans-serif";
+  vertical-align: middle;
+}
+.submission-table table {
+  margin: unset;
+}
+.submission-table .submission-table-footer {
+  margin: 10px;
+}
+.submission-table .submission-table-footer hr {
+  margin: unset;
+}
+.submission-table .submission-table-footer {
+  height: 16px;
+  text-align: right;
+}
+.submission-table td.general-info {
+  padding: 0;
+  margin: 0;
+  min-width: 100px;
+  max-width: 300px;
+}
+.submission-table td.general-info div.general-info-container {
+  width: 100%;
+  padding: 0 5px;
+  display: flex;
+  flex-direction: column;
+}
+.submission-table td.general-info div.general-info-container * {
+  text-align: left;
+}
+.submission-table td.general-info div.general-info-container span.author {
+  font-size: 12px;
+}
+.submission-table td.general-info div.general-info-container span.language {
+  margin-left: 2px;
+  font-size: 12px;
+}
+.submission-table td.verdict {
+  padding: 0;
+  margin: 0;
+}
+.submission-table td.verdict div.verdict-container {
+  width: 100%;
+  min-width: 170px;
+  min-height: 50px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.submission-table td.verdict div.verdict-container div.verdict-wrapper {
+  flex: 1;
+}
+.submission-table td.verdict div.verdict-container div.points-container {
+  height: 100px;
+  width: 100px;
+  max-height: 60px;
+  max-width: 60px;
+  cursor: help;
+  position: relative;
+}
+.submission-table td.verdict div.verdict-container div.points-container.available {
+  background: linear-gradient(to top left, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.05) calc(50% - 0.8px), rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.05) calc(50% + 0.8px), rgba(0, 0, 0, 0.05) 100%);
+}
+.submission-table td.verdict div.verdict-container div.points-container.available span.sub-points {
+  max-width: 75%;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+.submission-table td.verdict div.verdict-container div.points-container.available span.prob-points {
+  max-width: 75%;
+  color: black;
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+}
+.submission-table td.resource-allocated {
+  padding: 0;
+  margin: 0;
+  min-width: 100px;
+}
+.submission-table td.resource-allocated div.resource-allocated-container {
+  padding: 0 5px;
+}
+.submission-table td.resource-allocated div.resource-allocated-container span.cpu-usage {
+  font-weight: bold;
+}
+.submission-table tr.spectator-submission {
+  background-color: rgba(100, 200, 255, 0.2);
+}
+.submission-table tr.spectator-submission:hover {
+  background-color: rgba(100, 200, 255, 0.25);
+}
+.submission-table tr.spectator-submission:nth-of-type(odd) {
+  background-color: rgba(100, 200, 255, 0.3);
+}
+.submission-table tr.spectator-submission:nth-of-type(odd):hover {
+  background-color: rgba(100, 200, 255, 0.35);
+}
+.submission-table .submission-count-text {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  height: 26px;
+}
+.submission-table .submission-count-text .count-text {
+  font-size: 14px;
+}
+.submission-table .submission-count-text .count-text .number {
+  font-family: "Roboto Mono", monospace;
+  font-weight: bold;
+}
+.submission-table .verdict {
+  font-weight: 600;
+  font-family: "verdana", "arial", "sans-serif";
+  cursor: help;
+}
+.submission-table .verdict.ac {
+  color: green !important;
+}
+.submission-table .verdict.wa, .submission-table .verdict.tle, .submission-table .verdict.mle, .submission-table .verdict.ole {
+  color: rgba(255, 0, 0, 0.856) !important;
+}
+.submission-table .verdict.ir, .submission-table .verdict.rte {
+  color: orange !important;
+}
+.submission-table .verdict.qu, .submission-table .verdict.g, .submission-table .verdict.p, .submission-table .verdict.sc {
+  color: darkgray !important;
+}
+.submission-table .verdict.ie, .submission-table .verdict.ce {
+  color: black !important;
+}
+.submission-table .verdict.fr {
+  color: darkblue !important;
+  background-color: rgba(190, 239, 245, 0.8);
+}
+.submission-table .verdict span.points {
+  margin-left: 2px;
+}
+@media (min-width: 768px) {
+  .submission-table .verdict .verdict-wrapper span.text {
+    display: none;
+  }
+  .submission-table .verdict .verdict-wrapper.ac::after {
+    content: "Accepted";
+  }
+  .submission-table .verdict .verdict-wrapper.wa::after {
+    content: "Wrong Answer";
+  }
+  .submission-table .verdict .verdict-wrapper.tle::after {
+    content: "Time Limit Exceeded";
+  }
+  .submission-table .verdict .verdict-wrapper.mle::after {
+    content: "Memory Limit Exceeded";
+  }
+  .submission-table .verdict .verdict-wrapper.ole::after {
+    content: "Output Limit Exceeded";
+  }
+  .submission-table .verdict .verdict-wrapper.ir::after {
+    content: "Invalid Return";
+  }
+  .submission-table .verdict .verdict-wrapper.rte::after {
+    content: "Runtime Error";
+  }
+  .submission-table .verdict .verdict-wrapper.qu::after {
+    content: "Waiting..";
+  }
+  .submission-table .verdict .verdict-wrapper.p::after {
+    content: "Processing..";
+  }
+  .submission-table .verdict .verdict-wrapper.g::after {
+    content: "Judging..";
+  }
+  .submission-table .verdict .verdict-wrapper.sc::after {
+    content: "Skipped";
+  }
+  .submission-table .verdict .verdict-wrapper.ie::after {
+    content: "Internal Error";
+  }
+  .submission-table .verdict .verdict-wrapper.ce::after {
+    content: "Compile Error";
+  }
+  .submission-table .verdict .verdict-wrapper.fr::after {
+    content: "Frozen";
+  }
+}

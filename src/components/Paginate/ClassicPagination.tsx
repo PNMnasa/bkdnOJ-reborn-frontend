@@ -1,5 +1,5 @@
 import React from "react";
-import "./ClassicPagination.scss";
+import "./ClassicPagination.css";
 
 interface ClassicPaginationProps {
   pageCount: number;

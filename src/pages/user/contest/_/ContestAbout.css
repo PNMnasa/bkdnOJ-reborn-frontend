@@ -1,0 +1,14 @@
+div.contest-about .contest-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+div.contest-about .contest-info span {
+  margin-right: 4px;
+  margin-bottom: 4px;
+  font-size: 90%;
+}
+div.contest-about .contest-author {
+  text-decoration: none;
+  color: unset;
+}

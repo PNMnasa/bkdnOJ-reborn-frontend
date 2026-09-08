@@ -5,7 +5,7 @@ import { Row, Col } from "react-bootstrap";
 
 import UniIcon from "assets/images/bkdn-uni-icon-white.png";
 
-import "./Content.scss";
+import "./Content.css";
 
 export default class Content extends React.Component {
   constructor(props: {}) {
@@ -22,7 +22,7 @@ export default class Content extends React.Component {
               className="img-fluid"
               src={UniIcon}
               alt="bkdnoj-logo"
-              style={{ maxWidth: "90%" }}
+              style={{ width: "90%", maxWidth: "90%", aspectRatio: "1 / 1" }}
             />
           </Col>
           <Col md={8}>

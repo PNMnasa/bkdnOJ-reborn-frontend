@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import BTNavbar from "react-bootstrap/Navbar";
 
 import icon from "assets/images/bkdnoj-favicon-noring.png";
-import "./Navbar.scss";
+import "./Navbar.css";
 
 import UserAuthSection from "./UserAuthSection";
 

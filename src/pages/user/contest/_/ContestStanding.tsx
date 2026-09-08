@@ -30,8 +30,8 @@ import {BiSpreadsheet, BiTargetLock} from "react-icons/bi";
 import ContestContext from "context/ContestContext";
 
 // Styles
-import "./ContestStanding.scss";
-import "styles/Ratings.scss";
+import "./ContestStanding.css";
+import "styles/Ratings.css";
 import { addClass } from "helpers/dom_functions";
 
 const __STANDING_POLL_DELAY = 5000;
@@ -220,19 +220,19 @@ class StandingItem extends React.Component<StandingItemProps> {
         <td className="td-rank">
           <div className="flex-center rank-display">
             <div className="rank-position">{rowIdx + 1}</div>
-            {rowIdx === 0 ? <img src={top1} alt="Top 1 Icon" /> : ""}
+            {rowIdx === 0 ? <img src={top1} alt="Top 1 Icon" style={{ width: 16, height: 16 }} /> : ""}
             {0 < rowIdx && rowIdx < 10 ? (
-              <img src={top10} alt="Top 10 Icon" />
+              <img src={top10} alt="Top 10 Icon" style={{ width: 16, height: 16 }} />
             ) : (
               ""
             )}
             {10 <= rowIdx && rowIdx < 30 ? (
-              <img src={top30} alt="Top 30 Icon" />
+              <img src={top30} alt="Top 30 Icon" style={{ width: 16, height: 16 }} />
             ) : (
               ""
             )}
             {30 <= rowIdx && rowIdx < 100 ? (
-              <img src={top100} alt="Top 100 Icon" />
+              <img src={top100} alt="Top 100 Icon" style={{ width: 16, height: 16 }} />
             ) : (
               ""
             )}

@@ -1,0 +1,68 @@
+.org-table a {
+  color: darkblue;
+}
+.org-table a:hover {
+  color: #1c2237;
+}
+.org-table h4 {
+  margin: unset;
+  padding: 4px;
+  font-size: medium;
+  font-family: "verdana", "arial", "sans-serif";
+  background-color: #d6d6d6;
+}
+.org-table table {
+  margin: unset;
+}
+.org-table th, .org-table td {
+  font-size: 14px;
+  font-family: "verdana", "arial", "sans-serif";
+  vertical-align: middle;
+}
+.org-table td.org-i {
+  position: relative;
+}
+.org-table td.org-i div.org-img-wrapper {
+  max-height: 50px;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.org-table td.org-i div.org-img-wrapper img {
+  display: block;
+  max-height: 50px;
+  width: auto;
+  height: auto;
+}
+.org-table td.org-i span.org-slug {
+  font-weight: bold;
+}
+.org-table .org-tag {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  column-gap: 3px;
+  margin: 0 2px;
+  padding: 1px 3px;
+  border: solid 2px #d6d6d6;
+  border-radius: 10px;
+}
+.org-table .icons {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+.org-table .org-table-footer {
+  margin: 10px;
+}
+.org-table .org-table-footer hr {
+  margin: unset;
+}
+.org-table .org-table-footer {
+  height: 16px;
+  text-align: right;
+}

@@ -1,0 +1,74 @@
+.verdict {
+  font-weight: 600;
+  font-family: "verdana", "arial", "sans-serif";
+  cursor: help;
+}
+.verdict.ac {
+  color: green !important;
+}
+.verdict.wa, .verdict.tle, .verdict.mle, .verdict.ole {
+  color: rgba(255, 0, 0, 0.856) !important;
+}
+.verdict.ir, .verdict.rte {
+  color: orange !important;
+}
+.verdict.qu, .verdict.g, .verdict.p, .verdict.sc {
+  color: darkgray !important;
+}
+.verdict.ie, .verdict.ce {
+  color: black !important;
+}
+.verdict.fr {
+  color: darkblue !important;
+  background-color: rgba(190, 239, 245, 0.8);
+}
+.verdict span.points {
+  margin-left: 2px;
+}
+@media (min-width: 768px) {
+  .verdict .verdict-wrapper span.text {
+    display: none;
+  }
+  .verdict .verdict-wrapper.ac::after {
+    content: "Accepted";
+  }
+  .verdict .verdict-wrapper.wa::after {
+    content: "Wrong Answer";
+  }
+  .verdict .verdict-wrapper.tle::after {
+    content: "Time Limit Exceeded";
+  }
+  .verdict .verdict-wrapper.mle::after {
+    content: "Memory Limit Exceeded";
+  }
+  .verdict .verdict-wrapper.ole::after {
+    content: "Output Limit Exceeded";
+  }
+  .verdict .verdict-wrapper.ir::after {
+    content: "Invalid Return";
+  }
+  .verdict .verdict-wrapper.rte::after {
+    content: "Runtime Error";
+  }
+  .verdict .verdict-wrapper.qu::after {
+    content: "Waiting..";
+  }
+  .verdict .verdict-wrapper.p::after {
+    content: "Processing..";
+  }
+  .verdict .verdict-wrapper.g::after {
+    content: "Judging..";
+  }
+  .verdict .verdict-wrapper.sc::after {
+    content: "Skipped";
+  }
+  .verdict .verdict-wrapper.ie::after {
+    content: "Internal Error";
+  }
+  .verdict .verdict-wrapper.ce::after {
+    content: "Compile Error";
+  }
+  .verdict .verdict-wrapper.fr::after {
+    content: "Frozen";
+  }
+}

@@ -7,7 +7,7 @@ import {withParams} from "helpers/react-router";
 import UserFromFile from "./newtabs/UserFromFile";
 import {setTitle} from "helpers/setTitle";
 
-import "./Details.scss";
+import "./Details.css";
 
 interface AdminJudgeDetailsProps {
   params: Record<string, string | undefined>;
