@@ -3,7 +3,3 @@ allowBuilds:
   core-js: true
   core-js-pure: true
   esbuild: true
-
-overrides:
-  '@types/react': ^18.3.31
-  '@types/react-dom': ^18.3.7

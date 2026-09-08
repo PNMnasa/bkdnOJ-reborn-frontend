@@ -18,7 +18,7 @@ interface OutsideAlerterProps {
 }
 
 export default class OutsideAlerter extends Component<OutsideAlerterProps> {
-  wrapperRef: React.RefObject<HTMLDivElement>;
+  wrapperRef: React.RefObject<HTMLDivElement | null>;
   outsideClickHandler?: () => void;
 
   constructor(props: OutsideAlerterProps) {

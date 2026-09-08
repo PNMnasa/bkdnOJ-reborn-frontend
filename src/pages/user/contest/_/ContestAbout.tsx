@@ -12,7 +12,6 @@ import {secondsToHHMMSS} from "helpers/durationFormatter";
 import ContestContext from "context/ContestContext";
 
 // Styles
-import "pages/user/problem/__List.scss";
 import "./ContestAbout.scss";
 
 interface ContestAboutProps {
