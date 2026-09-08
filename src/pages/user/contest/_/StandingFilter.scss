@@ -1,4 +1,4 @@
-@import "global.scss";
+@use 'global.scss' as *;
 
 $filter-width: 600px;
 $filter-height: 230px;

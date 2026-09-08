@@ -1,4 +1,4 @@
-@import 'global.scss';
+@use 'global.scss' as *;
 
 div.admin.submission-panel {
   h1, h2, h3, h4, h5, hr{

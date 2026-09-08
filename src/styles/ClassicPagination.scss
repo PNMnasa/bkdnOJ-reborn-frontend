@@ -1,4 +1,4 @@
-@import 'global.scss';
+@use 'global.scss' as *;
 
 span.classic-pagination {
   font-family: $font-codeforces;

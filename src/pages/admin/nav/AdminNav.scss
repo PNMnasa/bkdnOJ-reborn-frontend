@@ -1,4 +1,4 @@
-@import 'global.scss';
+@use 'global.scss' as *;
 
 ul.admin-nav {
   margin-inline-start: 0px;

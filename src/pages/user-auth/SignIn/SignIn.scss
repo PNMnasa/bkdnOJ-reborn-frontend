@@ -1,4 +1,4 @@
-@import "global.scss";
+@use 'global.scss' as *;
 
 .sign-in-form {
     border: solid 2px ;

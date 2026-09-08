@@ -1,4 +1,4 @@
-@import 'global.scss';
+@use 'global.scss' as *;
 // RATING_CLASS = ['rate-newbie', 'rate-pupil', 'rate-specialist', 'rate-expert', 'rate-candidate-master', 'rate-master',
 //                 'rate-international-master', 'rate-grandmaster', 'rate-international-grandmaster',
 //                 'rate-legendary-grandmaster']

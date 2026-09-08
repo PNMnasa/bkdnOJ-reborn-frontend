@@ -73,8 +73,16 @@ export default defineConfig(({ mode }) => {
     },
     css: {
       preprocessorOptions: {
-        scss: { includePaths: [srcDir] },
-        sass: { includePaths: [srcDir] },
+        scss: {
+          includePaths: [srcDir],
+          api: "modern-compiler",
+          silenceDeprecations: ["import", "color-functions", "legacy-js-api", "global-builtin", "if-function"],
+        },
+        sass: {
+          includePaths: [srcDir],
+          api: "modern-compiler",
+          silenceDeprecations: ["import", "color-functions", "legacy-js-api", "global-builtin", "if-function"],
+        },
       },
     },
     build: {
