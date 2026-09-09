@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import "assets/vendor/bootstrap-4.1.0.min.css";
+import "styles/bootstrap.css";
 import "assets/vendor/google-fonts.css";
 
 import { Provider } from "react-redux";

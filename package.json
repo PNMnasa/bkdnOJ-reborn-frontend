@@ -13,7 +13,6 @@
     "@uiw/react-md-editor": "^3.25.6",
     "ace-builds": "^1.44.0",
     "axios": "^1.9.0",
-    "bootstrap": "^5.3.8",
     "gh-pages": "^3.2.3",
     "katex": "^0.16.47",
     "lodash": "^4.18.1",
