@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {Link} from "react-router";
-import {Form, Row, Col, Table, Button, Modal} from "react-bootstrap";
+import {Form, Row, Col, Table, Button, Modal} from "components/bootstrap";
 
 import contestAPI from "api/contest";
 

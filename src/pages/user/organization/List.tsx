@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { Link, Navigate } from "react-router";
-import { Table, Row, Col, Button } from "react-bootstrap";
+import { Table, Row, Col, Button } from "components/bootstrap";
 
 import { SpinLoader, ErrorBox } from "components";
 import orgAPI from "api/organization";

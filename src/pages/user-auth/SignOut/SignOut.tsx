@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 
 import { Navigate } from "react-router";
-import { Form } from "react-bootstrap";
+import { Form } from "components/bootstrap";
 
 import SpinLoader from "components/SpinLoader/SpinLoader";
 

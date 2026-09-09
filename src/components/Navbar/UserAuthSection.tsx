@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 import { toast } from "react-toastify";
 
-import { Nav, NavDropdown } from "react-bootstrap";
+import { Nav, NavDropdown } from "components/bootstrap";
 import { Link, Navigate } from "react-router";
 
 import { AiOutlineForm, AiOutlineLogin, AiOutlineLogout, AiOutlineProfile, GrUserAdmin } from "components/icons";

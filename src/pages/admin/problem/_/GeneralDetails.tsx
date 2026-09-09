@@ -1,5 +1,5 @@
 import React from "react";
-import {Accordion, Form, Row, Col, Button} from "react-bootstrap";
+import {Accordion, Form, Row, Col, Button} from "components/bootstrap";
 
 import { FaRegSave } from "components/icons";
 

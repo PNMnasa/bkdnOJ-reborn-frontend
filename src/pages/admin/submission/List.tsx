@@ -1,7 +1,7 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router";
-import {Table} from "react-bootstrap";
+import {Table} from "components/bootstrap";
 
 import {SpinLoader, ErrorBox} from "components";
 import submissionApi from "api/submission";

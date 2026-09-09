@@ -8,7 +8,7 @@ import { updateUser, clearUser } from "redux/User/actions";
 import { updateProfile } from "redux/Profile/actions";
 import { updateMyOrg } from "redux/MyOrg/actions";
 
-import { Row, Col, Tabs, Tab } from "react-bootstrap";
+import { Row, Col, Tabs, Tab } from "components/bootstrap";
 
 import profileClient from "api/profile";
 

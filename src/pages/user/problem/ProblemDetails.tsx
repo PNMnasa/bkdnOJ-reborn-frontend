@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link, Navigate } from "react-router";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col } from "components/bootstrap";
 
 import { FaAlignJustify, FaPaperPlane, FaRegFilePdf, FaSignInAlt, FaWrench, VscError } from "components/icons";
 

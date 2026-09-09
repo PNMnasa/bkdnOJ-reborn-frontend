@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import {Button, Table} from "react-bootstrap";
+import {Button, Table} from "components/bootstrap";
 import {Link} from "react-router";
 
 import {SpinLoader, ErrorBox, UserCard} from "components";

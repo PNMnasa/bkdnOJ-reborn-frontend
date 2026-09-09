@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {Navigate} from "react-router";
-import {Form, Row, Col, Button} from "react-bootstrap";
+import {Form, Row, Col, Button} from "components/bootstrap";
 
 import contestAPI from "api/contest";
 import {setTitle} from "helpers/setTitle";

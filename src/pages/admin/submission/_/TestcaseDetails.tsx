@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Accordion, Table, Row, Col} from "react-bootstrap";
+import {Form, Accordion, Table, Row, Col} from "components/bootstrap";
 import {ErrorBox, SpinLoader} from "components";
 
 interface ButtonPanelProps {}

@@ -1,7 +1,7 @@
 import React from "react";
 import { setTitle } from "helpers/setTitle";
 
-import { Row, Col } from "react-bootstrap";
+import { Row, Col } from "components/bootstrap";
 
 import UniIcon from "assets/images/bkdn-uni-icon-white.png";
 

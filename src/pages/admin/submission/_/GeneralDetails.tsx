@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Row, Col} from "react-bootstrap";
+import {Form, Row, Col} from "components/bootstrap";
 
 export interface SubmissionData {
   id: number | string;

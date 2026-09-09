@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col } from "components/bootstrap";
 
 import { FaUniversity } from "components/icons";
 

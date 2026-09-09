@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 
-import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
+import {Accordion, Button, Form, Row, Col} from "components/bootstrap";
 import {ErrorBox, SpinLoader, FileUploader} from "components";
 
 import { FaRegSave, VscRefresh } from "components/icons";

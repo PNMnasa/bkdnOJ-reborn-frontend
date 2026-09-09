@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "components/bootstrap";
 import "./Footer.css";
 import uniFlag from "assets/images/bkdn-uni-banner-gray-transparent.png";
 

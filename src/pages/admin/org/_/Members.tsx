@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router";
-import {Form, Row, Col, Table, Button, Modal} from "react-bootstrap";
+import {Form, Row, Col, Table, Button, Modal} from "components/bootstrap";
 import ReactPaginate from "react-paginate";
 
 import {SpinLoader, ErrorBox} from "components";

@@ -1,5 +1,5 @@
 import React from "react";
-import {Button} from "react-bootstrap";
+import {Button} from "components/bootstrap";
 import {Navigate, Outlet} from "react-router";
 
 import { VscThreeBars } from "components/icons";

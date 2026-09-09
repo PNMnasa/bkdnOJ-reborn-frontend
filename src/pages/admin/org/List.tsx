@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {Link, Navigate} from "react-router";
-import {Button, Modal, Form} from "react-bootstrap";
+import {Button, Modal, Form} from "components/bootstrap";
 
 import { AiOutlinePlusCircle, FaPlus, FaTimes } from "components/icons";
 

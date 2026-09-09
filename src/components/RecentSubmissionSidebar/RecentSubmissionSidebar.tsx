@@ -5,7 +5,7 @@ import type { AnyAction } from "redux";
 import ReactPaginate from "react-paginate";
 import { stopPolling } from "redux/RecentSubmission/actions";
 
-import { Table } from "react-bootstrap";
+import { Table } from "components/bootstrap";
 import { Link } from "react-router";
 
 import contestAPI from "api/contest";

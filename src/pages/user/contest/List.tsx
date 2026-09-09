@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router";
-import {Table} from "react-bootstrap";
+import {Table} from "components/bootstrap";
 import { VscPerson } from "components/icons";
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button } from "components/bootstrap";
 import { BiArrowFromLeft, BiArrowFromRight } from "components/icons";
 
 import type { ReactNode } from "react";

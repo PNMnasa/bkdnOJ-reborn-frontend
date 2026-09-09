@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col } from "components/bootstrap";
 import { toast } from "react-toastify";
 
 import authClient from "api/auth";

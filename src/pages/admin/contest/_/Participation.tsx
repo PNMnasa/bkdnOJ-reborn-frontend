@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import {Form, Row, Col, Table, Button, Modal} from "react-bootstrap";
+import {Form, Row, Col, Table, Button, Modal} from "components/bootstrap";
 import ReactPaginate from "react-paginate";
 
 import { FaFilter, FaPlusCircle, FaRegSave, FaTimes, FaUniversity } from "components/icons";

@@ -5,7 +5,7 @@ import type { AnyAction } from "redux";
 import { startPolling } from "redux/RecentSubmission/actions";
 
 import { toast } from "react-toastify";
-import { Form } from "react-bootstrap";
+import { Form } from "components/bootstrap";
 
 import { CodeEditor } from "components/CodeEditor";
 

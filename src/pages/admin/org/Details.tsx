@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {Link, Navigate} from "react-router";
-import {Form, Row, Col, Button, Tabs, Tab} from "react-bootstrap";
+import {Form, Row, Col, Button, Tabs, Tab} from "components/bootstrap";
 import { FaRedo, FaRegTrashAlt } from "components/icons";
 
 

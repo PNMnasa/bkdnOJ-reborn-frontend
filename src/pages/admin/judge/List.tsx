@@ -1,7 +1,7 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
 import {Navigate, Link} from "react-router";
-import {Button, Table} from "react-bootstrap";
+import {Button, Table} from "components/bootstrap";
 
 /* icons */
 import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle } from "components/icons";

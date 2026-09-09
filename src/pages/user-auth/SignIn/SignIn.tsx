@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 
 import { Navigate } from "react-router";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col } from "components/bootstrap";
 import { toast } from "react-toastify";
 
 import { updateUser, clearUser } from "redux/User/actions";

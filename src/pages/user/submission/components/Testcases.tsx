@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from "react";
 import { parseTime, parseMem } from "helpers/textFormatter";
 import { Link } from "react-router";
-import { Row, Col, Table } from "react-bootstrap";
+import { Row, Col, Table } from "components/bootstrap";
 import submissionApi from "api/submission";
 import { SpinLoader } from "components";
 

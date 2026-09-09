@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Container, Nav, NavDropdown, Image } from "react-bootstrap";
+import { Container, Nav, NavDropdown, Image } from "components/bootstrap";
 import { Link } from "react-router";
 
-import BTNavbar from "react-bootstrap/Navbar";
+import BTNavbar from "components/bootstrap/Navbar";
 
 import icon from "assets/images/bkdnoj-favicon-noring.png";
 import "./Navbar.css";

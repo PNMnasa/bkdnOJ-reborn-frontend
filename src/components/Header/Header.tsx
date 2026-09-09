@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 
-import { Modal, Button, Container } from "react-bootstrap";
+import { Modal, Button, Container } from "components/bootstrap";
 import { VscBug } from "components/icons";
 
 

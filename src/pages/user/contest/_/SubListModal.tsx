@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Modal} from "react-bootstrap";
+import {Modal} from "components/bootstrap";
 
 import {SpinLoader, ErrorBox} from "components";
 import ReactPaginate from "react-paginate";

@@ -11,7 +11,7 @@ import {
 
 import { NO_CONTEST_KEY } from "redux/SubFilter/types";
 
-import { Button, Row, Col } from "react-bootstrap";
+import { Button, Row, Col } from "components/bootstrap";
 
 import ContestContext from "context/ContestContext";
 

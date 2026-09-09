@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Container } from "components/bootstrap";
 import { Outlet } from "react-router";
 
 import { Header, Navbar, Footer, ScrollToTopBtn } from "components";

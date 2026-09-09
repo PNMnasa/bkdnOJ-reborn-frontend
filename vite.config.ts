@@ -129,15 +129,8 @@ function manualChunks(id: string): string | undefined {
   if (
     starts("@popperjs") ||
     is(
-      "react-bootstrap",
-      "bootstrap",
       "react-toastify",
-      "react-icons",
       "react-paginate",
-      "react-transition-group",
-      "classnames",
-      "prop-types",
-      "invariant",
       "overlayscrollbars"
     )
   ) {

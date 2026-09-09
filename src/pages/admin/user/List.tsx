@@ -1,7 +1,7 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
 import {Navigate, Link} from "react-router";
-import {Button, Table, Row, Col, Form} from "react-bootstrap";
+import {Button, Table, Row, Col, Form} from "components/bootstrap";
 
 import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle, FaFilter, FaTimes, FcHighPriority, FcOk } from "components/icons";
 

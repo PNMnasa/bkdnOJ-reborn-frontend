@@ -2,7 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { Link, Navigate } from "react-router";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col } from "components/bootstrap";
 
 import { FaSyncAlt, FaWrench, VscError } from "components/icons";
 

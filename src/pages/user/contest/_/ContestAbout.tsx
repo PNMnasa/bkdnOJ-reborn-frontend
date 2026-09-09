@@ -1,7 +1,7 @@
 import React from "react";
 import { VscInfo } from "components/icons";
 
-import {Badge, Button} from "react-bootstrap";
+import {Badge, Button} from "components/bootstrap";
 import {toast} from "react-toastify";
 
 import RichTextEditor from "components/RichTextEditor/RichTextEditor";

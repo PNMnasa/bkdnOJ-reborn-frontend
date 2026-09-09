@@ -1,6 +1,6 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
-import { Table } from "react-bootstrap";
+import { Table } from "components/bootstrap";
 import { FcHighPriority, FcOk } from "components/icons";
 
 

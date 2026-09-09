@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import { Container } from "react-bootstrap";
+import { Container } from "components/bootstrap";
 
 import { FaGlobe, FaUniversity } from "components/icons";
 

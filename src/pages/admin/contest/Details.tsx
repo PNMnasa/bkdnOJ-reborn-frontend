@@ -1,15 +1,15 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {Navigate} from "react-router";
-import {Button, Tabs, Tab} from "react-bootstrap";
+import {Button, Tabs, Tab} from "components/bootstrap";
 import { BsUpcScan, FaChartLine, FaGlobe, FaInfo, FaRegCalendarAlt, FaRegTrashAlt } from "components/icons";
 
 
 
 import {General, Participation, Problem} from "./_";
 
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "components/bootstrap/OverlayTrigger";
+import Tooltip from "components/bootstrap/Tooltip";
 
 import contestAPI from "api/contest";
 import {SpinLoader, ErrorBox} from "components";

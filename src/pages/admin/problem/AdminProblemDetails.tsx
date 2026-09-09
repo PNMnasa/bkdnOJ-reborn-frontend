@@ -2,7 +2,7 @@ import React from "react";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import {Navigate} from "react-router";
-import {Button, Tabs, Tab} from "react-bootstrap";
+import {Button, Tabs, Tab} from "components/bootstrap";
 
 import { FaGlobe, FaRegTrashAlt, FaSyncAlt } from "components/icons";
 

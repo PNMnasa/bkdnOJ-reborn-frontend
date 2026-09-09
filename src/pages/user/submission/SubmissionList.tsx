@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 import { setPublicParams, setContestParams } from "redux/SubFilter/actions";
 
-import { Button, Table } from "react-bootstrap";
+import { Button, Table } from "components/bootstrap";
 import { SpinLoader, ErrorBox } from "components";
 
 import submissionApi from "api/submission";

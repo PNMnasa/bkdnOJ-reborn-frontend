@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import {Row, Col, Button, Accordion} from "react-bootstrap";
+import {Row, Col, Button, Accordion} from "components/bootstrap";
 import { VscSave } from "components/icons";
 
 

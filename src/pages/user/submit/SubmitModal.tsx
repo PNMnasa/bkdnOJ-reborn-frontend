@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button } from "components/bootstrap";
 
 import { BsExclamationCircle, BsFillLightningChargeFill, FaExternalLinkAlt, FaPaperPlane } from "components/icons";
 

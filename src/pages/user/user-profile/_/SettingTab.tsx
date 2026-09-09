@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { Row, Col, Form, Button, Container } from "react-bootstrap";
+import { Row, Col, Form, Button, Container } from "components/bootstrap";
 
 import { ErrorBox } from "components";
 import profileClient from "api/profile";

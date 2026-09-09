@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Navigate} from "react-router";
-import {Tabs, Tab} from "react-bootstrap";
+import {Tabs, Tab} from "components/bootstrap";
 
 import {withParams} from "helpers/react-router";
 import UserFromFile from "./newtabs/UserFromFile";

@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router";
-import {Form, Accordion, Button, Table, Row, Col} from "react-bootstrap";
+import {Form, Accordion, Button, Table, Row, Col} from "components/bootstrap";
 import {ErrorBox, SpinLoader} from "components";
 import { VscRefresh } from "components/icons";
 

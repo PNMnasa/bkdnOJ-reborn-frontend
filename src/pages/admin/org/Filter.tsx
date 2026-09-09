@@ -1,5 +1,5 @@
 import React from "react";
-import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
+import {Accordion, Button, Form, Row, Col} from "components/bootstrap";
 
 import { FaFilter, FaTimes } from "components/icons";
 

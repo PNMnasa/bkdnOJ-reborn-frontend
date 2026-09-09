@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import {Form, Row, Col, Button, Accordion} from "react-bootstrap";
+import {Form, Row, Col, Button, Accordion} from "components/bootstrap";
 
 import contestAPI from "api/contest";
 import {ErrorBox} from "components";

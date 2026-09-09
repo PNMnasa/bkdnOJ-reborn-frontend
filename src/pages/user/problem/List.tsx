@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import ReactPaginate from "react-paginate";
 
 import { Link } from "react-router";
-import { Table, Button } from "react-bootstrap";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
+import { Table, Button } from "components/bootstrap";
+import OverlayTrigger from "components/bootstrap/OverlayTrigger";
+import Tooltip from "components/bootstrap/Tooltip";
 
 import { SpinLoader, ErrorBox } from "components";
 
