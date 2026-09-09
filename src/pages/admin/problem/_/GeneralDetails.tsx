@@ -1,7 +1,8 @@
 import React from "react";
 import {Accordion, Form, Row, Col, Button} from "react-bootstrap";
 
-import {FaRegSave} from "react-icons/fa";
+import { FaRegSave } from "components/icons";
+
 
 import {toast} from "react-toastify";
 

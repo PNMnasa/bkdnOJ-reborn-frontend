@@ -4,8 +4,9 @@ import {toast} from "react-toastify";
 import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
 import {ErrorBox, SpinLoader, FileUploader} from "components";
 
-import {FaRegSave} from "react-icons/fa";
-import {VscRefresh} from "react-icons/vsc";
+import { FaRegSave, VscRefresh } from "components/icons";
+
+
 
 import problemAPI from "api/problem";
 import commonAPI from "api/common";

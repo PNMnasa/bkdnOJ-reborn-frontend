@@ -3,9 +3,8 @@ import { toast } from "react-toastify";
 import {Form, Row, Col, Table, Button, Modal} from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 
-import {
-  FaPlusCircle, FaFilter, FaTimes, FaRegSave, FaUniversity
-} from "react-icons/fa";
+import { FaFilter, FaPlusCircle, FaRegSave, FaTimes, FaUniversity } from "components/icons";
+
 
 import {getLocalDateWithTimezone} from "helpers/dateFormatter";
 import {qmClarify} from "helpers/components";

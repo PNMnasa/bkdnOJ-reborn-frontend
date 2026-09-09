@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router";
 
 import { Modal, Button, Container } from "react-bootstrap";
-import { VscBug } from "react-icons/vsc";
+import { VscBug } from "components/icons";
+
 
 import flag from "assets/images/bkdnoj-dropflag.png";
 import "./Header.css";

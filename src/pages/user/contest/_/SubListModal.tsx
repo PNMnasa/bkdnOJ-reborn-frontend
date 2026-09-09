@@ -7,7 +7,8 @@ import ReactPaginate from "react-paginate";
 import contestAPI from "api/contest";
 
 // Assets
-import {FaExternalLinkAlt} from "react-icons/fa";
+import { FaExternalLinkAlt } from "components/icons";
+
 
 // Styles
 import "styles/SubmissionVerdict.css";

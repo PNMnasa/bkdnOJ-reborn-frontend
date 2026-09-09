@@ -4,11 +4,8 @@ import ReactPaginate from "react-paginate";
 import {Link, Navigate} from "react-router";
 import {Button, Table} from "react-bootstrap";
 
-import {
-  AiOutlinePlusCircle,
-  AiOutlineArrowRight,
-  AiOutlineForm,
-} from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle } from "components/icons";
+
 
 import {SpinLoader, ErrorBox} from "components";
 import Filter from "./Filter";

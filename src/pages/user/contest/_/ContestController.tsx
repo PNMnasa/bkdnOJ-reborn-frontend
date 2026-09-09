@@ -1,8 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Button} from "react-bootstrap";
-import {VscEyeClosed, VscEye} from "react-icons/vsc";
-import {FaWrench} from "react-icons/fa";
+import { FaWrench, VscEye, VscEyeClosed } from "components/icons";
+
+
 
 import {addClass, removeClass} from "helpers/dom_functions";
 import {withNavigation} from "helpers/react-router";

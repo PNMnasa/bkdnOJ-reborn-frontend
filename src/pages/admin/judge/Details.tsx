@@ -3,7 +3,8 @@ import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import {Navigate} from "react-router";
 import {Form, Row, Col, Button} from "react-bootstrap";
-import {FaRegTrashAlt} from "react-icons/fa";
+import { FaRegTrashAlt } from "components/icons";
+
 
 import judgeAPI from "api/judge";
 import {SpinLoader, ErrorBox} from "components";

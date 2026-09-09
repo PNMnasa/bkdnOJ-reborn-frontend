@@ -3,8 +3,9 @@ import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import {Navigate} from "react-router";
 import {Form, Row, Col, Button} from "react-bootstrap";
-import {FaRegTrashAlt, FaCogs, FaSave} from "react-icons/fa";
-import {VscRefresh} from "react-icons/vsc";
+import { FaCogs, FaRegTrashAlt, FaSave, VscRefresh } from "components/icons";
+
+
 
 import userAPI from "api/user";
 import profileAPI from "api/profile";

@@ -8,14 +8,8 @@ import contestAPI from "api/contest";
 import {ErrorBox, SpinLoader} from "components";
 import ProblemSelect from "components/SelectSingle/Problem";
 
-import {
-  FaQuestionCircle,
-  FaRegPlusSquare,
-  FaRegSave,
-  FaSortAmountDownAlt,
-  FaSortNumericDown,
-  FaRedo,
-} from "react-icons/fa";
+import { FaQuestionCircle, FaRedo, FaRegPlusSquare, FaRegSave, FaSortAmountDownAlt, FaSortNumericDown } from "components/icons";
+
 
 import {qmClarify} from "helpers/components";
 

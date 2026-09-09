@@ -2,14 +2,9 @@ import React from "react";
 import {toast} from "react-toastify";
 import {Navigate} from "react-router";
 import {Button, Tabs, Tab} from "react-bootstrap";
-import {
-  FaGlobe,
-  FaRegTrashAlt,
-  FaChartLine,
-  FaRegCalendarAlt,
-  FaInfo,
-} from "react-icons/fa";
-import {BsUpcScan} from "react-icons/bs";
+import { BsUpcScan, FaChartLine, FaGlobe, FaInfo, FaRegCalendarAlt, FaRegTrashAlt } from "components/icons";
+
+
 
 import {General, Participation, Problem} from "./_";
 

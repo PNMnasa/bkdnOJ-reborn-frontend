@@ -1,7 +1,8 @@
 import React from "react";
 import {Accordion, Button, Form, Row, Col} from "react-bootstrap";
 
-import {FaTimes, FaFilter} from "react-icons/fa";
+import { FaFilter, FaTimes } from "components/icons";
+
 
 import {INITIAL_FILTER} from "./List";
 

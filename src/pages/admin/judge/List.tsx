@@ -4,11 +4,8 @@ import {Navigate, Link} from "react-router";
 import {Button, Table} from "react-bootstrap";
 
 /* icons */
-import {
-  AiOutlineForm,
-  AiOutlineArrowRight,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle } from "components/icons";
+
 
 /* my imports */
 import {SpinLoader, ErrorBox} from "components";

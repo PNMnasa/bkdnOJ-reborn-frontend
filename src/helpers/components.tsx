@@ -1,5 +1,6 @@
 import { Link } from "react-router";
-import { FaQuestion } from "react-icons/fa";
+import { FaQuestion } from "components/icons";
+
 
 export function qmClarify(msg: string) {
   return (

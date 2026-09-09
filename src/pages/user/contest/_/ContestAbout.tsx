@@ -1,5 +1,6 @@
 import React from "react";
-import {VscInfo} from "react-icons/vsc";
+import { VscInfo } from "components/icons";
+
 import {Badge, Button} from "react-bootstrap";
 import {toast} from "react-toastify";
 

@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import {Navigate} from "react-router";
 import {Button, Tabs, Tab} from "react-bootstrap";
 
-import {FaRegTrashAlt, FaGlobe, FaSyncAlt} from "react-icons/fa";
+import { FaGlobe, FaRegTrashAlt, FaSyncAlt } from "components/icons";
+
 
 import problemAPI from "api/problem";
 import {SpinLoader, ErrorBox} from "components";

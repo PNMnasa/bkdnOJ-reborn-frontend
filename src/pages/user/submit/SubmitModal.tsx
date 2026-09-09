@@ -2,8 +2,9 @@ import React from "react";
 import { Navigate } from "react-router";
 import { Modal, Button } from "react-bootstrap";
 
-import { BsExclamationCircle, BsFillLightningChargeFill } from "react-icons/bs";
-import { FaPaperPlane, FaExternalLinkAlt } from "react-icons/fa";
+import { BsExclamationCircle, BsFillLightningChargeFill, FaExternalLinkAlt, FaPaperPlane } from "components/icons";
+
+
 
 import { shouldStopPolling, isNoTestcaseStatus } from "constants/statusFilter";
 

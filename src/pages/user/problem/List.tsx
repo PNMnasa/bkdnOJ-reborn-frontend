@@ -18,9 +18,10 @@ import { withParams } from "helpers/react-router";
 
 import ContestContext from "context/ContestContext";
 
-import { FaGlobe, FaUniversity, FaRegEyeSlash } from "react-icons/fa";
-import { ImBook } from "react-icons/im";
-import { BsPersonFill } from "react-icons/bs";
+import { BsPersonFill, FaGlobe, FaRegEyeSlash, FaUniversity, ImBook } from "components/icons";
+
+
+
 
 import { parseTime, parseMem } from "helpers/textFormatter";
 

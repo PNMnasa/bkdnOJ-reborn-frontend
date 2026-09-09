@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Button } from "react-bootstrap";
-import { BiArrowFromRight, BiArrowFromLeft } from "react-icons/bi";
+import { BiArrowFromLeft, BiArrowFromRight } from "components/icons";
+
 import type { ReactNode } from "react";
 
 import "./ListSidebar.css";

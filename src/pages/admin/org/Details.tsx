@@ -2,7 +2,8 @@ import React from "react";
 import {toast} from "react-toastify";
 import {Link, Navigate} from "react-router";
 import {Form, Row, Col, Button, Tabs, Tab} from "react-bootstrap";
-import {FaRedo, FaRegTrashAlt} from "react-icons/fa";
+import { FaRedo, FaRegTrashAlt } from "components/icons";
+
 
 import {SpinLoader, ErrorBox} from "components";
 import {withNavigation, withParams} from "helpers/react-router";

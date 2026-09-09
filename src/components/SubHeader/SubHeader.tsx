@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router";
 import { Container } from "react-bootstrap";
 
-import { FaUniversity, FaGlobe } from "react-icons/fa";
+import { FaGlobe, FaUniversity } from "components/icons";
+
 
 import { SwitchOrgModal } from "components";
 

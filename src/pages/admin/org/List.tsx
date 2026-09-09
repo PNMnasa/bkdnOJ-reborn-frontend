@@ -3,13 +3,14 @@ import {toast} from "react-toastify";
 import {Link, Navigate} from "react-router";
 import {Button, Modal, Form} from "react-bootstrap";
 
-import {AiOutlinePlusCircle} from "react-icons/ai";
+import { AiOutlinePlusCircle, FaPlus, FaTimes } from "components/icons";
+
 
 import {SpinLoader, ErrorBox} from "components";
 import orgAPI from "api/organization";
 
 import {setTitle} from "helpers/setTitle";
-import {FaTimes, FaPlus} from "react-icons/fa";
+
 
 import "./List.css";
 import "styles/ClassicPagination.css";

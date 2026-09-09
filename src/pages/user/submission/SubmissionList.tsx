@@ -13,15 +13,10 @@ import { SpinLoader, ErrorBox } from "components";
 import submissionApi from "api/submission";
 import contestApi from "api/contest";
 
-import {
-  FaRegEyeSlash,
-  FaRedoAlt,
-  FaSyncAlt,
-  FaFilter,
-  FaPlus,
-} from "react-icons/fa";
-import { GiTrophyCup } from "react-icons/gi";
-import { TbFilterOff } from "react-icons/tb";
+import { FaFilter, FaPlus, FaRedoAlt, FaRegEyeSlash, FaSyncAlt, GiTrophyCup, TbFilterOff } from "components/icons";
+
+
+
 
 import { getYearMonthDate, getHourMinuteSecond } from "helpers/dateFormatter";
 import { setTitle } from "helpers/setTitle";

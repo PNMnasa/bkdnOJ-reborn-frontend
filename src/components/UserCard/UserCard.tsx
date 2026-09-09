@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 
-import { FaUniversity } from "react-icons/fa";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, FaUniversity } from "components/icons";
+
+
 
 import defaultOrgImg from "assets/images/default-org.png";
 

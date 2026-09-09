@@ -15,7 +15,8 @@ import { Button, Row, Col } from "react-bootstrap";
 
 import ContestContext from "context/ContestContext";
 
-import { FaTimes, FaFilter } from "react-icons/fa";
+import { FaFilter, FaTimes } from "components/icons";
+
 
 import "./SubFilterSidebar.css";
 

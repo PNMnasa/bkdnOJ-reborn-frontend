@@ -2,9 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import { Link } from "react-router";
-import { VscAccount, VscOrganization, VscListOrdered, VscFileCode, VscServer
-  } from 'react-icons/vsc';
-import { GiTrophyCup } from 'react-icons/gi';
+import { GiTrophyCup, VscAccount, VscFileCode, VscListOrdered, VscOrganization, VscServer } from "components/icons";
+
+
 
 import logo from 'assets/images/bkdnoj-favicon-ring.png';
 import './AdminNav.css';

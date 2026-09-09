@@ -6,13 +6,9 @@ import { toast } from "react-toastify";
 import { Nav, NavDropdown } from "react-bootstrap";
 import { Link, Navigate } from "react-router";
 
-import {
-  AiOutlineForm,
-  AiOutlineLogin,
-  AiOutlineLogout,
-  AiOutlineProfile,
-} from "react-icons/ai";
-import { GrUserAdmin } from "react-icons/gr";
+import { AiOutlineForm, AiOutlineLogin, AiOutlineLogout, AiOutlineProfile, GrUserAdmin } from "components/icons";
+
+
 
 import authClient from "api/auth";
 import profileClient from "api/profile";

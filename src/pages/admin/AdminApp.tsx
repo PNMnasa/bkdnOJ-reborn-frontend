@@ -2,7 +2,8 @@ import React from "react";
 import {Button} from "react-bootstrap";
 import {Navigate, Outlet} from "react-router";
 
-import {VscThreeBars} from "react-icons/vsc";
+import { VscThreeBars } from "components/icons";
+
 
 import authAPI from "api/auth";
 import {addClass, removeClass} from "helpers/dom_functions";

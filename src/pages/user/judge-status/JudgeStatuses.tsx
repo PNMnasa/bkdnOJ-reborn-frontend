@@ -1,7 +1,8 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
 import { Table } from "react-bootstrap";
-import { FcOk, FcHighPriority } from "react-icons/fc";
+import { FcHighPriority, FcOk } from "components/icons";
+
 
 import { SpinLoader, ErrorBox } from "components";
 import judgeAPI from "api/judge";

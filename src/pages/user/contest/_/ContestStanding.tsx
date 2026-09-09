@@ -21,10 +21,11 @@ import top10 from "assets/common/atcoder_top10.png";
 import top30 from "assets/common/atcoder_top30.png";
 import top100 from "assets/common/atcoder_top100.png";
 
-import {GiIceCube} from "react-icons/gi";
-import {FaUniversity} from "react-icons/fa";
-import {AiOutlineEye} from "react-icons/ai";
-import {BiSpreadsheet, BiTargetLock} from "react-icons/bi";
+import { AiOutlineEye, BiSpreadsheet, BiTargetLock, FaUniversity, GiIceCube } from "components/icons";
+
+
+
+
 
 // Contexts
 import ContestContext from "context/ContestContext";

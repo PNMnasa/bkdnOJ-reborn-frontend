@@ -4,8 +4,9 @@ import { connect } from "react-redux";
 import { Link, Navigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 
-import { FaWrench, FaSyncAlt } from "react-icons/fa";
-import { VscError } from "react-icons/vsc";
+import { FaSyncAlt, FaWrench, VscError } from "components/icons";
+
+
 
 import submissionAPI from "api/submission";
 

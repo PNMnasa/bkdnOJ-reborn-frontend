@@ -4,12 +4,9 @@ import ReactPaginate from "react-paginate";
 import {Link} from "react-router";
 import {Button, Table, Form, Modal} from "react-bootstrap";
 
-import {FaRegFileArchive, FaQuestionCircle} from "react-icons/fa";
-import {
-  AiOutlineForm,
-  AiOutlineArrowRight,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle, FaQuestionCircle, FaRegFileArchive } from "components/icons";
+
+
 
 import {SpinLoader, ErrorBox, FileUploader} from "components";
 import ProblemSearchForm from "./ProblemSearchForm";

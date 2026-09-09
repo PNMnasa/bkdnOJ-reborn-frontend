@@ -3,14 +3,9 @@ import { connect } from "react-redux";
 import { Link, Navigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 
-import {
-  FaPaperPlane,
-  FaSignInAlt,
-  FaWrench,
-  FaAlignJustify,
-  FaRegFilePdf,
-} from "react-icons/fa";
-import { VscError } from "react-icons/vsc";
+import { FaAlignJustify, FaPaperPlane, FaRegFilePdf, FaSignInAlt, FaWrench, VscError } from "components/icons";
+
+
 
 import PDFViewer from "components/PDFViewer/PDFViewer";
 

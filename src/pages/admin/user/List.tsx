@@ -3,11 +3,8 @@ import ReactPaginate from "react-paginate";
 import {Navigate, Link} from "react-router";
 import {Button, Table, Row, Col, Form} from "react-bootstrap";
 
-import {
-  AiOutlineForm,
-  AiOutlineArrowRight,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle, FaFilter, FaTimes, FcHighPriority, FcOk } from "components/icons";
+
 
 import {SpinLoader, ErrorBox} from "components";
 import userAPI from "api/user";
@@ -16,8 +13,8 @@ import {setTitle} from "helpers/setTitle";
 import "styles/ClassicPagination.css";
 import {qmClarify} from "helpers/components";
 import { toast } from "react-toastify";
-import { FaFilter, FaTimes } from "react-icons/fa";
-import { FcOk, FcHighPriority } from "react-icons/fc";
+
+
 
 interface UserItemProps {
   id: number | string;

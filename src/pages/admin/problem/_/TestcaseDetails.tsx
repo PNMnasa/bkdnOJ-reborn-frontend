@@ -2,7 +2,8 @@ import React from "react";
 import {Link} from "react-router";
 import {Form, Accordion, Button, Table, Row, Col} from "react-bootstrap";
 import {ErrorBox, SpinLoader} from "components";
-import {VscRefresh} from "react-icons/vsc";
+import { VscRefresh } from "components/icons";
+
 
 import problemAPI from "api/problem";
 

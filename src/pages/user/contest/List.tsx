@@ -5,7 +5,8 @@ import {connect} from "react-redux";
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router";
 import {Table} from "react-bootstrap";
-import {VscPerson} from "react-icons/vsc";
+import { VscPerson } from "components/icons";
+
 
 import {SpinLoader, ErrorBox} from "components";
 import contestAPI from "api/contest";

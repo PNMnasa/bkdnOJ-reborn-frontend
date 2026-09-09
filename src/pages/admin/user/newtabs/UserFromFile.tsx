@@ -1,7 +1,8 @@
 import React from "react";
 import {toast} from "react-toastify";
 import {Row, Col, Button, Accordion} from "react-bootstrap";
-import {VscSave} from "react-icons/vsc";
+import { VscSave } from "components/icons";
+
 
 import userAPI from "api/user";
 import {FileUploader, SpinLoader, ErrorBox} from "components";

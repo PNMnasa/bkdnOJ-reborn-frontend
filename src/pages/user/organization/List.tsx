@@ -12,20 +12,8 @@ import { toast } from "react-toastify";
 
 import "styles/ClassicPagination.css";
 import "./List.css";
-import {
-  FaUniversity,
-  FaGreaterThan,
-  FaGlobe,
-  FaLock,
-  FaTimes,
-  FaPlus,
-  FaSignInAlt,
-  FaWrench,
-  FaDoorOpen,
-  FaDoorClosed,
-  FaRegEyeSlash,
-  FaRegEye,
-} from "react-icons/fa";
+import { FaDoorClosed, FaDoorOpen, FaGlobe, FaGreaterThan, FaLock, FaPlus, FaRegEye, FaRegEyeSlash, FaSignInAlt, FaTimes, FaUniversity, FaWrench } from "components/icons";
+
 
 const ORG_PATH_IMG_SIZE = 25;
 
