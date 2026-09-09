@@ -27,7 +27,7 @@ function resolveAliases() {
     const fullUrl = full.split(path.sep).join("/");
     if (fs.statSync(full).isDirectory()) {
       if (depNames.has(entry)) {
-        aliases.push({ find: new RegExp(`^${entry}\\/`), replacement: `${fullUrl}/` });
+        aliases.push({ find: new RegExp(String.raw`^${entry}\/`), replacement: `${fullUrl}/` });
       } else {
         aliases.push({ find: entry, replacement: fullUrl });
       }
