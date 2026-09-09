@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 
-import { updateUser, clearUser } from "redux/User/actions";
-import { updateProfile } from "redux/Profile/actions";
-import { updateMyOrg } from "redux/MyOrg/actions";
+import { updateUser, clearUser } from "redux/User";
+import { updateProfile } from "redux/Profile";
+import { updateMyOrg } from "redux/MyOrg";
 
 import { Row, Col, Tabs, Tab } from "components/bootstrap";
 

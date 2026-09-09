@@ -1,5 +1,0 @@
-export const ADD_CONTEST = "ADD_CONTEST";
-export const ADD_ORG = "ADD_ORG";
-export const ADD_FAVORITE_TEAM = "ADD_FAVORITE_TEAM";
-export const TOGGLE_ORG_FILTER = "TOGGLE_ORG_FILTER";
-export const TOGGLE_FAVORITE_ONLY = "TOGGLE_FAVORITE_ONLY";

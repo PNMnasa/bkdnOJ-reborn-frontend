@@ -7,9 +7,8 @@ import {
   clearContestParams,
   setPublicParams,
   clearPublicParams,
-} from "redux/SubFilter/actions";
-
-import { NO_CONTEST_KEY } from "redux/SubFilter/types";
+  NO_CONTEST_KEY,
+} from "redux/SubFilter";
 
 import { Button, Row, Col } from "components/bootstrap";
 

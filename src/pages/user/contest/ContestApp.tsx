@@ -22,7 +22,7 @@ import {ContestNav, ContestBanner, ContestController} from "./_";
 
 // Context
 import {ContestProvider} from "context/ContestContext";
-import {addContest} from "redux/StandingFilter/action";
+import {addContest} from "redux/StandingFilter";
 
 /*
 

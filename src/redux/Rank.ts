@@ -1,5 +1,13 @@
 import type { AnyAction } from "redux";
-import { UPDATE } from "./types";
+
+export const UPDATE = "UPDATE_RANKS";
+
+export const updateRanks = ({ ranks }: { ranks: Record<string, unknown>[] }) => {
+  return {
+    type: UPDATE,
+    ranks,
+  };
+};
 
 const INITIAL_STATE = {
   ranks: [

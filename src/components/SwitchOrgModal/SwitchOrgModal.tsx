@@ -4,7 +4,7 @@ import { Modal, Button } from "components/bootstrap";
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 
-import { updateMyOrg, updateSelectedOrg } from "redux/MyOrg/actions";
+import { updateMyOrg, updateSelectedOrg } from "redux/MyOrg";
 
 import orgAPI from "api/organization";
 

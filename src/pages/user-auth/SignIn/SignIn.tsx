@@ -6,7 +6,7 @@ import { Navigate } from "react-router";
 import { Form, Button, Row, Col } from "components/bootstrap";
 import { toast } from "react-toastify";
 
-import { updateUser, clearUser } from "redux/User/actions";
+import { updateUser, clearUser } from "redux/User";
 
 import authClient from "api/auth";
 import SpinLoader from "components/SpinLoader/SpinLoader";

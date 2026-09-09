@@ -1,5 +1,19 @@
 import type { AnyAction } from "redux";
-import { START_POLLING, STOP_POLLING } from "./types";
+
+export const START_POLLING = "RS_START_POLLING";
+export const STOP_POLLING = "RS_STOP_POLLING";
+
+export const startPolling = () => {
+  return {
+    type: START_POLLING,
+  };
+};
+
+export const stopPolling = () => {
+  return {
+    type: STOP_POLLING,
+  };
+};
 
 const INITIAL_STATE = {
   polling: 0,

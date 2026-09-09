@@ -13,10 +13,10 @@ import { AiOutlineForm, AiOutlineLogin, AiOutlineLogout, AiOutlineProfile, GrUse
 import authClient from "api/auth";
 import profileClient from "api/profile";
 
-import { updateUser, clearUser } from "redux/User/actions";
-import { updateProfile, clearProfile } from "redux/Profile/actions";
-import { updateContest, clearContest } from "redux/Contest/actions";
-import { clearMyOrg } from "redux/MyOrg/actions";
+import { updateUser, clearUser } from "redux/User";
+import { updateProfile, clearProfile } from "redux/Profile";
+import { updateContest, clearContest } from "redux/Contest";
+import { clearMyOrg } from "redux/MyOrg";
 
 import {
   __ls_get_auth_user,

@@ -1,5 +1,20 @@
 import type { AnyAction } from "redux";
-import { UPDATE, CLEAR } from "./types";
+
+export const UPDATE = "UPDATE_PROFILE";
+export const CLEAR = "CLEAR_PROFILE";
+
+export const updateProfile = ({ profile }: { profile: Record<string, unknown> | null }) => {
+  return {
+    type: UPDATE,
+    profile,
+  };
+};
+
+export const clearProfile = () => {
+  return {
+    type: CLEAR,
+  };
+};
 
 const INITIAL_STATE = {
   profile: null,

@@ -1,5 +1,21 @@
 import type { AnyAction } from "redux";
-import { UPDATE, CLEAR } from "./types";
+
+export const UPDATE = "UPDATE_CONTEST";
+export const CLEAR = "CLEAR_CONTEST";
+
+export const updateContest = ({ contest }: { contest: Record<string, unknown> | null }) => {
+  return {
+    type: UPDATE,
+    contest,
+    virtual: (contest && contest.virtual) || null,
+  };
+};
+
+export const clearContest = () => {
+  return {
+    type: CLEAR,
+  };
+};
 
 const INITIAL_STATE = {
   contest: null,

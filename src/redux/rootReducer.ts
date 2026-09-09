@@ -1,15 +1,15 @@
 import { combineReducers } from "redux";
 
-import userReducer from "./User/reducer";
-import profileReducer from "./Profile/reducer";
-import contestReducer from "./Contest/reducer";
+import userReducer from "./User";
+import profileReducer from "./Profile";
+import contestReducer from "./Contest";
 
-import standingFilterReducer from "./StandingFilter/reducer";
-import subFilterReducer from "./SubFilter/reducer";
-import recentSubmissionReducer from "./RecentSubmission/reducer";
+import standingFilterReducer from "./StandingFilter";
+import subFilterReducer from "./SubFilter";
+import recentSubmissionReducer from "./RecentSubmission";
 
-import ranksReducer from "./Rank/reducer";
-import myOrgReducer from "./MyOrg/reducer";
+import ranksReducer from "./Rank";
+import myOrgReducer from "./MyOrg";
 
 const rootReducer = combineReducers({
   user: userReducer,

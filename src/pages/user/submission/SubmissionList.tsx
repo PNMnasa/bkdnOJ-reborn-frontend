@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
-import { setPublicParams, setContestParams } from "redux/SubFilter/actions";
+import { setPublicParams, setContestParams, NO_CONTEST_KEY } from "redux/SubFilter";
 
 import { Button, Table } from "components/bootstrap";
 import { SpinLoader, ErrorBox } from "components";
@@ -28,7 +28,7 @@ import ContestContext from "context/ContestContext";
 
 import "./SubmissionList.css";
 import "styles/ClassicPagination.css";
-import { NO_CONTEST_KEY } from "redux/SubFilter/types";
+
 
 import { messages, values } from "./constants";
 

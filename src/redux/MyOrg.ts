@@ -1,5 +1,40 @@
 import type { AnyAction } from "redux";
-import { UPDATE, UPDATE_SELECT, CLEAR } from "./types";
+
+export const UPDATE = "UPDATE_MY_ORGS";
+export const UPDATE_SELECT = "UPDATE_SELECTED_ORG";
+export const CLEAR = "CLEAR_MY_ORGS";
+
+type Org = { name?: string; short_name?: string; slug: string | null };
+
+export const updateMyOrg = ({
+  memberOf,
+  adminOf,
+  selectedOrg,
+}: {
+  memberOf: Org[];
+  adminOf: Org[];
+  selectedOrg?: Org;
+}) => {
+  return {
+    type: UPDATE,
+    memberOf,
+    adminOf,
+    selectedOrg,
+  };
+};
+
+export const updateSelectedOrg = ({ selectedOrg }: { selectedOrg: Org }) => {
+  return {
+    type: UPDATE_SELECT,
+    selectedOrg,
+  };
+};
+
+export const clearMyOrg = () => {
+  return {
+    type: CLEAR,
+  };
+};
 
 const INITIAL_SELECTED_ORG = {
   name: "Global",

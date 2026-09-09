@@ -12,7 +12,7 @@ import {
   addOrgToFilter,
   toggleFavoriteOnly,
   toggleOrgFilter,
-} from "redux/StandingFilter/action";
+} from "redux/StandingFilter";
 
 interface ClearIconProps {
   onClick?: () => void;

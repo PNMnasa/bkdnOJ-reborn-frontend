@@ -2,7 +2,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
-import { startPolling } from "redux/RecentSubmission/actions";
+import { startPolling } from "redux/RecentSubmission";
 
 import { toast } from "react-toastify";
 import { Form } from "components/bootstrap";

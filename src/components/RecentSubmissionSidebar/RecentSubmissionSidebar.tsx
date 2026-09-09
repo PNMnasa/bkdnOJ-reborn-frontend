@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import type { AnyAction } from "redux";
 import ReactPaginate from "react-paginate";
-import { stopPolling } from "redux/RecentSubmission/actions";
+import { stopPolling } from "redux/RecentSubmission";
 
 import { Table } from "components/bootstrap";
 import { Link } from "react-router";

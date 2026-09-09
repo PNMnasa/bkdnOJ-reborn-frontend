@@ -9,7 +9,7 @@ import { AiFillHeart, AiOutlineHeart, FaUniversity } from "components/icons";
 import defaultOrgImg from "assets/images/default-org.png";
 
 import "./UserCard.css";
-import { toggleTeamFavorite } from "../../redux/StandingFilter/action";
+import { toggleTeamFavorite } from "redux/StandingFilter";
 
 interface UserShape {
   username?: string;

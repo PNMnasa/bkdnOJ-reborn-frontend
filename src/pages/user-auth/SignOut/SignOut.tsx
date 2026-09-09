@@ -8,7 +8,7 @@ import { Form } from "components/bootstrap";
 import SpinLoader from "components/SpinLoader/SpinLoader";
 
 import authClient from "api/auth";
-import { clearUser } from "redux/User/actions";
+import { clearUser } from "redux/User";
 
 import "./SignOut.css";
 

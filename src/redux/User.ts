@@ -1,6 +1,21 @@
 import type { AnyAction } from "redux";
-import { UPDATE, CLEAR } from "./types";
 import { __ls_remove_credentials } from "helpers/localStorageHelpers";
+
+export const UPDATE = "UPDATE_USER";
+export const CLEAR = "CLEAR_USER";
+
+export const updateUser = ({ user }: { user: Record<string, unknown> | null }) => {
+  return {
+    type: UPDATE,
+    user,
+  };
+};
+
+export const clearUser = () => {
+  return {
+    type: CLEAR,
+  };
+};
 
 const INITIAL_STATE = {
   user: null,
