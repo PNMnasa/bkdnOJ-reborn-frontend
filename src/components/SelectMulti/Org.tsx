@@ -2,7 +2,7 @@ import React from "react";
 
 import AsyncSelect from "react-select/async";
 
-import orgAPI from "api/organization";
+import { orgClient } from "api";
 
 import type { MultiValue } from "react-select";
 import type { ReactNode } from "react";
@@ -52,7 +52,7 @@ interface OrgMultiSelectProps {
 
 export default class OrgMultiSelect extends React.Component<OrgMultiSelectProps> {
   async loadOptions(val: string) {
-    return orgAPI.getAllOrgs({ params: { search: val } }).then((res) => {
+    return orgClient.getAllOrgs({ params: { search: val } }).then((res) => {
       const data = res.data.results.map((org: Org) => ({
         value: org.slug,
         label: <OrgSelectLabel {...org} />,

@@ -9,7 +9,7 @@ import { VscPerson } from "components/icons";
 
 
 import {SpinLoader, ErrorBox} from "components";
-import contestAPI from "api/contest";
+import { contestClient } from "api";
 import {setTitle} from "helpers/setTitle";
 import {getDuration} from "helpers/durationFormatter";
 
@@ -171,7 +171,7 @@ class ContestListItem extends React.Component<ContestListItemProps, ContestListI
     }
     if (!conf) return false;
 
-    contestAPI
+    contestClient
       .joinContest({key: ckey})
       .then(() => {
         toast.success(`Đăng ký contest ${ckey} thành công.`, {
@@ -345,7 +345,7 @@ class NPContestList extends React.Component<NPContestListProps, NPContestListSta
       prms.org = this.props.selectedOrg.slug;
     }
 
-    contestAPI
+    contestClient
       .getContests(prms)
       .then((cont: { data: { active: ContestShape[]; present: ContestShape[]; future: ContestShape[] } }) => {
         this.setState({
@@ -490,7 +490,7 @@ class ContestList extends React.Component<ContestListProps, ContestListState> {
       prms.org = this.props.selectedOrg.slug;
     }
 
-    contestAPI
+    contestClient
       .getPastContests(prms)
       .then((pastcont: { data: { results: ContestShape[]; count: number; total_pages: number } }) => {
         this.setState({

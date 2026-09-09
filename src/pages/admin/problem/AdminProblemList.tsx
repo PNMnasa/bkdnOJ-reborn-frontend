@@ -10,7 +10,7 @@ import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle, FaQuestionCirc
 
 import {SpinLoader, ErrorBox, FileUploader} from "components";
 import ProblemSearchForm from "./ProblemSearchForm";
-import problemApi from "api/problem";
+import { problemClient } from "api";
 
 import {setTitle} from "helpers/setTitle";
 import {qmClarify} from "helpers/components";
@@ -162,7 +162,7 @@ class AdminProblemList extends React.Component<Record<string, never>, AdminProbl
     this.setState({loaded: false, errors: null});
     const searchData = this.state.searchData;
 
-    problemApi
+    problemClient
       .getProblems({params: {page: params.page + 1, ...searchData}})
       .then(res => {
         this.setState({
@@ -215,7 +215,7 @@ class AdminProblemList extends React.Component<Record<string, never>, AdminProbl
     if (conf) {
       let reqs: Promise<unknown>[] = [];
       names.forEach(shortname => {
-        reqs.push(problemApi.adminDeleteProblem({shortname}));
+        reqs.push(problemClient.adminDeleteProblem({shortname}));
       });
 
       Promise.all(reqs)
@@ -281,7 +281,7 @@ class AdminProblemList extends React.Component<Record<string, never>, AdminProbl
                   this.setState({submitting: true}, () => {
                     const formData = new FormData();
                     formData.append("archive", selectedZip);
-                    problemApi
+                    problemClient
                       .adminPostProblemFromZip({formData})
                       .then(() => {
                         toast.success("Đã tạo Problem mới thành công.");
@@ -450,7 +450,7 @@ class NewProblemModal extends React.Component<NewProblemModalProps, NewProblemMo
     e.preventDefault();
     this.setState({errors: null});
 
-    problemApi
+    problemClient
       .createProblem({data: {shortname: this.state.shortname}})
       .then(res => {
         toast.success("OK Created.");

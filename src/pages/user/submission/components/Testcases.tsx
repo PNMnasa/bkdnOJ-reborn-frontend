@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from "react";
 import { parseTime, parseMem } from "helpers/textFormatter";
 import { Link } from "react-router";
 import { Row, Col, Table } from "components/bootstrap";
-import submissionApi from "api/submission";
+import { submissionClient } from "api";
 import { SpinLoader } from "components";
 
 interface TestCaseData {
@@ -41,7 +41,7 @@ const SubmissionTestCase = memo(
 
     const fetch = () => {
       if (testcaseErr || testcaseDetail) return;
-      submissionApi
+      submissionClient
         .getSubmissionResultCase({ case_num: data.case, id: problemId })
         .then((res) => {
           setTestcaseDetail(res.data);

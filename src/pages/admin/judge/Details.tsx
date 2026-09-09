@@ -6,7 +6,7 @@ import {Form, Row, Col, Button} from "components/bootstrap";
 import { FaRegTrashAlt } from "components/icons";
 
 
-import judgeAPI from "api/judge";
+import { judgeClient } from "api";
 import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
@@ -59,7 +59,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
   }
 
   refetch() {
-    judgeAPI
+    judgeClient
       .getJudgeDetails({id: this.id})
       .then(res => {
         this.setState({
@@ -114,7 +114,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
     });
 
     this.setState({errors: null});
-    judgeAPI
+    judgeClient
       .adminEditJudge({id, data: cleanedData})
       .then(() => {
         toast.success(`OK Edited.`);
@@ -136,7 +136,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
         "vì vậy hãy block máy chấm tối thiểu 1 phút để tránh hiện tượng này. Bạn có muốn xóa?"
     );
     if (conf) {
-      judgeAPI
+      judgeClient
         .adminDeleteJudge({id: this.id})
         .then(() => {
           toast.success("OK Deleted.");

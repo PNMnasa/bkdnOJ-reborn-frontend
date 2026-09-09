@@ -4,7 +4,7 @@ import {Link} from "react-router";
 import {Table} from "components/bootstrap";
 
 import {SpinLoader, ErrorBox} from "components";
-import submissionApi from "api/submission";
+import { submissionClient } from "api";
 import {setTitle} from "helpers/setTitle";
 
 import "styles/ClassicPagination.css";
@@ -123,7 +123,7 @@ class AdminSubmissionList extends React.Component<Record<string, never>, AdminSu
   callApi(params: { page: number }) {
     this.setState({loaded: false, errors: null});
 
-    submissionApi
+    submissionClient
       .getSubmissions({page: params.page + 1})
       .then(res => {
         this.setState({
@@ -175,7 +175,7 @@ class AdminSubmissionList extends React.Component<Record<string, never>, AdminSu
     if (conf) {
       let reqs: Promise<unknown>[] = [];
       ids.forEach(id => {
-        reqs.push(submissionApi.adminDeleteSubmission({id}));
+        reqs.push(submissionClient.adminDeleteSubmission({id}));
       });
 
       Promise.all(reqs)

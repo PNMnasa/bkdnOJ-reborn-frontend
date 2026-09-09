@@ -6,12 +6,14 @@ import { BsUpcScan, FaChartLine, FaGlobe, FaInfo, FaRegCalendarAlt, FaRegTrashAl
 
 
 
-import {General, Participation, Problem} from "./_";
+import General from "./General";
+import Participation from "./Participation";
+import Problem from "./Problem";
 
 import OverlayTrigger from "components/bootstrap/OverlayTrigger";
 import Tooltip from "components/bootstrap/Tooltip";
 
-import contestAPI from "api/contest";
+import { contestClient } from "api";
 import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
@@ -42,7 +44,7 @@ class RateButton extends React.Component<RateButtonProps, RateButtonState> {
   fetchRejudgeInfo() {
     const data = {key: this.props.ckey};
     this.setState({fetchingInfo: true}, () => {
-      contestAPI
+      contestClient
         .infoRateContest(data)
         .then(res => {
           let conf = window.confirm(res.data.msg + " Proceed?");
@@ -59,7 +61,7 @@ class RateButton extends React.Component<RateButtonProps, RateButtonState> {
 
   componentDidUpdate(prevProps: RateButtonProps, prevState: RateButtonState) {
     if (prevState.confirmRate === false && this.state.confirmRate === true) {
-      contestAPI
+      contestClient
         .rateContest({key: this.props.ckey, data: {}} as any)
         .then(() => toast.success(`OK Rated contest ${this.props.ckey}.`))
         .catch(() => toast.error("Cannot rate at the moment."));
@@ -132,7 +134,7 @@ class AdminContestDetails extends React.Component<AdminContestDetailsProps, Admi
   }
 
   refetch() {
-    contestAPI
+    contestClient
       .getContest({key: this.key})
       .then(res => {
         this.setState({
@@ -163,7 +165,7 @@ class AdminContestDetails extends React.Component<AdminContestDetailsProps, Admi
         "Bạn vẫn muốn xóa?"
     );
     if (conf) {
-      contestAPI
+      contestClient
         .deleteContest({key: this.key})
         .then(() => {
           toast.success("OK Deleted.");
@@ -309,7 +311,7 @@ class AdminContestDetails extends React.Component<AdminContestDetailsProps, Admi
                         }
                         disabled={this.state.recomputeDisabled}
                         onClick={() => {
-                          contestAPI
+                          contestClient
                             .recomputeContestStanding({key: data.key})
                             .then(() => {
                               toast.success("OK đã queue tác vụ.");

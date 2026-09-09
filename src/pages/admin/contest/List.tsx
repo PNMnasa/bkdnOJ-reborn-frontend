@@ -9,7 +9,7 @@ import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle } from "compone
 
 import {SpinLoader, ErrorBox} from "components";
 import Filter from "./Filter";
-import contestAPI from "api/contest";
+import { contestClient } from "api";
 
 import {setTitle} from "helpers/setTitle";
 import {getYearMonthDate, getHourMinuteSecond} from "helpers/dateFormatter";
@@ -167,7 +167,7 @@ class AdminContestList extends React.Component {
   callApi(params: {page: number}) {
     this.setState({loaded: false, errors: null});
 
-    contestAPI
+    contestClient
       .getAllContests({page: params.page + 1, ...this.state.searchData})
       .then(res => {
         this.setState({
@@ -220,7 +220,7 @@ class AdminContestList extends React.Component {
     if (conf) {
       let reqs: Promise<unknown>[] = [];
       ids.forEach(k => {
-        reqs.push(contestAPI.deleteContest({key: k}));
+        reqs.push(contestClient.deleteContest({key: k}));
       });
 
       Promise.all(reqs)

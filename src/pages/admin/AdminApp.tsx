@@ -5,7 +5,7 @@ import {Navigate, Outlet} from "react-router";
 import { VscThreeBars } from "components/icons";
 
 
-import authAPI from "api/auth";
+import { authClient } from "api";
 import {addClass, removeClass} from "helpers/dom_functions";
 import {setTitle} from "helpers/setTitle";
 
@@ -39,7 +39,7 @@ class AdminApp extends React.Component<Record<string, never>, AdminAppState> {
     });
   }
   componentDidMount() {
-    authAPI
+    authClient
       .whoAmI()
       .then(res => {
         const user = res.data && res.data.user;

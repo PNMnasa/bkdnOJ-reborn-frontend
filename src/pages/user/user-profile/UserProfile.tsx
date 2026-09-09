@@ -10,7 +10,7 @@ import { updateMyOrg } from "redux/MyOrg";
 
 import { Row, Col, Tabs, Tab } from "components/bootstrap";
 
-import profileClient from "api/profile";
+import { profileClient } from "api";
 
 import { SpinLoader } from "components";
 
@@ -18,7 +18,8 @@ import "./UserProfile.css";
 
 import { setTitle } from "helpers/setTitle";
 
-import { AboutTab, SettingTab } from "./_";
+import AboutTab from "./AboutTab";
+import SettingTab from "./SettingTab";
 
 interface UserProfileProps {
   user: unknown;

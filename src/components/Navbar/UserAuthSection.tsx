@@ -10,8 +10,8 @@ import { AiOutlineForm, AiOutlineLogin, AiOutlineLogout, AiOutlineProfile, GrUse
 
 
 
-import authClient from "api/auth";
-import profileClient from "api/profile";
+import { authClient } from "api";
+import { profileClient } from "api";
 
 import { updateUser, clearUser } from "redux/User";
 import { updateProfile, clearProfile } from "redux/Profile";

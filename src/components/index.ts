@@ -3,10 +3,7 @@ import Header from "./Header/Header";
 import SubHeader from "./SubHeader/SubHeader";
 import Footer from "./Footer/Footer";
 import Content from "./Content/Content";
-import SpinLoader from "./SpinLoader/SpinLoader";
-import ErrorBox from "./ErrorBox/ErrorBox";
-import FileUploader from "./FileUploader/FileUploader";
-import CSRFToken from "./CSRFToken/CSRFToken";
+import { SpinLoader, ErrorBox, FileUploader, CSRFToken, ScrollToTopBtn } from "./common";
 
 import UserCard from "./UserCard";
 
@@ -15,7 +12,6 @@ import SwitchOrgModal from "./SwitchOrgModal";
 import ContestSidebar from "./ContestSidebar";
 import SubFilterSidebar from "./SubFilterSidebar";
 import RecentSubmissionSidebar from "./RecentSubmissionSidebar";
-import ScrollToTopBtn from "./ScrollToTopBtn/ScrollToTopBtn";
 
 export {
   Header,

@@ -8,9 +8,8 @@ import { toast } from "react-toastify";
 
 import { updateUser, clearUser } from "redux/User";
 
-import authClient from "api/auth";
-import SpinLoader from "components/SpinLoader/SpinLoader";
-import ErrorBox from "components/ErrorBox/ErrorBox";
+import { authClient } from "api";
+import { SpinLoader, ErrorBox } from "components/common";
 
 import "./SignIn.css";
 

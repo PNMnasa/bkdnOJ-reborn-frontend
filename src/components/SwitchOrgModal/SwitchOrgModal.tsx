@@ -6,7 +6,7 @@ import type { AnyAction } from "redux";
 
 import { updateMyOrg, updateSelectedOrg } from "redux/MyOrg";
 
-import orgAPI from "api/organization";
+import { orgClient } from "api";
 
 import DropdownTreeSelect from "components/DropdownTreeNoRerender";
 import "react-dropdown-tree-select/dist/styles.css";
@@ -61,7 +61,7 @@ class SwitchOrgModal extends React.Component<SwitchOrgModalProps, SwitchOrgModal
   }
 
   refetch() {
-    orgAPI
+    orgClient
       .getMyOrgs()
       .then((res) => {
         this.props.updateMyOrg({

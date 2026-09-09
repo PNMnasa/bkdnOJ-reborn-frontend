@@ -8,7 +8,7 @@ import { BsExclamationCircle, BsFillLightningChargeFill, FaExternalLinkAlt, FaPa
 
 import { shouldStopPolling, isNoTestcaseStatus } from "constants/statusFilter";
 
-import submissionApi from "api/submission";
+import { submissionClient } from "api";
 import SubmitForm from "./SubmitForm";
 import "./SubmitModal.css";
 
@@ -52,7 +52,7 @@ class SubmitModalResult extends React.Component<SubmitModalResultProps, SubmitMo
       this.setState({ isPolling: false });
       return;
     }
-    submissionApi
+    submissionClient
       .getSubmissionResult({ id: this.state.subId as number | string })
       .then((res) => {
         this.setState({ data: res.data });

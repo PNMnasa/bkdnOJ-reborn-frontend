@@ -11,14 +11,16 @@ import {OneColumn} from "layout";
 
 import {SpinLoader} from "components";
 
-import contestAPI from "api/contest";
+import { contestClient } from "api";
 import {withParams, withNavigation} from "helpers/react-router";
 
 import "styles/ClassicPagination.css";
 import "./ContestApp.css";
 
 // Context Components
-import {ContestNav, ContestBanner, ContestController} from "./_";
+import ContestNav from "./ContestNav";
+import ContestBanner from "./ContestBanner";
+import ContestController from "./ContestController";
 
 // Context
 import {ContestProvider} from "context/ContestContext";
@@ -106,7 +108,7 @@ class ContestApp extends React.Component<ContestAppProps, ContestAppState> {
   }
 
   pollDescription() {
-    contestAPI.getContest({key: this.state.contest_key!, params: {"description": 1}})
+    contestClient.getContest({key: this.state.contest_key!, params: {"description": 1}})
     .then((res: { data: { updated_recently?: boolean; description?: string } }) => {
       const data = res.data;
       const contest = this.state.contest;
@@ -126,7 +128,7 @@ class ContestApp extends React.Component<ContestAppProps, ContestAppState> {
   }
 
   componentDidMount() {
-    contestAPI
+    contestClient
       .getContest({key: this.state.contest_key!})
       .then((res: { data: ContestShape }) => {
         let contest = res.data;

@@ -7,7 +7,7 @@ import { AiOutlinePlusCircle, FaPlus, FaTimes } from "components/icons";
 
 
 import {SpinLoader, ErrorBox} from "components";
-import orgAPI from "api/organization";
+import { orgClient } from "api";
 
 import {setTitle} from "helpers/setTitle";
 
@@ -162,7 +162,7 @@ class OrgListWrapper extends React.Component<Record<string, never>, OrgListWrapp
   callApi() {
     this.setState({loaded: false, errors: null});
 
-    orgAPI
+    orgClient
       .getMyOrgs()
       .then(res => {
         this.setState({
@@ -302,8 +302,8 @@ class NewModal extends React.Component<NewModalProps, NewModalState> {
       short_name: this.state.short_name,
     };
     const endpoint = parent
-      ? orgAPI.createSubOrg({parentSlug: parent, data})
-      : orgAPI.createOrg(data);
+      ? orgClient.createSubOrg({parentSlug: parent, data})
+      : orgClient.createOrg(data);
 
     endpoint
       .then(() => {

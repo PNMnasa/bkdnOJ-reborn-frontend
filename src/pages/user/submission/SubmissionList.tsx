@@ -10,8 +10,8 @@ import { setPublicParams, setContestParams, NO_CONTEST_KEY } from "redux/SubFilt
 import { Button, Table } from "components/bootstrap";
 import { SpinLoader, ErrorBox } from "components";
 
-import submissionApi from "api/submission";
-import contestApi from "api/contest";
+import { submissionClient } from "api";
+import { contestClient } from "api";
 
 import { FaFilter, FaPlus, FaRedoAlt, FaRegEyeSlash, FaSyncAlt, GiTrophyCup, TbFilterOff } from "components/icons";
 
@@ -22,7 +22,7 @@ import { getYearMonthDate, getHourMinuteSecond } from "helpers/dateFormatter";
 import { setTitle } from "helpers/setTitle";
 import { parseTime, parseMem } from "helpers/textFormatter";
 import { isStaff } from "helpers/auth";
-import { isEmpty } from "helpers/checkObject";
+import { isEmpty } from "helpers/utils";
 
 import ContestContext from "context/ContestContext";
 
@@ -284,7 +284,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
       const extraParams =
         this.props.subFilter[(this.state.contest as { key: string }).key] || {};
 
-      contestApi
+      contestClient
         .getContestSubmissions({
           key: (this.state.contest as { key: string }).key,
           params: { page: params.page + 1, ...extraParams },
@@ -313,7 +313,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
         prms.org = this.props.selectedOrg.slug;
       }
 
-      submissionApi
+      submissionClient
         .getSubmissions(prms)
         .then((res) => {
           this.setState({
@@ -377,7 +377,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
     if (this.isInContest()) {
       const extraParams =
         this.props.subFilter[(this.state.contest as { key: string }).key] || {};
-      request = contestApi.rejudgeContestSubmissions({
+      request = contestClient.rejudgeContestSubmissions({
         key: (this.state.contest as { key: string }).key,
         params: { ...extraParams },
       });
@@ -388,7 +388,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
       if (this.props.selectedOrg.slug) {
         prms.org = this.props.selectedOrg.slug;
       }
-      request = submissionApi.rejudgeSubmissions(prms);
+      request = submissionClient.rejudgeSubmissions(prms);
     }
 
     request

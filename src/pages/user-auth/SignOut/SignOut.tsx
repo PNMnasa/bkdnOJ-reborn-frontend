@@ -5,9 +5,9 @@ import type { AnyAction } from "redux";
 import { Navigate } from "react-router";
 import { Form } from "components/bootstrap";
 
-import SpinLoader from "components/SpinLoader/SpinLoader";
+import { SpinLoader } from "components/common";
 
-import authClient from "api/auth";
+import { authClient } from "api";
 import { clearUser } from "redux/User";
 
 import "./SignOut.css";

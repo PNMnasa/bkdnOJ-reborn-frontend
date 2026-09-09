@@ -9,8 +9,8 @@ import { Form } from "components/bootstrap";
 
 import { CodeEditor } from "components/CodeEditor";
 
-import contestAPI from "api/contest";
-import problemApi from "api/problem";
+import { contestClient } from "api";
+import { problemClient } from "api";
 
 import { DEFAULT_LANG_SHORTNAME } from "constants/aceEditorMode";
 import { __ls_get_code_editor, __ls_set_code_editor } from "helpers/localStorageHelpers";
@@ -96,10 +96,10 @@ class SubmitForm extends React.Component<SubmitFormProps, SubmitFormState> {
       let conf: Record<string, unknown>;
 
       if (contest) {
-        endpoint = contestAPI.submitContestProblem as never;
+        endpoint = contestClient.submitContestProblem as never;
         conf = { key: (contest as { key: string }).key, shortname: prob };
       } else {
-        endpoint = problemApi.submitToProblem as never;
+        endpoint = problemClient.submitToProblem as never;
         conf = { shortname: prob };
       }
 

@@ -2,7 +2,7 @@ import React from "react";
 import AsyncSelect from "react-select/async";
 import type { SingleValue } from "react-select";
 
-import problemAPI from "api/problem";
+import { problemClient } from "api";
 
 interface Problem {
   shortname: string;
@@ -37,7 +37,7 @@ interface ProblemSingleSelectProps {
 
 export default class ProblemSingleSelect extends React.Component<ProblemSingleSelectProps> {
   async loadOptions(val: string) {
-    return problemAPI
+    return problemClient
       .getProblems({ params: { search: val, ordering: "-modified" } })
       .then((res) => {
         const data = res.data.results.map((prob: Problem) => ({

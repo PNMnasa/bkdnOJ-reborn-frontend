@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Navigate} from "react-router";
 import {Form, Row, Col, Button} from "components/bootstrap";
 
-import judgeAPI from "api/judge";
+import { judgeClient } from "api";
 import {setTitle} from "helpers/setTitle";
 import {ErrorBox} from "components";
 
@@ -72,7 +72,7 @@ class AdminJudgeNew extends React.Component<AdminJudgeNewProps, AdminJudgeNewSta
       cleanedData[key] = v;
     });
 
-    judgeAPI
+    judgeClient
       .adminCreateJudge({data: cleanedData})
       .then(res => {
         toast.success(`OK Created.`);

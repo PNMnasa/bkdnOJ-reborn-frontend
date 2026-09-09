@@ -7,14 +7,14 @@ import {Button, Tabs, Tab} from "components/bootstrap";
 import { FaGlobe, FaRegTrashAlt, FaSyncAlt } from "components/icons";
 
 
-import problemAPI from "api/problem";
+import { problemClient } from "api";
 import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 
-import GeneralDetails from "./_/GeneralDetails";
-import TestDataDetails from "./_/TestDataDetails";
-import TestcaseDetails from "./_/TestcaseDetails";
+import GeneralDetails from "./GeneralDetails";
+import TestDataDetails from "./TestDataDetails";
+import TestcaseDetails from "./TestcaseDetails";
 
 import "./AdminProblemDetails.css";
 
@@ -42,7 +42,7 @@ class RejudgeButton extends React.Component<RejudgeButtonProps, RejudgeButtonSta
   fetchRejudgeInfo() {
     const data = {shortname: this.props.shortname};
     this.setState({fetchingInfo: true}, () => {
-      problemAPI
+      problemClient
         .infoRejudgeProblem(data)
         .then(res => {
           this.setState({judgeInfo: res.data.msg}, () => {
@@ -65,7 +65,7 @@ class RejudgeButton extends React.Component<RejudgeButtonProps, RejudgeButtonSta
       this.state.confirmRejudge === true
     ) {
       const data = {shortname: this.props.shortname, data: {}};
-      problemAPI
+      problemClient
         .rejudgeProblem(data)
 
         .then(() => toast.success(`OK Rejudging ${this.props.shortname}.`))
@@ -151,7 +151,7 @@ class AdminProblemDetails extends React.Component<AdminProblemDetailsProps, Admi
     }
 
     Promise.all([
-      problemAPI.getProblemDetails({shortname: this.shortname}),
+      problemClient.getProblemDetails({shortname: this.shortname}),
     ])
       .then(res => {
         const [generalRes] = res;
@@ -179,7 +179,7 @@ class AdminProblemDetails extends React.Component<AdminProblemDetailsProps, Admi
   deleteObjectHandler() {
     let conf = window.confirm("Are you sure you want to delete this problem?");
     if (conf) {
-      problemAPI
+      problemClient
         .adminDeleteProblem({shortname: this.shortname})
         .then(() => {
           toast.success("OK Deleted.");

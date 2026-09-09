@@ -3,9 +3,8 @@ import { Navigate } from "react-router";
 import { Form, Button, Row, Col } from "components/bootstrap";
 import { toast } from "react-toastify";
 
-import authClient from "api/auth";
-import SpinLoader from "components/SpinLoader/SpinLoader";
-import ErrorBox from "components/ErrorBox/ErrorBox";
+import { authClient } from "api";
+import { SpinLoader, ErrorBox } from "components/common";
 
 import "./SignUp.css";
 

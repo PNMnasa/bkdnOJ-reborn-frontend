@@ -5,7 +5,7 @@ import { Link, Navigate } from "react-router";
 import { Table, Row, Col, Button } from "components/bootstrap";
 
 import { SpinLoader, ErrorBox } from "components";
-import orgAPI from "api/organization";
+import { orgClient } from "api";
 import { setTitle } from "helpers/setTitle";
 import { withParams } from "helpers/react-router";
 import { toast } from "react-toastify";
@@ -159,7 +159,7 @@ class OrgList extends React.Component<OrgListProps, OrgListState> {
     const slug =
       this.state.path.length === 0 ? null : this.state.path[this.state.path.length - 1].slug;
 
-    orgAPI
+    orgClient
       .getOrgs({ slug: slug as string | undefined, params: { page: params.page + 1 } })
       .then((res) => {
         this.setState({
@@ -292,7 +292,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
 
   fetch() {
     this.setState({ loaded: false, errors: null });
-    orgAPI
+    orgClient
       .getOrg({ slug: this.state.slug })
       .then((res) => {
         this.setState({ loaded: true, org: res.data });
@@ -322,7 +322,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
           "Code:"
       );
       if (code === null) return;
-      orgAPI
+      orgClient
         .joinOrg({ slug, data: { access_code: code } })
         .then(() => {
           toast.success(`Welcome to ${slug}.`);
@@ -336,7 +336,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
       const conf = window.confirm(`Gia nhập tổ chức ${slug}?`);
       if (!conf) return;
 
-      orgAPI
+      orgClient
         .joinOrg({ slug } as never)
         .then(() => {
           toast.success(`Welcome to ${slug}.`);
@@ -354,7 +354,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
     const conf = window.confirm(`Rời khỏi tổ chức ${slug}?`);
     if (!conf) return;
 
-    orgAPI
+    orgClient
       .leaveOrg({ slug })
       .then(() => {
         toast.success(`Đã rời khỏi ${slug}.`);

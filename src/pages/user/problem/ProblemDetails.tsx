@@ -9,8 +9,8 @@ import { FaAlignJustify, FaPaperPlane, FaRegFilePdf, FaSignInAlt, FaWrench, VscE
 
 import PDFViewer from "components/PDFViewer/PDFViewer";
 
-import contestAPI from "api/contest";
-import problemAPI from "api/problem";
+import { contestClient } from "api";
+import { problemClient } from "api";
 import { SpinLoader } from "components";
 import RichTextEditor from "components/RichTextEditor/RichTextEditor";
 import { withParams } from "helpers/react-router";
@@ -119,7 +119,7 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
     let callback = (_res: { data: ProblemData }) => {};
     const prms = null;
     if (this.state.contest) {
-      endpoint = contestAPI.getContestProblem as never;
+      endpoint = contestClient.getContestProblem as never;
       data = { key: this.state.contest.key, shortname: this.shortname };
       callback = (res) => {
         this.setState(
@@ -135,7 +135,7 @@ class ProblemDetails extends React.Component<ProblemDetailsProps, ProblemDetails
         setTitle(`${String(this.state.contest?.name)} | Problem. ${res.data.title}`);
       };
     } else {
-      endpoint = problemAPI.getProblemDetails as never;
+      endpoint = problemClient.getProblemDetails as never;
       data = { shortname: this.shortname };
       callback = (res) => {
         this.setState(

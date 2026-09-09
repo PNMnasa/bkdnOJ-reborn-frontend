@@ -9,7 +9,7 @@ import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle } from "compone
 
 /* my imports */
 import {SpinLoader, ErrorBox} from "components";
-import judgeApi from "api/judge";
+import { judgeClient } from "api";
 import {setTitle} from "helpers/setTitle";
 
 import "styles/ClassicPagination.css";
@@ -114,7 +114,7 @@ class AdminJudgeList extends React.Component {
   callApi(params: {page: number}) {
     this.setState({loaded: false, errors: null});
 
-    judgeApi
+    judgeClient
       .getJudges({page: params.page + 1})
       .then(res => {
         this.setState({
@@ -160,7 +160,7 @@ class AdminJudgeList extends React.Component {
     if (conf) {
       let reqs: Promise<unknown>[] = [];
       ids.forEach(id => {
-        reqs.push(judgeApi.adminDeleteJudge({id}));
+        reqs.push(judgeClient.adminDeleteJudge({id}));
       });
 
       Promise.all(reqs)

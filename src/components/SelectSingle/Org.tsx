@@ -2,7 +2,7 @@ import React from "react";
 
 import AsyncSelect from "react-select/async";
 
-import orgAPI from "api/organization";
+import { orgClient } from "api";
 import type { SingleValue } from "react-select";
 
 interface Org {
@@ -47,7 +47,7 @@ interface OrgSingleSelectProps {
 
 export default class OrgSingleSelect extends React.Component<OrgSingleSelectProps> {
   async loadOptions(val: string) {
-    return orgAPI.getAllOrgs({ params: { search: val } }).then((res) => {
+    return orgClient.getAllOrgs({ params: { search: val } }).then((res) => {
       const data = res.data.results.map((org: Org) => ({
         value: org.slug,
         label: <OrgSelectLabel {...org} />,

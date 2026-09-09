@@ -10,8 +10,8 @@ import Tooltip from "components/bootstrap/Tooltip";
 
 import { SpinLoader, ErrorBox } from "components";
 
-import problemApi from "api/problem";
-import contestApi from "api/contest";
+import { problemClient } from "api";
+import { contestClient } from "api";
 
 import { setTitle } from "helpers/setTitle";
 import { withParams } from "helpers/react-router";
@@ -196,11 +196,11 @@ class ProblemList extends React.Component<ProblemListProps, ProblemListState> {
     let prms: Record<string, unknown> = {};
 
     if (this.state.contest) {
-      endpoint = contestApi.getContestProblems as never;
+      endpoint = contestClient.getContestProblems as never;
       data = { key: this.state.contest.key };
       prms = { page: params.page + 1, contest: this.state.contest.key, ...prms };
     } else {
-      endpoint = problemApi.getProblems as never;
+      endpoint = problemClient.getProblems as never;
       data = {};
       prms = { page: params.page + 1, ...prms };
       if (this.props.selectedOrg.slug) {

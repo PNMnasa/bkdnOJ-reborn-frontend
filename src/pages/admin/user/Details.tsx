@@ -7,13 +7,13 @@ import { FaCogs, FaRegTrashAlt, FaSave, VscRefresh } from "components/icons";
 
 
 
-import userAPI from "api/user";
-import profileAPI from "api/profile";
+import { userClient } from "api";
+import { profileClient } from "api";
 
 import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
-import {randomString} from "helpers/random";
+import {randomString} from "helpers/utils";
 
 import "./Details.css";
 import { qmClarify } from "helpers/components";
@@ -75,7 +75,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
   }
 
   fetch() {
-    userAPI
+    userClient
       .getUser({username: this.username})
       .then(res => {
         this.setState({
@@ -112,7 +112,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
         "Nếu xóa, mọi tài nguyên liên quan sẽ bị ảnh hưởng. Bạn có chắc không?"
     );
     if (conf) {
-      userAPI
+      userClient
         .adminDeleteUser({username: this.username})
         .then(() => {
           toast.success("OK Deleted.");
@@ -145,7 +145,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
     let sendData = {...this.state.data};
     delete sendData.url;
     delete sendData.id;
-    userAPI
+    userClient
       .adminEditUser({username: this.username, data: sendData})
       .then(() => {
         toast.success("OK Updated.");
@@ -164,7 +164,7 @@ class AdminJudgeDetails extends React.Component<AdminJudgeDetailsProps, AdminJud
     const pw = this.state.password;
     const data = {password: pw, password_confirm: pw};
 
-    userAPI
+    userClient
       .adminResetPassword({username: this.username, data})
       .then(() => {
         toast.success("OK Password Reset.");
@@ -418,7 +418,7 @@ class UserProfileSection extends React.Component<UserProfileSectionProps, UserPr
 
   fetch(){
     this.setState({loaded: false, errors: null})
-    profileAPI.adminGetProfile({ username: this.username })
+    profileClient.adminGetProfile({ username: this.username })
     .then(res => {
       this.setState({
         loaded: true, data: res.data,
@@ -438,7 +438,7 @@ class UserProfileSection extends React.Component<UserProfileSectionProps, UserPr
   formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
     const data = this.state.data;
-    const apiCall = profileAPI.adminEditProfile({ username: this.username, data: data as unknown as Record<string, unknown> })
+    const apiCall = profileClient.adminEditProfile({ username: this.username, data: data as unknown as Record<string, unknown> })
 
     const parent = this;
     toast.promise(apiCall, {

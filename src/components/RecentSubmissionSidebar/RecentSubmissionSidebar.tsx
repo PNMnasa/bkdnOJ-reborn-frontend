@@ -8,7 +8,7 @@ import { stopPolling } from "redux/RecentSubmission";
 import { Table } from "components/bootstrap";
 import { Link } from "react-router";
 
-import contestAPI from "api/contest";
+import { contestClient } from "api";
 
 import { ErrorBox, SpinLoader } from "components";
 import ContestContext from "context/ContestContext";
@@ -158,7 +158,7 @@ class RecentSubmissionSidebar extends React.Component<
 
     const { user } = this.state;
     if (!this.state.contest) return;
-    contestAPI
+    contestClient
       .getContestSubmissions({
         key: this.state.contest.key,
         params: { user: user?.username, ...pageNo },

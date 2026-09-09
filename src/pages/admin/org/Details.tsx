@@ -14,9 +14,9 @@ import UserMultiSelectRaw from "components/SelectMulti/User";
 const UserMultiSelect = UserMultiSelectRaw as React.ComponentType<any>;
 import OrgSingleSelect from "components/SelectSingle/Org";
 
-import orgAPI from "api/organization";
+import { orgClient } from "api";
 
-import Members from "./_/Members";
+import Members from "./Members";
 
 import "./Details.css";
 
@@ -82,7 +82,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
 
   callApi() {
     this.setState({loaded: false, errors: null});
-    orgAPI
+    orgClient
       .getOrg({slug: this.state.slug})
       .then(res => {
         this.setState({
@@ -118,7 +118,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
     this.setState({errors: null});
 
     const data = this.state.data;
-    orgAPI
+    orgClient
       .updateOrg({slug: this.state.slug, data})
       .then(res => {
         toast.success("OK Updated.");
@@ -143,7 +143,7 @@ class OrgDetail extends React.Component<OrgDetailProps, OrgDetailState> {
     );
     if (!conf) return;
 
-    orgAPI
+    orgClient
       .deleteOrg({slug: this.state.slug})
       .then(() => {
         toast.success("OK Deleted.");

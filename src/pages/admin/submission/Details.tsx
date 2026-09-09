@@ -7,13 +7,13 @@ import {Button, Tabs, Tab} from "components/bootstrap";
 import { FaGlobe, FaRegTrashAlt } from "components/icons";
 
 
-import submissionAPI from "api/submission";
+import { submissionClient } from "api";
 import {SpinLoader, ErrorBox} from "components";
 import {withParams} from "helpers/react-router";
 import {setTitle} from "helpers/setTitle";
 
-import GeneralDetails, {SubmissionData} from "./_/GeneralDetails";
-import TestcaseDetails from "./_/TestcaseDetails";
+import GeneralDetails, {SubmissionData} from "./GeneralDetails";
+import TestcaseDetails from "./TestcaseDetails";
 import "./Details.css";
 
 interface AdminSubmissionDetailsProps {
@@ -44,7 +44,7 @@ class AdminSubmissionDetails extends React.Component<AdminSubmissionDetailsProps
 
   componentDidMount() {
     setTitle(`Admin | Submission. ${this.id}`);
-    submissionAPI
+    submissionClient
       .getSubmissionDetails({id: this.id})
       .then(res => {
         this.setState({
@@ -65,7 +65,7 @@ class AdminSubmissionDetails extends React.Component<AdminSubmissionDetailsProps
       "Are you sure you want to delete this submission?"
     );
     if (conf) {
-      submissionAPI
+      submissionClient
         .adminDeleteSubmission({id: this.id})
         .then(() => {
           toast.success("OK Deleted.");

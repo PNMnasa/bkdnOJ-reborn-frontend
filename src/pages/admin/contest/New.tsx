@@ -3,7 +3,7 @@ import {toast} from "react-toastify";
 import {Navigate} from "react-router";
 import {Form, Row, Col, Button} from "components/bootstrap";
 
-import contestAPI from "api/contest";
+import { contestClient } from "api";
 import {setTitle} from "helpers/setTitle";
 import {ErrorBox} from "components";
 
@@ -63,7 +63,7 @@ class AdminContestNew extends React.Component<Record<string, unknown>, AdminCont
       cleanedData[key] = v;
     });
 
-    contestAPI
+    contestClient
       .createContest({data: cleanedData})
       .then(res => {
         toast.success(`OK Created.`);

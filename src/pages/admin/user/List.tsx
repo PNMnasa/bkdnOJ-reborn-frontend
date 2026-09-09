@@ -7,7 +7,7 @@ import { AiOutlineArrowRight, AiOutlineForm, AiOutlinePlusCircle, FaFilter, FaTi
 
 
 import {SpinLoader, ErrorBox} from "components";
-import userAPI from "api/user";
+import { userClient } from "api";
 import {setTitle} from "helpers/setTitle";
 
 import "styles/ClassicPagination.css";
@@ -128,7 +128,7 @@ class AdminUserList extends React.Component<Record<string, never>, AdminUserList
     this.setState({loaded: false, errors: null, selectChkAll: false});
     let query = {params: {page: params.page + 1, ...this.state.filters}}
 
-    userAPI
+    userClient
       .getUsers({...query})
       .then(res => {
         this.setState({
@@ -182,7 +182,7 @@ class AdminUserList extends React.Component<Record<string, never>, AdminUserList
       action: action,
       data: { users: usernames, }
     }
-    const apiCall = userAPI.adminActOnUsers(payload);
+    const apiCall = userClient.adminActOnUsers(payload);
     const parent = this;
     toast.promise(apiCall, {
       pending: { render() { return "Processing..."; }, },

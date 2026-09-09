@@ -33,9 +33,9 @@ const JudgeStatuses = lazy(() =>
 const ContestList = lazy(() => import("pages/user/contest/List"));
 const ContestApp = lazy(() => import("pages/user/contest/ContestApp"));
 const ContestStanding = lazy(() =>
-  import("pages/user/contest/_/ContestStanding")
+  import("pages/user/contest/ContestStanding")
 );
-const ContestAbout = lazy(() => import("pages/user/contest/_/ContestAbout"));
+const ContestAbout = lazy(() => import("pages/user/contest/ContestAbout"));
 const OrgList = lazy(() => import("pages/user/organization/List"));
 const OrgDetail = lazy(() => import("pages/user/organization/Detail"));
 

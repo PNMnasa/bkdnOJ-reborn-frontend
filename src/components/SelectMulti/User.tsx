@@ -2,7 +2,7 @@ import React from "react";
 
 import AsyncSelect from "react-select/async";
 
-import userAPI from "api/user";
+import { userClient } from "api";
 
 import type { MultiValue } from "react-select";
 
@@ -61,7 +61,7 @@ interface UserMultiSelectProps {
 
 export default class UserMultiSelect extends React.Component<UserMultiSelectProps> {
   async loadOptions(val: string) {
-    return userAPI.getUsers({ params: { search: val } }).then((res) => {
+    return userClient.getUsers({ params: { search: val } }).then((res) => {
       const data = res.data.results.map((user: User) => ({
         value: user.username,
         label: <UserSelectLabel {...user} />,

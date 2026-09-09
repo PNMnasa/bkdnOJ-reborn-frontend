@@ -4,7 +4,7 @@ import {Row, Col, Button, Accordion} from "components/bootstrap";
 import { VscSave } from "components/icons";
 
 
-import userAPI from "api/user";
+import { userClient } from "api";
 import {FileUploader, SpinLoader, ErrorBox} from "components";
 
 import {fileFromBlob} from "helpers/file-utils"
@@ -44,7 +44,7 @@ export default class UserFromFile extends React.Component<UserFromFileProps, Use
     let formData = new FormData();
     formData.append("file", this.state.file);
     this.setState({submitting: true}, async () =>
-      userAPI
+      userClient
         .adminGenUserFromCSV({formData})
         .then(res => {
           toast.success("OK Created");

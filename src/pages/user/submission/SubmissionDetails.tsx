@@ -8,7 +8,7 @@ import { FaSyncAlt, FaWrench, VscError } from "components/icons";
 
 
 
-import submissionAPI from "api/submission";
+import { submissionClient } from "api";
 
 import { SpinLoader } from "components";
 import { CodeEditor } from "components/CodeEditor";
@@ -85,7 +85,7 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
 
   fetch() {
     this.clearIntervals();
-    submissionAPI
+    submissionClient
       .getSubmissionDetails({ id: this.state.id })
       .then((res) => {
         setTitle(`Submission#${res.data.id}`);
@@ -104,7 +104,7 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
   }
 
   fetchTestcase() {
-    submissionAPI
+    submissionClient
       .getSubmissionResult({ id: this.state.id })
       .then((res) => {
         const subData = this.state.data;
@@ -136,7 +136,7 @@ class SubmissionDetails extends React.Component<SubmissionDetailsProps, Submissi
   }
 
   rejudge() {
-    submissionAPI
+    submissionClient
       .adminRejudgeSubmission({ id: this.state.id })
       .then(() => {
         toast.success("OK Rejudging.");

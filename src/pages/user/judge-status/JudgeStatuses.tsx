@@ -5,7 +5,7 @@ import { FcHighPriority, FcOk } from "components/icons";
 
 
 import { SpinLoader, ErrorBox } from "components";
-import judgeAPI from "api/judge";
+import { judgeClient } from "api";
 import { setTitle } from "helpers/setTitle";
 
 import "./JudgeStatuses.css";
@@ -134,7 +134,7 @@ class JudgeStatuses extends React.Component<JudgeStatusesProps, JudgeStatusesSta
   callApi(params: { page: number }) {
     this.setState({ loaded: false, errors: null });
 
-    judgeAPI
+    judgeClient
       .getJudges({ page: params.page + 1 })
       .then((res) => {
         this.setState({
